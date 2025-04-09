@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChiSquaredDistribution.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Commons Math</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.math3.distribution</a> &gt; <span class="el_source">ChiSquaredDistribution.java</span></div><h1>ChiSquaredDistribution.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.math3.distribution;
+
+import org.apache.commons.math3.random.RandomGenerator;
+import org.apache.commons.math3.random.Well19937c;
+
+/**
+ * Implementation of the chi-squared distribution.
+ *
+ * @see &lt;a href=&quot;http://en.wikipedia.org/wiki/Chi-squared_distribution&quot;&gt;Chi-squared distribution (Wikipedia)&lt;/a&gt;
+ * @see &lt;a href=&quot;http://mathworld.wolfram.com/Chi-SquaredDistribution.html&quot;&gt;Chi-squared Distribution (MathWorld)&lt;/a&gt;
+ * @version $Id$
+ */
+public class ChiSquaredDistribution extends AbstractRealDistribution {
+    /**
+     * Default inverse cumulative probability accuracy
+     * @since 2.1
+     */
+    public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
+    /** Serializable version identifier */
+    private static final long serialVersionUID = -8352658048349159782L;
+    /** Internal Gamma distribution. */
+    private final GammaDistribution gamma;
+    /** Inverse cumulative probability accuracy */
+    private final double solverAbsoluteAccuracy;
+
+    /**
+     * Create a Chi-Squared distribution with the given degrees of freedom.
+     *
+     * @param degreesOfFreedom Degrees of freedom.
+     */
+    public ChiSquaredDistribution(double degreesOfFreedom) {
+<span class="fc" id="L48">        this(degreesOfFreedom, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);</span>
+<span class="fc" id="L49">    }</span>
+
+    /**
+     * Create a Chi-Squared distribution with the given degrees of freedom and
+     * inverse cumulative probability accuracy.
+     *
+     * @param degreesOfFreedom Degrees of freedom.
+     * @param inverseCumAccuracy the maximum absolute error in inverse
+     * cumulative probability estimates (defaults to
+     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     * @since 2.1
+     */
+    public ChiSquaredDistribution(double degreesOfFreedom,
+                                  double inverseCumAccuracy) {
+<span class="fc" id="L63">        this(new Well19937c(), degreesOfFreedom, inverseCumAccuracy);</span>
+<span class="fc" id="L64">    }</span>
+
+    /**
+     * Create a Chi-Squared distribution with the given degrees of freedom and
+     * inverse cumulative probability accuracy.
+     *
+     * @param rng Random number generator.
+     * @param degreesOfFreedom Degrees of freedom.
+     * @param inverseCumAccuracy the maximum absolute error in inverse
+     * cumulative probability estimates (defaults to
+     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     * @since 3.1
+     */
+    public ChiSquaredDistribution(RandomGenerator rng,
+                                  double degreesOfFreedom,
+                                  double inverseCumAccuracy) {
+<span class="fc" id="L80">        super(rng);</span>
+
+<span class="fc" id="L82">        gamma = new GammaDistribution(degreesOfFreedom / 2, 2);</span>
+<span class="fc" id="L83">        solverAbsoluteAccuracy = inverseCumAccuracy;</span>
+<span class="fc" id="L84">    }</span>
+
+    /**
+     * Access the number of degrees of freedom.
+     *
+     * @return the degrees of freedom.
+     */
+    public double getDegreesOfFreedom() {
+<span class="fc" id="L92">        return gamma.getShape() * 2.0;</span>
+    }
+
+    /** {@inheritDoc} */
+    public double density(double x) {
+<span class="fc" id="L97">        return gamma.density(x);</span>
+    }
+
+    /** {@inheritDoc} */
+    public double cumulativeProbability(double x)  {
+<span class="fc" id="L102">        return gamma.cumulativeProbability(x);</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected double getSolverAbsoluteAccuracy() {
+<span class="fc" id="L108">        return solverAbsoluteAccuracy;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * For {@code k} degrees of freedom, the mean is {@code k}.
+     */
+    public double getNumericalMean() {
+<span class="fc" id="L117">        return getDegreesOfFreedom();</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return {@code 2 * k}, where {@code k} is the number of degrees of freedom.
+     */
+    public double getNumericalVariance() {
+<span class="fc" id="L126">        return 2 * getDegreesOfFreedom();</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * The lower bound of the support is always 0 no matter the
+     * degrees of freedom.
+     *
+     * @return zero.
+     */
+    public double getSupportLowerBound() {
+<span class="fc" id="L138">        return 0;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * The upper bound of the support is always positive infinity no matter the
+     * degrees of freedom.
+     *
+     * @return {@code Double.POSITIVE_INFINITY}.
+     */
+    public double getSupportUpperBound() {
+<span class="fc" id="L150">        return Double.POSITIVE_INFINITY;</span>
+    }
+
+    /** {@inheritDoc} */
+    public boolean isSupportLowerBoundInclusive() {
+<span class="fc" id="L155">        return true;</span>
+    }
+
+    /** {@inheritDoc} */
+    public boolean isSupportUpperBoundInclusive() {
+<span class="fc" id="L160">        return false;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * The support of this distribution is connected.
+     *
+     * @return {@code true}
+     */
+    public boolean isSupportConnected() {
+<span class="fc" id="L171">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

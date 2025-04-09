@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EnumeratedIntegerDistribution.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Commons Math</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.math3.distribution</a> &gt; <span class="el_source">EnumeratedIntegerDistribution.java</span></div><h1>EnumeratedIntegerDistribution.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.math3.distribution;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.apache.commons.math3.exception.MathArithmeticException;
+import org.apache.commons.math3.exception.NotANumberException;
+import org.apache.commons.math3.exception.NotFiniteNumberException;
+import org.apache.commons.math3.exception.NotPositiveException;
+import org.apache.commons.math3.random.RandomGenerator;
+import org.apache.commons.math3.random.Well19937c;
+import org.apache.commons.math3.util.Pair;
+
+/**
+ * &lt;p&gt;Implementation of an integer-valued {@link EnumeratedDistribution}.&lt;/p&gt;
+ *
+ * &lt;p&gt;Values with zero-probability are allowed but they do not extend the
+ * support.&lt;br/&gt;
+ * Duplicate values are allowed. Probabilities of duplicate values are combined
+ * when computing cumulative probabilities and statistics.&lt;/p&gt;
+ *
+ * @version $Id$
+ * @since 3.2
+ */
+public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
+
+    /** Serializable UID. */
+    private static final long serialVersionUID = 20130308L;
+
+    /**
+     * {@link EnumeratedDistribution} instance (using the {@link Integer} wrapper)
+     * used to generate the pmf.
+     */
+    protected final EnumeratedDistribution&lt;Integer&gt; innerDistribution;
+
+    /**
+     * Create a discrete distribution using the given probability mass function
+     * definition.
+     *
+     * @param singletons array of random variable values.
+     * @param probabilities array of probabilities.
+     * @throws DimensionMismatchException if
+     * {@code singletons.length != probabilities.length}
+     * @throws NotPositiveException if any of the probabilities are negative.
+     * @throws NotFiniteNumberException if any of the probabilities are infinite.
+     * @throws NotANumberException if any of the probabilities are NaN.
+     * @throws MathArithmeticException all of the probabilities are 0.
+     */
+    public EnumeratedIntegerDistribution(final int[] singletons, final double[] probabilities)
+    throws DimensionMismatchException, NotPositiveException, MathArithmeticException,
+           NotFiniteNumberException, NotANumberException{
+<span class="fc" id="L68">        this(new Well19937c(), singletons, probabilities);</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Create a discrete distribution using the given random number generator
+     * and probability mass function definition.
+     *
+     * @param rng random number generator.
+     * @param singletons array of random variable values.
+     * @param probabilities array of probabilities.
+     * @throws DimensionMismatchException if
+     * {@code singletons.length != probabilities.length}
+     * @throws NotPositiveException if any of the probabilities are negative.
+     * @throws NotFiniteNumberException if any of the probabilities are infinite.
+     * @throws NotANumberException if any of the probabilities are NaN.
+     * @throws MathArithmeticException all of the probabilities are 0.
+     */
+    public EnumeratedIntegerDistribution(final RandomGenerator rng,
+                                       final int[] singletons, final double[] probabilities)
+        throws DimensionMismatchException, NotPositiveException, MathArithmeticException,
+                NotFiniteNumberException, NotANumberException {
+<span class="fc" id="L89">        super(rng);</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (singletons.length != probabilities.length) {</span>
+<span class="fc" id="L91">            throw new DimensionMismatchException(probabilities.length, singletons.length);</span>
+        }
+
+<span class="fc" id="L94">        final List&lt;Pair&lt;Integer, Double&gt;&gt; samples = new ArrayList&lt;Pair&lt;Integer, Double&gt;&gt;(singletons.length);</span>
+
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        for (int i = 0; i &lt; singletons.length; i++) {</span>
+<span class="fc" id="L97">            samples.add(new Pair&lt;Integer, Double&gt;(singletons[i], probabilities[i]));</span>
+        }
+
+<span class="fc" id="L100">        innerDistribution = new EnumeratedDistribution&lt;Integer&gt;(rng, samples);</span>
+<span class="fc" id="L101">    }</span>
+
+    /**
+     * {@inheritDoc}
+     */
+    public double probability(final int x) {
+<span class="fc" id="L107">        return innerDistribution.probability(x);</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public double cumulativeProbability(final int x) {
+<span class="fc" id="L114">        double probability = 0;</span>
+
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        for (final Pair&lt;Integer, Double&gt; sample : innerDistribution.getPmf()) {</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">            if (sample.getKey() &lt;= x) {</span>
+<span class="fc" id="L118">                probability += sample.getValue();</span>
+            }
+<span class="fc" id="L120">        }</span>
+
+<span class="fc" id="L122">        return probability;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return {@code sum(singletons[i] * probabilities[i])}
+     */
+    public double getNumericalMean() {
+<span class="fc" id="L131">        double mean = 0;</span>
+
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        for (final Pair&lt;Integer, Double&gt; sample : innerDistribution.getPmf()) {</span>
+<span class="fc" id="L134">            mean += sample.getValue() * sample.getKey();</span>
+<span class="fc" id="L135">        }</span>
+
+<span class="fc" id="L137">        return mean;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return {@code sum((singletons[i] - mean) ^ 2 * probabilities[i])}
+     */
+    public double getNumericalVariance() {
+<span class="fc" id="L146">        double mean = 0;</span>
+<span class="fc" id="L147">        double meanOfSquares = 0;</span>
+
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        for (final Pair&lt;Integer, Double&gt; sample : innerDistribution.getPmf()) {</span>
+<span class="fc" id="L150">            mean += sample.getValue() * sample.getKey();</span>
+<span class="fc" id="L151">            meanOfSquares += sample.getValue() * sample.getKey() * sample.getKey();</span>
+<span class="fc" id="L152">        }</span>
+
+<span class="fc" id="L154">        return meanOfSquares - mean * mean;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * Returns the lowest value with non-zero probability.
+     *
+     * @return the lowest value with non-zero probability.
+     */
+    public int getSupportLowerBound() {
+<span class="fc" id="L165">        int min = Integer.MAX_VALUE;</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        for (final Pair&lt;Integer, Double&gt; sample : innerDistribution.getPmf()) {</span>
+<span class="fc bfc" id="L167" title="All 4 branches covered.">            if (sample.getKey() &lt; min &amp;&amp; sample.getValue() &gt; 0) {</span>
+<span class="fc" id="L168">                min = sample.getKey();</span>
+            }
+<span class="fc" id="L170">        }</span>
+
+<span class="fc" id="L172">        return min;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * Returns the highest value with non-zero probability.
+     *
+     * @return the highest value with non-zero probability.
+     */
+    public int getSupportUpperBound() {
+<span class="fc" id="L183">        int max = Integer.MIN_VALUE;</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        for (final Pair&lt;Integer, Double&gt; sample : innerDistribution.getPmf()) {</span>
+<span class="fc bfc" id="L185" title="All 4 branches covered.">            if (sample.getKey() &gt; max &amp;&amp; sample.getValue() &gt; 0) {</span>
+<span class="fc" id="L186">                max = sample.getKey();</span>
+            }
+<span class="fc" id="L188">        }</span>
+
+<span class="fc" id="L190">        return max;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * The support of this distribution is connected.
+     *
+     * @return {@code true}
+     */
+    public boolean isSupportConnected() {
+<span class="fc" id="L201">        return true;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int sample() {
+<span class="fc" id="L209">        return innerDistribution.sample();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LogNormalDistribution.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Commons Math</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.math3.distribution</a> &gt; <span class="el_source">LogNormalDistribution.java</span></div><h1>LogNormalDistribution.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.math3.distribution;
+
+import org.apache.commons.math3.exception.NotStrictlyPositiveException;
+import org.apache.commons.math3.exception.NumberIsTooLargeException;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
+import org.apache.commons.math3.special.Erf;
+import org.apache.commons.math3.util.FastMath;
+import org.apache.commons.math3.random.RandomGenerator;
+import org.apache.commons.math3.random.Well19937c;
+
+/**
+ * Implementation of the log-normal (gaussian) distribution.
+ *
+ * &lt;p&gt;
+ * &lt;strong&gt;Parameters:&lt;/strong&gt;
+ * {@code X} is log-normally distributed if its natural logarithm {@code log(X)}
+ * is normally distributed. The probability distribution function of {@code X}
+ * is given by (for {@code x &gt; 0})
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * {@code exp(-0.5 * ((ln(x) - m) / s)^2) / (s * sqrt(2 * pi) * x)}
+ * &lt;/p&gt;
+ * &lt;ul&gt;
+ * &lt;li&gt;{@code m} is the &lt;em&gt;scale&lt;/em&gt; parameter: this is the mean of the
+ * normally distributed natural logarithm of this distribution,&lt;/li&gt;
+ * &lt;li&gt;{@code s} is the &lt;em&gt;shape&lt;/em&gt; parameter: this is the standard
+ * deviation of the normally distributed natural logarithm of this
+ * distribution.
+ * &lt;/ul&gt;
+ *
+ * @see &lt;a href=&quot;http://en.wikipedia.org/wiki/Log-normal_distribution&quot;&gt;
+ * Log-normal distribution (Wikipedia)&lt;/a&gt;
+ * @see &lt;a href=&quot;http://mathworld.wolfram.com/LogNormalDistribution.html&quot;&gt;
+ * Log Normal distribution (MathWorld)&lt;/a&gt;
+ *
+ * @version $Id$
+ * @since 3.0
+ */
+public class LogNormalDistribution extends AbstractRealDistribution {
+    /** Default inverse cumulative probability accuracy. */
+    public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
+
+    /** Serializable version identifier. */
+    private static final long serialVersionUID = 20120112;
+
+    /** &amp;radic;(2 &amp;pi;) */
+<span class="fc" id="L64">    private static final double SQRT2PI = FastMath.sqrt(2 * FastMath.PI);</span>
+
+    /** &amp;radic;(2) */
+<span class="fc" id="L67">    private static final double SQRT2 = FastMath.sqrt(2.0);</span>
+
+    /** The scale parameter of this distribution. */
+    private final double scale;
+
+    /** The shape parameter of this distribution. */
+    private final double shape;
+
+    /** Inverse cumulative probability accuracy. */
+    private final double solverAbsoluteAccuracy;
+
+    /**
+     * Create a log-normal distribution, where the mean and standard deviation
+     * of the {@link NormalDistribution normally distributed} natural
+     * logarithm of the log-normal distribution are equal to zero and one
+     * respectively. In other words, the scale of the returned distribution is
+     * {@code 0}, while its shape is {@code 1}.
+     */
+    public LogNormalDistribution() {
+<span class="nc" id="L86">        this(0, 1);</span>
+<span class="nc" id="L87">    }</span>
+
+    /**
+     * Create a log-normal distribution using the specified scale and shape.
+     *
+     * @param scale the scale parameter of this distribution
+     * @param shape the shape parameter of this distribution
+     * @throws NotStrictlyPositiveException if {@code shape &lt;= 0}.
+     */
+    public LogNormalDistribution(double scale, double shape)
+        throws NotStrictlyPositiveException {
+<span class="fc" id="L98">        this(scale, shape, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);</span>
+<span class="fc" id="L99">    }</span>
+
+    /**
+     * Create a log-normal distribution using the specified scale, shape and
+     * inverse cumulative distribution accuracy.
+     *
+     * @param scale the scale parameter of this distribution
+     * @param shape the shape parameter of this distribution
+     * @param inverseCumAccuracy Inverse cumulative probability accuracy.
+     * @throws NotStrictlyPositiveException if {@code shape &lt;= 0}.
+     */
+    public LogNormalDistribution(double scale, double shape, double inverseCumAccuracy)
+        throws NotStrictlyPositiveException {
+<span class="fc" id="L112">        this(new Well19937c(), scale, shape, inverseCumAccuracy);</span>
+<span class="fc" id="L113">    }</span>
+
+    /**
+     * Creates a log-normal distribution.
+     *
+     * @param rng Random number generator.
+     * @param scale Scale parameter of this distribution.
+     * @param shape Shape parameter of this distribution.
+     * @param inverseCumAccuracy Inverse cumulative probability accuracy.
+     * @throws NotStrictlyPositiveException if {@code shape &lt;= 0}.
+     * @since 3.1
+     */
+    public LogNormalDistribution(RandomGenerator rng,
+                                 double scale,
+                                 double shape,
+                                 double inverseCumAccuracy)
+        throws NotStrictlyPositiveException {
+<span class="fc" id="L130">        super(rng);</span>
+
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (shape &lt;= 0) {</span>
+<span class="fc" id="L133">            throw new NotStrictlyPositiveException(LocalizedFormats.SHAPE, shape);</span>
+        }
+
+<span class="fc" id="L136">        this.scale = scale;</span>
+<span class="fc" id="L137">        this.shape = shape;</span>
+<span class="fc" id="L138">        this.solverAbsoluteAccuracy = inverseCumAccuracy;</span>
+<span class="fc" id="L139">    }</span>
+
+    /**
+     * Returns the scale parameter of this distribution.
+     *
+     * @return the scale parameter
+     */
+    public double getScale() {
+<span class="fc" id="L147">        return scale;</span>
+    }
+
+    /**
+     * Returns the shape parameter of this distribution.
+     *
+     * @return the shape parameter
+     */
+    public double getShape() {
+<span class="fc" id="L156">        return shape;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * For scale {@code m}, and shape {@code s} of this distribution, the PDF
+     * is given by
+     * &lt;ul&gt;
+     * &lt;li&gt;{@code 0} if {@code x &lt;= 0},&lt;/li&gt;
+     * &lt;li&gt;{@code exp(-0.5 * ((ln(x) - m) / s)^2) / (s * sqrt(2 * pi) * x)}
+     * otherwise.&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+    public double density(double x) {
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        if (x &lt;= 0) {</span>
+<span class="fc" id="L172">            return 0;</span>
+        }
+<span class="fc" id="L174">        final double x0 = FastMath.log(x) - scale;</span>
+<span class="fc" id="L175">        final double x1 = x0 / shape;</span>
+<span class="fc" id="L176">        return FastMath.exp(-0.5 * x1 * x1) / (shape * SQRT2PI * x);</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * For scale {@code m}, and shape {@code s} of this distribution, the CDF
+     * is given by
+     * &lt;ul&gt;
+     * &lt;li&gt;{@code 0} if {@code x &lt;= 0},&lt;/li&gt;
+     * &lt;li&gt;{@code 0} if {@code ln(x) - m &lt; 0} and {@code m - ln(x) &gt; 40 * s}, as
+     * in these cases the actual value is within {@code Double.MIN_VALUE} of 0,
+     * &lt;li&gt;{@code 1} if {@code ln(x) - m &gt;= 0} and {@code ln(x) - m &gt; 40 * s},
+     * as in these cases the actual value is within {@code Double.MIN_VALUE} of
+     * 1,&lt;/li&gt;
+     * &lt;li&gt;{@code 0.5 + 0.5 * erf((ln(x) - m) / (s * sqrt(2))} otherwise.&lt;/li&gt;
+     * &lt;/ul&gt;
+     */
+    public double cumulativeProbability(double x)  {
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (x &lt;= 0) {</span>
+<span class="fc" id="L196">            return 0;</span>
+        }
+<span class="fc" id="L198">        final double dev = FastMath.log(x) - scale;</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        if (FastMath.abs(dev) &gt; 40 * shape) {</span>
+<span class="pc bpc" id="L200" title="1 of 2 branches missed.">            return dev &lt; 0 ? 0.0d : 1.0d;</span>
+        }
+<span class="fc" id="L202">        return 0.5 + 0.5 * Erf.erf(dev / (shape * SQRT2));</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @deprecated See {@link RealDistribution#cumulativeProbability(double,double)}
+     */
+    @Override@Deprecated
+    public double cumulativeProbability(double x0, double x1)
+        throws NumberIsTooLargeException {
+<span class="fc" id="L213">        return probability(x0, x1);</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public double probability(double x0,
+                              double x1)
+        throws NumberIsTooLargeException {
+<span class="fc bfc" id="L221" title="All 2 branches covered.">        if (x0 &gt; x1) {</span>
+<span class="fc" id="L222">            throw new NumberIsTooLargeException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,</span>
+<span class="fc" id="L223">                                                x0, x1, true);</span>
+        }
+<span class="pc bpc" id="L225" title="1 of 4 branches missed.">        if (x0 &lt;= 0 || x1 &lt;= 0) {</span>
+<span class="fc" id="L226">            return super.probability(x0, x1);</span>
+        }
+<span class="fc" id="L228">        final double denom = shape * SQRT2;</span>
+<span class="fc" id="L229">        final double v0 = (FastMath.log(x0) - scale) / denom;</span>
+<span class="fc" id="L230">        final double v1 = (FastMath.log(x1) - scale) / denom;</span>
+<span class="fc" id="L231">        return 0.5 * Erf.erf(v0, v1);</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected double getSolverAbsoluteAccuracy() {
+<span class="fc" id="L237">        return solverAbsoluteAccuracy;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * For scale {@code m} and shape {@code s}, the mean is
+     * {@code exp(m + s^2 / 2)}.
+     */
+    public double getNumericalMean() {
+<span class="fc" id="L247">        double s = shape;</span>
+<span class="fc" id="L248">        return FastMath.exp(scale + (s * s / 2));</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * For scale {@code m} and shape {@code s}, the variance is
+     * {@code (exp(s^2) - 1) * exp(2 * m + s^2)}.
+     */
+    public double getNumericalVariance() {
+<span class="fc" id="L258">        final double s = shape;</span>
+<span class="fc" id="L259">        final double ss = s * s;</span>
+<span class="fc" id="L260">        return (FastMath.exp(ss) - 1) * FastMath.exp(2 * scale + ss);</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * The lower bound of the support is always 0 no matter the parameters.
+     *
+     * @return lower bound of the support (always 0)
+     */
+    public double getSupportLowerBound() {
+<span class="fc" id="L271">        return 0;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * The upper bound of the support is always positive infinity
+     * no matter the parameters.
+     *
+     * @return upper bound of the support (always
+     * {@code Double.POSITIVE_INFINITY})
+     */
+    public double getSupportUpperBound() {
+<span class="fc" id="L284">        return Double.POSITIVE_INFINITY;</span>
+    }
+
+    /** {@inheritDoc} */
+    public boolean isSupportLowerBoundInclusive() {
+<span class="fc" id="L289">        return true;</span>
+    }
+
+    /** {@inheritDoc} */
+    public boolean isSupportUpperBoundInclusive() {
+<span class="fc" id="L294">        return false;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * The support of this distribution is connected.
+     *
+     * @return {@code true}
+     */
+    public boolean isSupportConnected() {
+<span class="fc" id="L305">        return true;</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public double sample()  {
+<span class="fc" id="L311">        final double n = random.nextGaussian();</span>
+<span class="fc" id="L312">        return FastMath.exp(scale + shape * n);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="105" failures="0" name="org.apache.commons.math3.linear.RealVectorTest" time="0.095" errors="0" skipped="24">
+  <properties>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="java.vm.version" value="11.0.26+4-post-Ubuntu-1ubuntu122.04"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-11-openjdk-amd64/lib"/>
+    <property name="maven.multiModuleProjectDirectory" value="/home/daniel/SOEN-345-Project/Math/Math_5b"/>
+    <property name="java.vm.vendor" value="Ubuntu"/>
+    <property name="java.vendor.url" value="https://ubuntu.com/"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="path.separator" value=":"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="/home/daniel/SOEN-345-Project/Math/Math_5b"/>
+    <property name="java.vm.compressedOopsMode" value="32-bit"/>
+    <property name="java.runtime.version" value="11.0.26+4-post-Ubuntu-1ubuntu122.04"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="os.name" value="Linux"/>
+    <property name="classworlds.conf" value="/mnt/c/Program Files/Maven/apache-maven-3.9.9/bin/m2.conf"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib"/>
+    <property name="maven.conf" value="/mnt/c/Program Files/Maven/apache-maven-3.9.9/conf"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="java.class.version" value="55.0"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="5.15.167.4-microsoft-standard-WSL2"/>
+    <property name="library.jansi.path" value="/mnt/c/Program Files/Maven/apache-maven-3.9.9/lib/jansi-native"/>
+    <property name="user.home" value="/home/daniel"/>
+    <property name="user.timezone" value="America/Toronto"/>
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.specification.version" value="11"/>
+    <property name="user.name" value="daniel"/>
+    <property name="java.class.path" value="/mnt/c/Program Files/Maven/apache-maven-3.9.9/boot/plexus-classworlds-2.8.0.jar"/>
+    <property name="java.vm.specification.version" value="11"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean verify"/>
+    <property name="java.home" value="/usr/lib/jvm/java-11-openjdk-amd64"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="java.version" value="11.0.26"/>
+    <property name="java.vendor" value="Ubuntu"/>
+    <property name="java.specification.maintenance.version" value="3"/>
+    <property name="maven.home" value="/mnt/c/Program Files/Maven/apache-maven-3.9.9"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.version.date" value="2025-01-21"/>
+    <property name="java.vendor.url.bug" value="https://bugs.launchpad.net/ubuntu/+source/openjdk-lts"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.cpu.isalist" value=""/>
+  </properties>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testSerial" time="0">
+    <skipped message="Abstract class RealVector is not serializable."/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testIsInfinite" time="0">
+    <skipped message="Abstract class RealVector does not implement isNaN()"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testIsNaN" time="0">
+    <skipped message="Abstract class RealVector does not implement isNaN()"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testEquals" time="0">
+    <skipped message="Abstract class RealVector does not override equals(Object)."/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetL1Norm" time="0">
+    <skipped message="Abstract class RealVector does not implement getL1Norm()"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetLInfNorm" time="0">
+    <skipped message="Abstract class RealVector does not implement getLInfNorm()"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testAppendVector" time="0">
+    <skipped message="Abstract class RealVector does not implement append(RealVector)."/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testAppendScalar" time="0">
+    <skipped message="Abstract class RealVector does not implement append(double)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetSubVector" time="0">
+    <skipped message="Abstract class RealVector does not implement getSubvector(int, int)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetSubVectorInvalidIndex1" time="0">
+    <skipped message="Abstract class RealVector does not implement getSubvector(int, int)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetSubVectorInvalidIndex2" time="0">
+    <skipped message="Abstract class RealVector does not implement getSubvector(int, int)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetSubVectorInvalidIndex3" time="0">
+    <skipped message="Abstract class RealVector does not implement getSubvector(int, int)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetSubVectorInvalidIndex4" time="0">
+    <skipped message="Abstract class RealVector does not implement getSubvector(int, int)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testSetSubVectorSameType" time="0">
+    <skipped message="Abstract class RealVector does not implement setSubvector(int, RealVector)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testSetSubVectorMixedType" time="0">
+    <skipped message="Abstract class RealVector does not implement setSubvector(int, RealVector)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testSetSubVectorInvalidIndex1" time="0.001">
+    <skipped message="Abstract class RealVector does not implement setSubvector(int, RealVector)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testSetSubVectorInvalidIndex2" time="0.001">
+    <skipped message="Abstract class RealVector does not implement setSubvector(int, RealVector)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testSetSubVectorInvalidIndex3" time="0.001">
+    <skipped message="Abstract class RealVector does not implement setSubvector(int, RealVector)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testEbeMultiplySameType" time="0.001">
+    <skipped message="Abstract class RealVector does not implement ebeMultiply(RealVector)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testEbeMultiplyMixedTypes" time="0.001">
+    <skipped message="Abstract class RealVector does not implement ebeMultiply(RealVector)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testEbeMultiplyDimensionMismatch" time="0.001">
+    <skipped message="Abstract class RealVector does not implement ebeMultiply(RealVector)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testEbeDivideSameType" time="0.001">
+    <skipped message="Abstract class RealVector does not implement ebeDivide(RealVector)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testEbeDivideMixedTypes" time="0.001">
+    <skipped message="Abstract class RealVector does not implement ebeDivide(RealVector)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testEbeDivideDimensionMismatch" time="0.001">
+    <skipped message="Abstract class RealVector does not implement ebeDivide(RealVector)"/>
+  </testcase>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testSparseIterator" time="0.003"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testSet" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testCopy" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testIterator" time="0.002"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testMinMax" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetDistanceMixedTypes" time="0.001"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetDistanceDimensionMismatch" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetNorm" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetL1DistanceSameType" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetL1DistanceMixedTypes" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetL1DistanceDimensionMismatch" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetLInfDistanceSameType" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetLInfDistanceMixedTypes" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetLInfDistanceDimensionMismatch" time="0.001"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testMapAdd" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testMapAddToSelf" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testMapSubtract" time="0.001"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testMapSubtractToSelf" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testMapMultiply" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testMapMultiplyToSelf" time="0.001"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testMapDivide" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testMapDivideToSelf" time="0.001"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testOuterProductSameType" time="0.001"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testOuterProductMixedTypes" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testProjectionSameType" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testProjectionMixedTypes" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testProjectionNullVector" time="0.001"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testProjectionDimensionMismatch" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testToArray" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testUnitVector" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testUnitize" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testUnitVectorNullVector" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testUnitizeNullVector" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testCombineSameType" time="0.016"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testCombineMixedTypes" time="0.02"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testCombineDimensionMismatchSameType" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testCombineDimensionMismatchMixedTypes" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testCombineToSelfSameType" time="0.017"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testCombineToSelfMixedTypes" time="0.017"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testCombineToSelfDimensionMismatchSameType" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testCombineToSelfDimensionMismatchMixedTypes" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testDotProductSameType" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testDotProductDimensionMismatchSameType" time="0.001"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testDotProductMixedTypes" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testDotProductDimensionMismatchMixedTypes" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testCosineSameType" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testCosineMixedTypes" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testCosineLeftNullVector" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testCosineRightNullVector" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testCosineDimensionMismatch" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testWalkInDefaultOrderPreservingVisitor1" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testWalkInDefaultOrderPreservingVisitor2" time="0.001"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testWalkInDefaultOrderPreservingVisitor3" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testWalkInOptimizedOrderPreservingVisitor1" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testWalkInOptimizedOrderPreservingVisitor2" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testWalkInOptimizedOrderPreservingVisitor3" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testWalkInDefaultOrderChangingVisitor1" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testWalkInDefaultOrderChangingVisitor2" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testWalkInDefaultOrderChangingVisitor3" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testWalkInOptimizedOrderChangingVisitor1" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testWalkInOptimizedOrderChangingVisitor2" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testWalkInOptimizedOrderChangingVisitor3" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetDimension" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetEntry" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetEntryInvalidIndex1" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetEntryInvalidIndex2" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testSetEntry" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testSetEntryInvalidIndex1" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testSetEntryInvalidIndex2" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testAddToEntry" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testAddToEntryInvalidIndex1" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testAddToEntryInvalidIndex2" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testAddSameType" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testAddMixedTypes" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testAddDimensionMismatch" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testSubtractSameType" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testSubtractMixedTypes" time="0.001"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testSubtractDimensionMismatch" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testGetDistanceSameType" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testMap" time="0"/>
+  <testcase classname="org.apache.commons.math3.linear.RealVectorTest" name="testMapToSelf" time="0.001"/>
+</testsuite>

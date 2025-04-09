@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ISAACRandom.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Commons Math</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.math3.random</a> &gt; <span class="el_source">ISAACRandom.java</span></div><h1>ISAACRandom.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.math3.random;
+
+import java.io.Serializable;
+
+/**
+ * &lt;a href=&quot;http://burtleburtle.net/bob/rand/isaacafa.html&quot;&gt;
+ *  ISAAC: a fast cryptographic pseudo-random number generator&lt;/a&gt;
+ * &lt;br/&gt;
+ * ISAAC (Indirection, Shift, Accumulate, Add, and Count) generates 32-bit
+ * random numbers.
+ * ISAAC has been designed to be cryptographically secure and is inspired
+ * by RC4.
+ * Cycles are guaranteed to be at least 2&lt;sup&gt;40&lt;/sup&gt; values long, and they
+ * are 2&lt;sup&gt;8295&lt;/sup&gt; values long on average.
+ * The results are uniformly distributed, unbiased, and unpredictable unless
+ * you know the seed.
+ * &lt;br/&gt;
+ * This code is based (with minor changes and improvements) on the original
+ * implementation of the algorithm by Bob Jenkins.
+ * &lt;br/&gt;
+ *
+ * @version $Id$
+ * @since 3.0
+ */
+public class ISAACRandom extends BitsStreamGenerator implements Serializable {
+    /** Serializable version identifier */
+    private static final long serialVersionUID = 7288197941165002400L;
+    /** Log of size of rsl[] and mem[] */
+    private static final int SIZE_L = 8;
+    /** Size of rsl[] and mem[] */
+    private static final int SIZE = 1 &lt;&lt; SIZE_L;
+    /** Half-size of rsl[] and mem[] */
+    private static final int H_SIZE = SIZE &gt;&gt; 1;
+    /** For pseudo-random lookup */
+    private static final int MASK = SIZE - 1 &lt;&lt; 2;
+    /** The golden ratio */
+    private static final int GLD_RATIO = 0x9e3779b9;
+    /** The results given to the user */
+<span class="pc" id="L56">    private final int[] rsl = new int[SIZE];</span>
+    /** The internal state */
+<span class="pc" id="L58">    private final int[] mem = new int[SIZE];</span>
+    /** Count through the results in rsl[] */
+    private int count;
+    /** Accumulator */
+    private int isaacA;
+    /** The last result */
+    private int isaacB;
+    /** Counter, guarantees cycle is at least 2^40 */
+    private int isaacC;
+    /** Service variable. */
+<span class="pc" id="L68">    private final int[] arr = new int[8];</span>
+    /** Service variable. */
+    private int isaacX;
+    /** Service variable. */
+    private int isaacI;
+    /** Service variable. */
+    private int isaacJ;
+
+
+    /**
+     * Creates a new ISAAC random number generator.
+     * &lt;br/&gt;
+     * The instance is initialized using a combination of the
+     * current time and system hash code of the instance as the seed.
+     */
+<span class="nc" id="L83">    public ISAACRandom() {</span>
+<span class="nc" id="L84">        setSeed(System.currentTimeMillis() + System.identityHashCode(this));</span>
+<span class="nc" id="L85">    }</span>
+
+    /**
+     * Creates a new ISAAC random number generator using a single long seed.
+     *
+     * @param seed Initial seed.
+     */
+<span class="fc" id="L92">    public ISAACRandom(long seed) {</span>
+<span class="fc" id="L93">        setSeed(seed);</span>
+<span class="fc" id="L94">    }</span>
+
+    /**
+     * Creates a new ISAAC random number generator using an int array seed.
+     *
+     * @param seed Initial seed. If {@code null}, the seed will be related
+     * to the current time.
+     */
+<span class="fc" id="L102">    public ISAACRandom(int[] seed) {</span>
+<span class="fc" id="L103">        setSeed(seed);</span>
+<span class="fc" id="L104">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public void setSeed(int seed) {
+<span class="fc" id="L109">        setSeed(new int[]{seed});</span>
+<span class="fc" id="L110">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public void setSeed(long seed) {
+<span class="fc" id="L115">        setSeed(new int[]{(int) (seed &gt;&gt;&gt; 32), (int) (seed &amp; 0xffffffffL)});</span>
+<span class="fc" id="L116">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public void setSeed(int[] seed) {
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">        if (seed == null) {</span>
+<span class="nc" id="L122">            setSeed(System.currentTimeMillis() + System.identityHashCode(this));</span>
+<span class="nc" id="L123">            return;</span>
+        }
+<span class="fc" id="L125">        final int seedLen = seed.length;</span>
+<span class="fc" id="L126">        final int rslLen = rsl.length;</span>
+<span class="fc" id="L127">        System.arraycopy(seed, 0, rsl, 0, Math.min(seedLen, rslLen));</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (seedLen &lt; rslLen) {</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">            for (int j = seedLen; j &lt; rslLen; j++) {</span>
+<span class="fc" id="L130">                long k = rsl[j - seedLen];</span>
+<span class="fc" id="L131">                rsl[j] = (int) (0x6c078965L * (k ^ k &gt;&gt; 30) + j &amp; 0xffffffffL);</span>
+            }
+        }
+<span class="fc" id="L134">        initState();</span>
+<span class="fc" id="L135">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    protected int next(int bits) {
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        if (count &lt; 0) {</span>
+<span class="fc" id="L141">            isaac();</span>
+<span class="fc" id="L142">            count = SIZE - 1;</span>
+        }
+<span class="fc" id="L144">        return rsl[count--] &gt;&gt;&gt; 32 - bits;</span>
+    }
+
+    /** Generate 256 results */
+    private void isaac() {
+<span class="fc" id="L149">        isaacI = 0;</span>
+<span class="fc" id="L150">        isaacJ = H_SIZE;</span>
+<span class="fc" id="L151">        isaacB += ++isaacC;</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        while (isaacI &lt; H_SIZE) {</span>
+<span class="fc" id="L153">            isaac2();</span>
+        }
+<span class="fc" id="L155">        isaacJ = 0;</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        while (isaacJ &lt; H_SIZE) {</span>
+<span class="fc" id="L157">            isaac2();</span>
+        }
+<span class="fc" id="L159">    }</span>
+
+    /** Intermediate internal loop. */
+    private void isaac2() {
+<span class="fc" id="L163">        isaacX = mem[isaacI];</span>
+<span class="fc" id="L164">        isaacA ^= isaacA &lt;&lt; 13;</span>
+<span class="fc" id="L165">        isaacA += mem[isaacJ++];</span>
+<span class="fc" id="L166">        isaac3();</span>
+<span class="fc" id="L167">        isaacX = mem[isaacI];</span>
+<span class="fc" id="L168">        isaacA ^= isaacA &gt;&gt;&gt; 6;</span>
+<span class="fc" id="L169">        isaacA += mem[isaacJ++];</span>
+<span class="fc" id="L170">        isaac3();</span>
+<span class="fc" id="L171">        isaacX = mem[isaacI];</span>
+<span class="fc" id="L172">        isaacA ^= isaacA &lt;&lt; 2;</span>
+<span class="fc" id="L173">        isaacA += mem[isaacJ++];</span>
+<span class="fc" id="L174">        isaac3();</span>
+<span class="fc" id="L175">        isaacX = mem[isaacI];</span>
+<span class="fc" id="L176">        isaacA ^= isaacA &gt;&gt;&gt; 16;</span>
+<span class="fc" id="L177">        isaacA += mem[isaacJ++];</span>
+<span class="fc" id="L178">        isaac3();</span>
+<span class="fc" id="L179">    }</span>
+
+    /** Lowest level internal loop. */
+    private void isaac3() {
+<span class="fc" id="L183">        mem[isaacI] = mem[(isaacX &amp; MASK) &gt;&gt; 2] + isaacA + isaacB;</span>
+<span class="fc" id="L184">        isaacB = mem[(mem[isaacI] &gt;&gt; SIZE_L &amp; MASK) &gt;&gt; 2] + isaacX;</span>
+<span class="fc" id="L185">        rsl[isaacI++] = isaacB;</span>
+<span class="fc" id="L186">    }</span>
+
+    /** Initialize, or reinitialize, this instance of rand. */
+    private void initState() {
+<span class="fc" id="L190">        isaacA = 0;</span>
+<span class="fc" id="L191">        isaacB = 0;</span>
+<span class="fc" id="L192">        isaacC = 0;</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        for (int j = 0; j &lt; arr.length; j++) {</span>
+<span class="fc" id="L194">            arr[j] = GLD_RATIO;</span>
+        }
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        for (int j = 0; j &lt; 4; j++) {</span>
+<span class="fc" id="L197">            shuffle();</span>
+        }
+        // fill in mem[] with messy stuff
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        for (int j = 0; j &lt; SIZE; j += 8) {</span>
+<span class="fc" id="L201">            arr[0] += rsl[j];</span>
+<span class="fc" id="L202">            arr[1] += rsl[j + 1];</span>
+<span class="fc" id="L203">            arr[2] += rsl[j + 2];</span>
+<span class="fc" id="L204">            arr[3] += rsl[j + 3];</span>
+<span class="fc" id="L205">            arr[4] += rsl[j + 4];</span>
+<span class="fc" id="L206">            arr[5] += rsl[j + 5];</span>
+<span class="fc" id="L207">            arr[6] += rsl[j + 6];</span>
+<span class="fc" id="L208">            arr[7] += rsl[j + 7];</span>
+<span class="fc" id="L209">            shuffle();</span>
+<span class="fc" id="L210">            setState(j);</span>
+        }
+        // second pass makes all of seed affect all of mem
+<span class="fc bfc" id="L213" title="All 2 branches covered.">        for (int j = 0; j &lt; SIZE; j += 8) {</span>
+<span class="fc" id="L214">            arr[0] += mem[j];</span>
+<span class="fc" id="L215">            arr[1] += mem[j + 1];</span>
+<span class="fc" id="L216">            arr[2] += mem[j + 2];</span>
+<span class="fc" id="L217">            arr[3] += mem[j + 3];</span>
+<span class="fc" id="L218">            arr[4] += mem[j + 4];</span>
+<span class="fc" id="L219">            arr[5] += mem[j + 5];</span>
+<span class="fc" id="L220">            arr[6] += mem[j + 6];</span>
+<span class="fc" id="L221">            arr[7] += mem[j + 7];</span>
+<span class="fc" id="L222">            shuffle();</span>
+<span class="fc" id="L223">            setState(j);</span>
+        }
+<span class="fc" id="L225">        isaac();</span>
+<span class="fc" id="L226">        count = SIZE - 1;</span>
+<span class="fc" id="L227">        clear();</span>
+<span class="fc" id="L228">    }</span>
+
+    /** Shuffle array. */
+    private void shuffle() {
+<span class="fc" id="L232">        arr[0] ^= arr[1] &lt;&lt; 11;</span>
+<span class="fc" id="L233">        arr[3] += arr[0];</span>
+<span class="fc" id="L234">        arr[1] += arr[2];</span>
+<span class="fc" id="L235">        arr[1] ^= arr[2] &gt;&gt;&gt; 2;</span>
+<span class="fc" id="L236">        arr[4] += arr[1];</span>
+<span class="fc" id="L237">        arr[2] += arr[3];</span>
+<span class="fc" id="L238">        arr[2] ^= arr[3] &lt;&lt; 8;</span>
+<span class="fc" id="L239">        arr[5] += arr[2];</span>
+<span class="fc" id="L240">        arr[3] += arr[4];</span>
+<span class="fc" id="L241">        arr[3] ^= arr[4] &gt;&gt;&gt; 16;</span>
+<span class="fc" id="L242">        arr[6] += arr[3];</span>
+<span class="fc" id="L243">        arr[4] += arr[5];</span>
+<span class="fc" id="L244">        arr[4] ^= arr[5] &lt;&lt; 10;</span>
+<span class="fc" id="L245">        arr[7] += arr[4];</span>
+<span class="fc" id="L246">        arr[5] += arr[6];</span>
+<span class="fc" id="L247">        arr[5] ^= arr[6] &gt;&gt;&gt; 4;</span>
+<span class="fc" id="L248">        arr[0] += arr[5];</span>
+<span class="fc" id="L249">        arr[6] += arr[7];</span>
+<span class="fc" id="L250">        arr[6] ^= arr[7] &lt;&lt; 8;</span>
+<span class="fc" id="L251">        arr[1] += arr[6];</span>
+<span class="fc" id="L252">        arr[7] += arr[0];</span>
+<span class="fc" id="L253">        arr[7] ^= arr[0] &gt;&gt;&gt; 9;</span>
+<span class="fc" id="L254">        arr[2] += arr[7];</span>
+<span class="fc" id="L255">        arr[0] += arr[1];</span>
+<span class="fc" id="L256">    }</span>
+
+    /** Set the state by copying the internal arrays.
+     *
+     * @param start First index into {@link #mem} array.
+     */
+    private void setState(int start) {
+<span class="fc" id="L263">        mem[start] = arr[0];</span>
+<span class="fc" id="L264">        mem[start + 1] = arr[1];</span>
+<span class="fc" id="L265">        mem[start + 2] = arr[2];</span>
+<span class="fc" id="L266">        mem[start + 3] = arr[3];</span>
+<span class="fc" id="L267">        mem[start + 4] = arr[4];</span>
+<span class="fc" id="L268">        mem[start + 5] = arr[5];</span>
+<span class="fc" id="L269">        mem[start + 6] = arr[6];</span>
+<span class="fc" id="L270">        mem[start + 7] = arr[7];</span>
+<span class="fc" id="L271">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

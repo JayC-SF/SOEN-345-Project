@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SimplexSolver.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Commons Math</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.math3.optim.linear</a> &gt; <span class="el_source">SimplexSolver.java</span></div><h1>SimplexSolver.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.math3.optim.linear;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.math3.exception.TooManyIterationsException;
+import org.apache.commons.math3.optim.PointValuePair;
+import org.apache.commons.math3.util.Precision;
+
+/**
+ * Solves a linear problem using the &quot;Two-Phase Simplex&quot; method.
+ * &lt;p&gt;
+ * &lt;b&gt;Note:&lt;/b&gt; Depending on the problem definition, the default convergence criteria
+ * may be too strict, resulting in {@link NoFeasibleSolutionException} or
+ * {@link TooManyIterationsException}. In such a case it is advised to adjust these
+ * criteria with more appropriate values, e.g. relaxing the epsilon value.
+ * &lt;p&gt;
+ * Default convergence criteria:
+ * &lt;ul&gt;
+ *   &lt;li&gt;Algorithm convergence: 1e-6&lt;/li&gt;
+ *   &lt;li&gt;Floating-point comparisons: 10 ulp&lt;/li&gt;
+ *   &lt;li&gt;Cut-Off value: 1e-12&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;p&gt;
+ * The cut-off value has been introduced to zero out very small numbers in the Simplex tableau,
+ * as these may lead to numerical instabilities due to the nature of the Simplex algorithm
+ * (the pivot element is used as a denominator). If the problem definition is very tight, the
+ * default cut-off value may be too small, thus it is advised to increase it to a larger value,
+ * in accordance with the chosen epsilon.
+ * &lt;p&gt;
+ * It may also be counter-productive to provide a too large value for {@link
+ * org.apache.commons.math3.optim.MaxIter MaxIter} as parameter in the call of {@link
+ * #optimize(org.apache.commons.math3.optim.OptimizationData...) optimize(OptimizationData...)},
+ * as the {@link SimplexSolver} will use different strategies depending on the current iteration
+ * count. After half of the allowed max iterations has already been reached, the strategy to select
+ * pivot rows will change in order to break possible cycles due to degenerate problems.
+ *
+ * @version $Id$
+ * @since 2.0
+ */
+public class SimplexSolver extends LinearOptimizer {
+    /** Default amount of error to accept in floating point comparisons (as ulps). */
+    static final int DEFAULT_ULPS = 10;
+
+    /** Default cut-off value. */
+    static final double DEFAULT_CUT_OFF = 1e-12;
+
+    /** Default amount of error to accept for algorithm convergence. */
+    private static final double DEFAULT_EPSILON = 1.0e-6;
+
+    /** Amount of error to accept for algorithm convergence. */
+    private final double epsilon;
+
+    /** Amount of error to accept in floating point comparisons (as ulps). */
+    private final int maxUlps;
+
+    /**
+     * Cut-off value for entries in the tableau: values smaller than the cut-off
+     * are treated as zero to improve numerical stability.
+     */
+    private final double cutOff;
+
+    /**
+     * Builds a simplex solver with default settings.
+     */
+    public SimplexSolver() {
+<span class="fc" id="L82">        this(DEFAULT_EPSILON, DEFAULT_ULPS, DEFAULT_CUT_OFF);</span>
+<span class="fc" id="L83">    }</span>
+
+    /**
+     * Builds a simplex solver with a specified accepted amount of error.
+     *
+     * @param epsilon Amount of error to accept for algorithm convergence.
+     */
+    public SimplexSolver(final double epsilon) {
+<span class="nc" id="L91">        this(epsilon, DEFAULT_ULPS, DEFAULT_CUT_OFF);</span>
+<span class="nc" id="L92">    }</span>
+
+    /**
+     * Builds a simplex solver with a specified accepted amount of error.
+     *
+     * @param epsilon Amount of error to accept for algorithm convergence.
+     * @param maxUlps Amount of error to accept in floating point comparisons.
+     */
+    public SimplexSolver(final double epsilon, final int maxUlps) {
+<span class="nc" id="L101">        this(epsilon, maxUlps, DEFAULT_CUT_OFF);</span>
+<span class="nc" id="L102">    }</span>
+
+    /**
+     * Builds a simplex solver with a specified accepted amount of error.
+     *
+     * @param epsilon Amount of error to accept for algorithm convergence.
+     * @param maxUlps Amount of error to accept in floating point comparisons.
+     * @param cutOff Values smaller than the cutOff are treated as zero.
+     */
+<span class="fc" id="L111">    public SimplexSolver(final double epsilon, final int maxUlps, final double cutOff) {</span>
+<span class="fc" id="L112">        this.epsilon = epsilon;</span>
+<span class="fc" id="L113">        this.maxUlps = maxUlps;</span>
+<span class="fc" id="L114">        this.cutOff = cutOff;</span>
+<span class="fc" id="L115">    }</span>
+
+    /**
+     * Returns the column with the most negative coefficient in the objective function row.
+     *
+     * @param tableau Simple tableau for the problem.
+     * @return the column with the most negative coefficient.
+     */
+    private Integer getPivotColumn(SimplexTableau tableau) {
+<span class="fc" id="L124">        double minValue = 0;</span>
+<span class="fc" id="L125">        Integer minPos = null;</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        for (int i = tableau.getNumObjectiveFunctions(); i &lt; tableau.getWidth() - 1; i++) {</span>
+<span class="fc" id="L127">            final double entry = tableau.getEntry(0, i);</span>
+            // check if the entry is strictly smaller than the current minimum
+            // do not use a ulp/epsilon check
+<span class="fc bfc" id="L130" title="All 2 branches covered.">            if (entry &lt; minValue) {</span>
+<span class="fc" id="L131">                minValue = entry;</span>
+<span class="fc" id="L132">                minPos = i;</span>
+            }
+        }
+<span class="fc" id="L135">        return minPos;</span>
+    }
+
+    /**
+     * Returns the row with the minimum ratio as given by the minimum ratio test (MRT).
+     *
+     * @param tableau Simple tableau for the problem.
+     * @param col Column to test the ratio of (see {@link #getPivotColumn(SimplexTableau)}).
+     * @return the row with the minimum ratio.
+     */
+    private Integer getPivotRow(SimplexTableau tableau, final int col) {
+        // create a list of all the rows that tie for the lowest score in the minimum ratio test
+<span class="fc" id="L147">        List&lt;Integer&gt; minRatioPositions = new ArrayList&lt;Integer&gt;();</span>
+<span class="fc" id="L148">        double minRatio = Double.MAX_VALUE;</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        for (int i = tableau.getNumObjectiveFunctions(); i &lt; tableau.getHeight(); i++) {</span>
+<span class="fc" id="L150">            final double rhs = tableau.getEntry(i, tableau.getWidth() - 1);</span>
+<span class="fc" id="L151">            final double entry = tableau.getEntry(i, col);</span>
+
+<span class="fc bfc" id="L153" title="All 2 branches covered.">            if (Precision.compareTo(entry, 0d, maxUlps) &gt; 0) {</span>
+<span class="fc" id="L154">                final double ratio = rhs / entry;</span>
+                // check if the entry is strictly equal to the current min ratio
+                // do not use a ulp/epsilon check
+<span class="fc" id="L157">                final int cmp = Double.compare(ratio, minRatio);</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">                if (cmp == 0) {</span>
+<span class="fc" id="L159">                    minRatioPositions.add(i);</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">                } else if (cmp &lt; 0) {</span>
+<span class="fc" id="L161">                    minRatio = ratio;</span>
+<span class="fc" id="L162">                    minRatioPositions = new ArrayList&lt;Integer&gt;();</span>
+<span class="fc" id="L163">                    minRatioPositions.add(i);</span>
+                }
+            }
+        }
+
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        if (minRatioPositions.size() == 0) {</span>
+<span class="fc" id="L169">            return null;</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        } else if (minRatioPositions.size() &gt; 1) {</span>
+            // there's a degeneracy as indicated by a tie in the minimum ratio test
+
+            // 1. check if there's an artificial variable that can be forced out of the basis
+<span class="fc bfc" id="L174" title="All 2 branches covered.">            if (tableau.getNumArtificialVariables() &gt; 0) {</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">                for (Integer row : minRatioPositions) {</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">                    for (int i = 0; i &lt; tableau.getNumArtificialVariables(); i++) {</span>
+<span class="fc" id="L177">                        int column = i + tableau.getArtificialVariableOffset();</span>
+<span class="fc" id="L178">                        final double entry = tableau.getEntry(row, column);</span>
+<span class="fc bfc" id="L179" title="All 4 branches covered.">                        if (Precision.equals(entry, 1d, maxUlps) &amp;&amp; row.equals(tableau.getBasicRow(column))) {</span>
+<span class="fc" id="L180">                            return row;</span>
+                        }
+                    }
+<span class="fc" id="L183">                }</span>
+            }
+
+            // 2. apply Bland's rule to prevent cycling:
+            //    take the row for which the corresponding basic variable has the smallest index
+            //
+            // see http://www.stanford.edu/class/msande310/blandrule.pdf
+            // see http://en.wikipedia.org/wiki/Bland%27s_rule (not equivalent to the above paper)
+            //
+            // Additional heuristic: if we did not get a solution after half of maxIterations
+            //                       revert to the simple case of just returning the top-most row
+            // This heuristic is based on empirical data gathered while investigating MATH-828.
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">            if (getEvaluations() &lt; getMaxEvaluations() / 2) {</span>
+<span class="nc" id="L196">                Integer minRow = null;</span>
+<span class="nc" id="L197">                int minIndex = tableau.getWidth();</span>
+<span class="nc" id="L198">                final int varStart = tableau.getNumObjectiveFunctions();</span>
+<span class="nc" id="L199">                final int varEnd = tableau.getWidth() - 1;</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">                for (Integer row : minRatioPositions) {</span>
+<span class="nc bnc" id="L201" title="All 4 branches missed.">                    for (int i = varStart; i &lt; varEnd &amp;&amp; !row.equals(minRow); i++) {</span>
+<span class="nc" id="L202">                        final Integer basicRow = tableau.getBasicRow(i);</span>
+<span class="nc bnc" id="L203" title="All 4 branches missed.">                        if (basicRow != null &amp;&amp; basicRow.equals(row)) {</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">                            if (i &lt; minIndex) {</span>
+<span class="nc" id="L205">                                minIndex = i;</span>
+<span class="nc" id="L206">                                minRow = row;</span>
+                            }
+                        }
+                    }
+<span class="nc" id="L210">                }</span>
+<span class="nc" id="L211">                return minRow;</span>
+            }
+        }
+<span class="fc" id="L214">        return minRatioPositions.get(0);</span>
+    }
+
+    /**
+     * Runs one iteration of the Simplex method on the given model.
+     *
+     * @param tableau Simple tableau for the problem.
+     * @throws TooManyIterationsException if the allowed number of iterations has been exhausted.
+     * @throws UnboundedSolutionException if the model is found not to have a bounded solution.
+     */
+    protected void doIteration(final SimplexTableau tableau)
+        throws TooManyIterationsException,
+               UnboundedSolutionException {
+
+<span class="fc" id="L228">        incrementIterationCount();</span>
+
+<span class="fc" id="L230">        Integer pivotCol = getPivotColumn(tableau);</span>
+<span class="fc" id="L231">        Integer pivotRow = getPivotRow(tableau, pivotCol);</span>
+<span class="fc bfc" id="L232" title="All 2 branches covered.">        if (pivotRow == null) {</span>
+<span class="fc" id="L233">            throw new UnboundedSolutionException();</span>
+        }
+
+        // set the pivot element to 1
+<span class="fc" id="L237">        double pivotVal = tableau.getEntry(pivotRow, pivotCol);</span>
+<span class="fc" id="L238">        tableau.divideRow(pivotRow, pivotVal);</span>
+
+        // set the rest of the pivot column to 0
+<span class="fc bfc" id="L241" title="All 2 branches covered.">        for (int i = 0; i &lt; tableau.getHeight(); i++) {</span>
+<span class="fc bfc" id="L242" title="All 2 branches covered.">            if (i != pivotRow) {</span>
+<span class="fc" id="L243">                final double multiplier = tableau.getEntry(i, pivotCol);</span>
+<span class="fc" id="L244">                tableau.subtractRow(i, pivotRow, multiplier);</span>
+            }
+        }
+<span class="fc" id="L247">    }</span>
+
+    /**
+     * Solves Phase 1 of the Simplex method.
+     *
+     * @param tableau Simple tableau for the problem.
+     * @throws TooManyIterationsException if the allowed number of iterations has been exhausted.
+     * @throws UnboundedSolutionException if the model is found not to have a bounded solution.
+     * @throws NoFeasibleSolutionException if there is no feasible solution?
+     */
+    protected void solvePhase1(final SimplexTableau tableau)
+        throws TooManyIterationsException,
+               UnboundedSolutionException,
+               NoFeasibleSolutionException {
+
+        // make sure we're in Phase 1
+<span class="fc bfc" id="L263" title="All 2 branches covered.">        if (tableau.getNumArtificialVariables() == 0) {</span>
+<span class="fc" id="L264">            return;</span>
+        }
+
+<span class="fc bfc" id="L267" title="All 2 branches covered.">        while (!tableau.isOptimal()) {</span>
+<span class="fc" id="L268">            doIteration(tableau);</span>
+        }
+
+        // if W is not zero then we have no feasible solution
+<span class="fc bfc" id="L272" title="All 2 branches covered.">        if (!Precision.equals(tableau.getEntry(0, tableau.getRhsOffset()), 0d, epsilon)) {</span>
+<span class="fc" id="L273">            throw new NoFeasibleSolutionException();</span>
+        }
+<span class="fc" id="L275">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public PointValuePair doOptimize()
+        throws TooManyIterationsException,
+               UnboundedSolutionException,
+               NoFeasibleSolutionException {
+<span class="fc" id="L283">        final SimplexTableau tableau =</span>
+<span class="fc" id="L284">            new SimplexTableau(getFunction(),</span>
+<span class="fc" id="L285">                               getConstraints(),</span>
+<span class="fc" id="L286">                               getGoalType(),</span>
+<span class="fc" id="L287">                               isRestrictedToNonNegative(),</span>
+                               epsilon,
+                               maxUlps,
+                               cutOff);
+
+<span class="fc" id="L292">        solvePhase1(tableau);</span>
+<span class="fc" id="L293">        tableau.dropPhase1Objective();</span>
+
+<span class="fc bfc" id="L295" title="All 2 branches covered.">        while (!tableau.isOptimal()) {</span>
+<span class="fc" id="L296">            doIteration(tableau);</span>
+        }
+<span class="fc" id="L298">        return tableau.getSolution();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

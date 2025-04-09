@@ -1,0 +1,1652 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealVector.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Commons Math</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.math3.linear</a> &gt; <span class="el_source">RealVector.java</span></div><h1>RealVector.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.math3.linear;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+import org.apache.commons.math3.exception.MathUnsupportedOperationException;
+import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.apache.commons.math3.exception.NotPositiveException;
+import org.apache.commons.math3.exception.NumberIsTooSmallException;
+import org.apache.commons.math3.exception.OutOfRangeException;
+import org.apache.commons.math3.exception.MathArithmeticException;
+import org.apache.commons.math3.analysis.FunctionUtils;
+import org.apache.commons.math3.analysis.function.Add;
+import org.apache.commons.math3.analysis.function.Multiply;
+import org.apache.commons.math3.analysis.function.Divide;
+import org.apache.commons.math3.analysis.UnivariateFunction;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
+import org.apache.commons.math3.util.FastMath;
+
+/**
+ * Class defining a real-valued vector with basic algebraic operations.
+ * &lt;p&gt;
+ * vector element indexing is 0-based -- e.g., {@code getEntry(0)}
+ * returns the first element of the vector.
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * The {@code code map} and {@code mapToSelf} methods operate
+ * on vectors element-wise, i.e. they perform the same operation (adding a scalar,
+ * applying a function ...) on each element in turn. The {@code map}
+ * versions create a new vector to hold the result and do not change the instance.
+ * The {@code mapToSelf} version uses the instance itself to store the
+ * results, so the instance is changed by this method. In all cases, the result
+ * vector is returned by the methods, allowing the &lt;i&gt;fluent API&lt;/i&gt;
+ * style, like this:
+ * &lt;/p&gt;
+ * &lt;pre&gt;
+ *   RealVector result = v.mapAddToSelf(3.4).mapToSelf(new Tan()).mapToSelf(new Power(2.3));
+ * &lt;/pre&gt;
+ *
+ * @version $Id$
+ * @since 2.1
+ */
+<span class="fc" id="L60">public abstract class RealVector {</span>
+    /**
+     * Returns the size of the vector.
+     *
+     * @return the size of this vector.
+     */
+    public abstract int getDimension();
+
+    /**
+     * Return the entry at the specified index.
+     *
+     * @param index Index location of entry to be fetched.
+     * @return the vector entry at {@code index}.
+     * @throws OutOfRangeException if the index is not valid.
+     * @see #setEntry(int, double)
+     */
+    public abstract double getEntry(int index) throws OutOfRangeException;
+
+    /**
+     * Set a single element.
+     *
+     * @param index element index.
+     * @param value new value for the element.
+     * @throws OutOfRangeException if the index is not valid.
+     * @see #getEntry(int)
+     */
+    public abstract void setEntry(int index, double value)
+        throws OutOfRangeException;
+
+    /**
+     * Change an entry at the specified index.
+     *
+     * @param index Index location of entry to be set.
+     * @param increment Value to add to the vector entry.
+     * @throws OutOfRangeException if the index is not valid.
+     * @since 3.0
+     */
+    public void addToEntry(int index, double increment)
+        throws OutOfRangeException {
+<span class="fc" id="L99">        setEntry(index, getEntry(index) + increment);</span>
+<span class="fc" id="L100">    }</span>
+
+    /**
+     * Construct a new vector by appending a vector to this vector.
+     *
+     * @param v vector to append to this one.
+     * @return a new vector.
+     */
+    public abstract RealVector append(RealVector v);
+
+    /**
+     * Construct a new vector by appending a double to this vector.
+     *
+     * @param d double to append.
+     * @return a new vector.
+     */
+    public abstract RealVector append(double d);
+
+    /**
+     * Get a subvector from consecutive elements.
+     *
+     * @param index index of first element.
+     * @param n number of elements to be retrieved.
+     * @return a vector containing n elements.
+     * @throws OutOfRangeException if the index is not valid.
+     * @throws NotPositiveException if the number of elements is not positive.
+     */
+    public abstract RealVector getSubVector(int index, int n)
+        throws NotPositiveException, OutOfRangeException;
+
+    /**
+     * Set a sequence of consecutive elements.
+     *
+     * @param index index of first element to be set.
+     * @param v vector containing the values to set.
+     * @throws OutOfRangeException if the index is not valid.
+     */
+    public abstract void setSubVector(int index, RealVector v)
+        throws OutOfRangeException;
+
+    /**
+     * Check whether any coordinate of this vector is {@code NaN}.
+     *
+     * @return {@code true} if any coordinate of this vector is {@code NaN},
+     * {@code false} otherwise.
+     */
+    public abstract boolean isNaN();
+
+    /**
+     * Check whether any coordinate of this vector is infinite and none are {@code NaN}.
+     *
+     * @return {@code true} if any coordinate of this vector is infinite and
+     * none are {@code NaN}, {@code false} otherwise.
+     */
+    public abstract boolean isInfinite();
+
+    /**
+     * Check if instance and specified vectors have the same dimension.
+     *
+     * @param v Vector to compare instance with.
+     * @throws DimensionMismatchException if the vectors do not
+     * have the same dimension.
+     */
+    protected void checkVectorDimensions(RealVector v)
+        throws DimensionMismatchException {
+<span class="fc" id="L165">        checkVectorDimensions(v.getDimension());</span>
+<span class="fc" id="L166">    }</span>
+
+    /**
+     * Check if instance dimension is equal to some expected value.
+     *
+     * @param n Expected dimension.
+     * @throws DimensionMismatchException if the dimension is
+     * inconsistent with the vector size.
+     */
+    protected void checkVectorDimensions(int n)
+        throws DimensionMismatchException {
+<span class="fc" id="L177">        int d = getDimension();</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        if (d != n) {</span>
+<span class="fc" id="L179">            throw new DimensionMismatchException(d, n);</span>
+        }
+<span class="fc" id="L181">    }</span>
+
+    /**
+     * Check if an index is valid.
+     *
+     * @param index Index to check.
+     * @exception OutOfRangeException if {@code index} is not valid.
+     */
+    protected void checkIndex(final int index) throws OutOfRangeException {
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        if (index &lt; 0 ||</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">            index &gt;= getDimension()) {</span>
+<span class="fc" id="L192">            throw new OutOfRangeException(LocalizedFormats.INDEX,</span>
+<span class="fc" id="L193">                                          index, 0, getDimension() - 1);</span>
+        }
+<span class="fc" id="L195">    }</span>
+
+    /**
+     * Checks that the indices of a subvector are valid.
+     *
+     * @param start the index of the first entry of the subvector
+     * @param end the index of the last entry of the subvector (inclusive)
+     * @throws OutOfRangeException if {@code start} of {@code end} are not valid
+     * @throws NumberIsTooSmallException if {@code end &lt; start}
+     * @since 3.1
+     */
+    protected void checkIndices(final int start, final int end)
+        throws NumberIsTooSmallException, OutOfRangeException {
+<span class="fc" id="L208">        final int dim = getDimension();</span>
+<span class="fc bfc" id="L209" title="All 4 branches covered.">        if ((start &lt; 0) || (start &gt;= dim)) {</span>
+<span class="fc" id="L210">            throw new OutOfRangeException(LocalizedFormats.INDEX, start, 0,</span>
+<span class="fc" id="L211">                                          dim - 1);</span>
+        }
+<span class="fc bfc" id="L213" title="All 4 branches covered.">        if ((end &lt; 0) || (end &gt;= dim)) {</span>
+<span class="fc" id="L214">            throw new OutOfRangeException(LocalizedFormats.INDEX, end, 0,</span>
+<span class="fc" id="L215">                                          dim - 1);</span>
+        }
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        if (end &lt; start) {</span>
+            // TODO Use more specific error message
+<span class="fc" id="L219">            throw new NumberIsTooSmallException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,</span>
+<span class="fc" id="L220">                                                end, start, false);</span>
+        }
+<span class="fc" id="L222">    }</span>
+
+    /**
+     * Compute the sum of this vector and {@code v}.
+     * Returns a new vector. Does not change instance data.
+     *
+     * @param v Vector to be added.
+     * @return {@code this} + {@code v}.
+     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * {@code this} vector.
+     */
+    public RealVector add(RealVector v) throws DimensionMismatchException {
+<span class="fc" id="L234">        checkVectorDimensions(v);</span>
+<span class="fc" id="L235">        RealVector result = v.copy();</span>
+<span class="fc" id="L236">        Iterator&lt;Entry&gt; it = iterator();</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        while (it.hasNext()) {</span>
+<span class="fc" id="L238">            final Entry e = it.next();</span>
+<span class="fc" id="L239">            final int index = e.getIndex();</span>
+<span class="fc" id="L240">            result.setEntry(index, e.getValue() + result.getEntry(index));</span>
+<span class="fc" id="L241">        }</span>
+<span class="fc" id="L242">        return result;</span>
+    }
+
+    /**
+     * Subtract {@code v} from this vector.
+     * Returns a new vector. Does not change instance data.
+     *
+     * @param v Vector to be subtracted.
+     * @return {@code this} - {@code v}.
+     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * {@code this} vector.
+     */
+    public RealVector subtract(RealVector v) throws DimensionMismatchException {
+<span class="fc" id="L255">        checkVectorDimensions(v);</span>
+<span class="fc" id="L256">        RealVector result = v.mapMultiply(-1d);</span>
+<span class="fc" id="L257">        Iterator&lt;Entry&gt; it = iterator();</span>
+<span class="fc bfc" id="L258" title="All 2 branches covered.">        while (it.hasNext()) {</span>
+<span class="fc" id="L259">            final Entry e = it.next();</span>
+<span class="fc" id="L260">            final int index = e.getIndex();</span>
+<span class="fc" id="L261">            result.setEntry(index, e.getValue() + result.getEntry(index));</span>
+<span class="fc" id="L262">        }</span>
+<span class="fc" id="L263">        return result;</span>
+    }
+
+    /**
+     * Add a value to each entry.
+     * Returns a new vector. Does not change instance data.
+     *
+     * @param d Value to be added to each entry.
+     * @return {@code this} + {@code d}.
+     */
+    public RealVector mapAdd(double d) {
+<span class="fc" id="L274">        return copy().mapAddToSelf(d);</span>
+    }
+
+    /**
+     * Add a value to each entry.
+     * The instance is changed in-place.
+     *
+     * @param d Value to be added to each entry.
+     * @return {@code this}.
+     */
+    public RealVector mapAddToSelf(double d) {
+<span class="fc bfc" id="L285" title="All 2 branches covered.">        if (d != 0) {</span>
+<span class="fc" id="L286">            return mapToSelf(FunctionUtils.fix2ndArgument(new Add(), d));</span>
+        }
+<span class="fc" id="L288">        return this;</span>
+    }
+
+    /**
+     * Returns a (deep) copy of this vector.
+     *
+     * @return a vector copy.
+     */
+    public abstract RealVector copy();
+
+    /**
+     * Compute the dot product of this vector with {@code v}.
+     *
+     * @param v Vector with which dot product should be computed
+     * @return the scalar dot product between this instance and {@code v}.
+     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * {@code this} vector.
+     */
+    public double dotProduct(RealVector v) throws DimensionMismatchException {
+<span class="fc" id="L307">        checkVectorDimensions(v);</span>
+<span class="fc" id="L308">        double d = 0;</span>
+<span class="fc" id="L309">        final int n = getDimension();</span>
+<span class="fc bfc" id="L310" title="All 2 branches covered.">        for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L311">            d += getEntry(i) * v.getEntry(i);</span>
+        }
+<span class="fc" id="L313">        return d;</span>
+    }
+
+    /**
+     * Computes the cosine of the angle between this vector and the
+     * argument.
+     *
+     * @param v Vector.
+     * @return the cosine of the angle between this vector and {@code v}.
+     * @throws MathArithmeticException if {@code this} or {@code v} is the null
+     * vector
+     * @throws DimensionMismatchException if the dimensions of {@code this} and
+     * {@code v} do not match
+     */
+    public double cosine(RealVector v) throws DimensionMismatchException,
+        MathArithmeticException {
+<span class="fc" id="L329">        final double norm = getNorm();</span>
+<span class="fc" id="L330">        final double vNorm = v.getNorm();</span>
+
+<span class="fc bfc" id="L332" title="All 4 branches covered.">        if (norm == 0 ||</span>
+            vNorm == 0) {
+<span class="fc" id="L334">            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);</span>
+        }
+<span class="fc" id="L336">        return dotProduct(v) / (norm * vNorm);</span>
+    }
+
+    /**
+     * Element-by-element division.
+     *
+     * @param v Vector by which instance elements must be divided.
+     * @return a vector containing this[i] / v[i] for all i.
+     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * {@code this} vector.
+     * @deprecated As of version 3.1, this method is deprecated, and will be
+     * removed in version 4.0. This decision follows the discussion reported in
+     * &lt;a href=&quot;https://issues.apache.org/jira/browse/MATH-803?focusedCommentId=13399150#comment-13399150&quot;&gt;MATH-803&lt;/a&gt;.
+     * Uses of this method involving sparse implementations of
+     * {@link RealVector} might lead to wrong results. Since there is no
+     * satisfactory correction to this bug, this method is deprecated. Users who
+     * want to preserve this feature are advised to implement
+     * {@link RealVectorPreservingVisitor} (possibly ignoring corner cases for
+     * the sake of efficiency).
+     */
+    @Deprecated
+    public abstract RealVector ebeDivide(RealVector v)
+        throws DimensionMismatchException;
+
+    /**
+     * Element-by-element multiplication.
+     *
+     * @param v Vector by which instance elements must be multiplied
+     * @return a vector containing this[i] * v[i] for all i.
+     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * {@code this} vector.
+     * @deprecated As of version 3.1, this method is deprecated, and will be
+     * removed in version 4.0. This decision follows the discussion reported in
+     * &lt;a href=&quot;https://issues.apache.org/jira/browse/MATH-803?focusedCommentId=13399150#comment-13399150&quot;&gt;MATH-803&lt;/a&gt;.
+     * Uses of this method involving sparse implementations of
+     * {@link RealVector} might lead to wrong results. Since there is no
+     * satisfactory correction to this bug, this method is deprecated. Users who
+     * want to preserve this feature are advised to implement
+     * {@link RealVectorPreservingVisitor} (possibly ignoring corner cases for
+     * the sake of efficiency).
+     */
+    @Deprecated
+    public abstract RealVector ebeMultiply(RealVector v)
+        throws DimensionMismatchException;
+
+    /**
+     * Distance between two vectors.
+     * &lt;p&gt;This method computes the distance consistent with the
+     * L&lt;sub&gt;2&lt;/sub&gt; norm, i.e. the square root of the sum of
+     * element differences, or Euclidean distance.&lt;/p&gt;
+     *
+     * @param v Vector to which distance is requested.
+     * @return the distance between two vectors.
+     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * {@code this} vector.
+     * @see #getL1Distance(RealVector)
+     * @see #getLInfDistance(RealVector)
+     * @see #getNorm()
+     */
+    public double getDistance(RealVector v) throws DimensionMismatchException {
+<span class="fc" id="L396">        checkVectorDimensions(v);</span>
+<span class="fc" id="L397">        double d = 0;</span>
+<span class="fc" id="L398">        Iterator&lt;Entry&gt; it = iterator();</span>
+<span class="fc bfc" id="L399" title="All 2 branches covered.">        while (it.hasNext()) {</span>
+<span class="fc" id="L400">            final Entry e = it.next();</span>
+<span class="fc" id="L401">            final double diff = e.getValue() - v.getEntry(e.getIndex());</span>
+<span class="fc" id="L402">            d += diff * diff;</span>
+<span class="fc" id="L403">        }</span>
+<span class="fc" id="L404">        return FastMath.sqrt(d);</span>
+    }
+
+    /**
+     * Returns the L&lt;sub&gt;2&lt;/sub&gt; norm of the vector.
+     * &lt;p&gt;The L&lt;sub&gt;2&lt;/sub&gt; norm is the root of the sum of
+     * the squared elements.&lt;/p&gt;
+     *
+     * @return the norm.
+     * @see #getL1Norm()
+     * @see #getLInfNorm()
+     * @see #getDistance(RealVector)
+     */
+    public double getNorm() {
+<span class="fc" id="L418">        double sum = 0;</span>
+<span class="fc" id="L419">        Iterator&lt;Entry&gt; it = iterator();</span>
+<span class="fc bfc" id="L420" title="All 2 branches covered.">        while (it.hasNext()) {</span>
+<span class="fc" id="L421">            final Entry e = it.next();</span>
+<span class="fc" id="L422">            final double value = e.getValue();</span>
+<span class="fc" id="L423">            sum += value * value;</span>
+<span class="fc" id="L424">        }</span>
+<span class="fc" id="L425">        return FastMath.sqrt(sum);</span>
+    }
+
+    /**
+     * Returns the L&lt;sub&gt;1&lt;/sub&gt; norm of the vector.
+     * &lt;p&gt;The L&lt;sub&gt;1&lt;/sub&gt; norm is the sum of the absolute
+     * values of the elements.&lt;/p&gt;
+     *
+     * @return the norm.
+     * @see #getNorm()
+     * @see #getLInfNorm()
+     * @see #getL1Distance(RealVector)
+     */
+    public double getL1Norm() {
+<span class="fc" id="L439">        double norm = 0;</span>
+<span class="fc" id="L440">        Iterator&lt;Entry&gt; it = iterator();</span>
+<span class="fc bfc" id="L441" title="All 2 branches covered.">        while (it.hasNext()) {</span>
+<span class="fc" id="L442">            final Entry e = it.next();</span>
+<span class="fc" id="L443">            norm += FastMath.abs(e.getValue());</span>
+<span class="fc" id="L444">        }</span>
+<span class="fc" id="L445">        return norm;</span>
+    }
+
+    /**
+     * Returns the L&lt;sub&gt;&amp;infin;&lt;/sub&gt; norm of the vector.
+     * &lt;p&gt;The L&lt;sub&gt;&amp;infin;&lt;/sub&gt; norm is the max of the absolute
+     * values of the elements.&lt;/p&gt;
+     *
+     * @return the norm.
+     * @see #getNorm()
+     * @see #getL1Norm()
+     * @see #getLInfDistance(RealVector)
+     */
+    public double getLInfNorm() {
+<span class="fc" id="L459">        double norm = 0;</span>
+<span class="fc" id="L460">        Iterator&lt;Entry&gt; it = iterator();</span>
+<span class="fc bfc" id="L461" title="All 2 branches covered.">        while (it.hasNext()) {</span>
+<span class="fc" id="L462">            final Entry e = it.next();</span>
+<span class="fc" id="L463">            norm = FastMath.max(norm, FastMath.abs(e.getValue()));</span>
+<span class="fc" id="L464">        }</span>
+<span class="fc" id="L465">        return norm;</span>
+    }
+
+    /**
+     * Distance between two vectors.
+     * &lt;p&gt;This method computes the distance consistent with
+     * L&lt;sub&gt;1&lt;/sub&gt; norm, i.e. the sum of the absolute values of
+     * the elements differences.&lt;/p&gt;
+     *
+     * @param v Vector to which distance is requested.
+     * @return the distance between two vectors.
+     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * {@code this} vector.
+     */
+    public double getL1Distance(RealVector v)
+        throws DimensionMismatchException {
+<span class="fc" id="L481">        checkVectorDimensions(v);</span>
+<span class="fc" id="L482">        double d = 0;</span>
+<span class="fc" id="L483">        Iterator&lt;Entry&gt; it = iterator();</span>
+<span class="fc bfc" id="L484" title="All 2 branches covered.">        while (it.hasNext()) {</span>
+<span class="fc" id="L485">            final Entry e = it.next();</span>
+<span class="fc" id="L486">            d += FastMath.abs(e.getValue() - v.getEntry(e.getIndex()));</span>
+<span class="fc" id="L487">        }</span>
+<span class="fc" id="L488">        return d;</span>
+    }
+
+    /**
+     * Distance between two vectors.
+     * &lt;p&gt;This method computes the distance consistent with
+     * L&lt;sub&gt;&amp;infin;&lt;/sub&gt; norm, i.e. the max of the absolute values of
+     * element differences.&lt;/p&gt;
+     *
+     * @param v Vector to which distance is requested.
+     * @return the distance between two vectors.
+     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * {@code this} vector.
+     * @see #getDistance(RealVector)
+     * @see #getL1Distance(RealVector)
+     * @see #getLInfNorm()
+     */
+    public double getLInfDistance(RealVector v)
+        throws DimensionMismatchException {
+<span class="fc" id="L507">        checkVectorDimensions(v);</span>
+<span class="fc" id="L508">        double d = 0;</span>
+<span class="fc" id="L509">        Iterator&lt;Entry&gt; it = iterator();</span>
+<span class="fc bfc" id="L510" title="All 2 branches covered.">        while (it.hasNext()) {</span>
+<span class="fc" id="L511">            final Entry e = it.next();</span>
+<span class="fc" id="L512">            d = FastMath.max(FastMath.abs(e.getValue() - v.getEntry(e.getIndex())), d);</span>
+<span class="fc" id="L513">        }</span>
+<span class="fc" id="L514">        return d;</span>
+    }
+
+    /**
+     * Get the index of the minimum entry.
+     *
+     * @return the index of the minimum entry or -1 if vector length is 0
+     * or all entries are {@code NaN}.
+     */
+    public int getMinIndex() {
+<span class="fc" id="L524">        int minIndex    = -1;</span>
+<span class="fc" id="L525">        double minValue = Double.POSITIVE_INFINITY;</span>
+<span class="fc" id="L526">        Iterator&lt;Entry&gt; iterator = iterator();</span>
+<span class="fc bfc" id="L527" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L528">            final Entry entry = iterator.next();</span>
+<span class="fc bfc" id="L529" title="All 2 branches covered.">            if (entry.getValue() &lt;= minValue) {</span>
+<span class="fc" id="L530">                minIndex = entry.getIndex();</span>
+<span class="fc" id="L531">                minValue = entry.getValue();</span>
+            }
+<span class="fc" id="L533">        }</span>
+<span class="fc" id="L534">        return minIndex;</span>
+    }
+
+    /**
+     * Get the value of the minimum entry.
+     *
+     * @return the value of the minimum entry or {@code NaN} if all
+     * entries are {@code NaN}.
+     */
+    public double getMinValue() {
+<span class="fc" id="L544">        final int minIndex = getMinIndex();</span>
+<span class="fc bfc" id="L545" title="All 2 branches covered.">        return minIndex &lt; 0 ? Double.NaN : getEntry(minIndex);</span>
+    }
+
+    /**
+     * Get the index of the maximum entry.
+     *
+     * @return the index of the maximum entry or -1 if vector length is 0
+     * or all entries are {@code NaN}
+     */
+    public int getMaxIndex() {
+<span class="fc" id="L555">        int maxIndex    = -1;</span>
+<span class="fc" id="L556">        double maxValue = Double.NEGATIVE_INFINITY;</span>
+<span class="fc" id="L557">        Iterator&lt;Entry&gt; iterator = iterator();</span>
+<span class="fc bfc" id="L558" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L559">            final Entry entry = iterator.next();</span>
+<span class="fc bfc" id="L560" title="All 2 branches covered.">            if (entry.getValue() &gt;= maxValue) {</span>
+<span class="fc" id="L561">                maxIndex = entry.getIndex();</span>
+<span class="fc" id="L562">                maxValue = entry.getValue();</span>
+            }
+<span class="fc" id="L564">        }</span>
+<span class="fc" id="L565">        return maxIndex;</span>
+    }
+
+    /**
+     * Get the value of the maximum entry.
+     *
+     * @return the value of the maximum entry or {@code NaN} if all
+     * entries are {@code NaN}.
+     */
+    public double getMaxValue() {
+<span class="fc" id="L575">        final int maxIndex = getMaxIndex();</span>
+<span class="fc bfc" id="L576" title="All 2 branches covered.">        return maxIndex &lt; 0 ? Double.NaN : getEntry(maxIndex);</span>
+    }
+
+
+    /**
+     * Multiply each entry by the argument. Returns a new vector.
+     * Does not change instance data.
+     *
+     * @param d Multiplication factor.
+     * @return {@code this} * {@code d}.
+     */
+    public RealVector mapMultiply(double d) {
+<span class="fc" id="L588">        return copy().mapMultiplyToSelf(d);</span>
+    }
+
+    /**
+     * Multiply each entry.
+     * The instance is changed in-place.
+     *
+     * @param d Multiplication factor.
+     * @return {@code this}.
+     */
+    public RealVector mapMultiplyToSelf(double d){
+<span class="fc" id="L599">        return mapToSelf(FunctionUtils.fix2ndArgument(new Multiply(), d));</span>
+    }
+
+    /**
+     * Subtract a value from each entry. Returns a new vector.
+     * Does not change instance data.
+     *
+     * @param d Value to be subtracted.
+     * @return {@code this} - {@code d}.
+     */
+    public RealVector mapSubtract(double d) {
+<span class="fc" id="L610">        return copy().mapSubtractToSelf(d);</span>
+    }
+
+    /**
+     * Subtract a value from each entry.
+     * The instance is changed in-place.
+     *
+     * @param d Value to be subtracted.
+     * @return {@code this}.
+     */
+    public RealVector mapSubtractToSelf(double d){
+<span class="fc" id="L621">        return mapAddToSelf(-d);</span>
+    }
+
+    /**
+     * Divide each entry by the argument. Returns a new vector.
+     * Does not change instance data.
+     *
+     * @param d Value to divide by.
+     * @return {@code this} / {@code d}.
+     */
+    public RealVector mapDivide(double d) {
+<span class="fc" id="L632">        return copy().mapDivideToSelf(d);</span>
+    }
+
+    /**
+     * Divide each entry by the argument.
+     * The instance is changed in-place.
+     *
+     * @param d Value to divide by.
+     * @return {@code this}.
+     */
+    public RealVector mapDivideToSelf(double d){
+<span class="fc" id="L643">        return mapToSelf(FunctionUtils.fix2ndArgument(new Divide(), d));</span>
+    }
+
+    /**
+     * Compute the outer product.
+     *
+     * @param v Vector with which outer product should be computed.
+     * @return the matrix outer product between this instance and {@code v}.
+     */
+    public RealMatrix outerProduct(RealVector v) {
+<span class="fc" id="L653">        final int m = this.getDimension();</span>
+<span class="fc" id="L654">        final int n = v.getDimension();</span>
+        final RealMatrix product;
+<span class="fc bfc" id="L656" title="All 4 branches covered.">        if (v instanceof SparseRealVector || this instanceof SparseRealVector) {</span>
+<span class="fc" id="L657">            product = new OpenMapRealMatrix(m, n);</span>
+        } else {
+<span class="fc" id="L659">            product = new Array2DRowRealMatrix(m, n);</span>
+        }
+<span class="fc bfc" id="L661" title="All 2 branches covered.">        for (int i = 0; i &lt; m; i++) {</span>
+<span class="fc bfc" id="L662" title="All 2 branches covered.">            for (int j = 0; j &lt; n; j++) {</span>
+<span class="fc" id="L663">                product.setEntry(i, j, this.getEntry(i) * v.getEntry(j));</span>
+            }
+        }
+<span class="fc" id="L666">        return product;</span>
+    }
+
+    /**
+     * Find the orthogonal projection of this vector onto another vector.
+     *
+     * @param v vector onto which instance must be projected.
+     * @return projection of the instance onto {@code v}.
+     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * {@code this} vector.
+     * @throws MathArithmeticException if {@code this} or {@code v} is the null
+     * vector
+     */
+    public RealVector projection(final RealVector v)
+        throws DimensionMismatchException, MathArithmeticException {
+<span class="fc" id="L681">        final double norm2 = v.dotProduct(v);</span>
+<span class="fc bfc" id="L682" title="All 2 branches covered.">        if (norm2 == 0.0) {</span>
+<span class="fc" id="L683">            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);</span>
+        }
+<span class="fc" id="L685">        return v.mapMultiply(dotProduct(v) / v.dotProduct(v));</span>
+    }
+
+    /**
+     * Set all elements to a single value.
+     *
+     * @param value Single value to set for all elements.
+     */
+    public void set(double value) {
+<span class="fc" id="L694">        Iterator&lt;Entry&gt; it = iterator();</span>
+<span class="fc bfc" id="L695" title="All 2 branches covered.">        while (it.hasNext()) {</span>
+<span class="fc" id="L696">            final Entry e = it.next();</span>
+<span class="fc" id="L697">            e.setValue(value);</span>
+<span class="fc" id="L698">        }</span>
+<span class="fc" id="L699">    }</span>
+
+    /**
+     * Convert the vector to an array of {@code double}s.
+     * The array is independent from this vector data: the elements
+     * are copied.
+     *
+     * @return an array containing a copy of the vector elements.
+     */
+    public double[] toArray() {
+<span class="fc" id="L709">        int dim = getDimension();</span>
+<span class="fc" id="L710">        double[] values = new double[dim];</span>
+<span class="fc bfc" id="L711" title="All 2 branches covered.">        for (int i = 0; i &lt; dim; i++) {</span>
+<span class="fc" id="L712">            values[i] = getEntry(i);</span>
+        }
+<span class="fc" id="L714">        return values;</span>
+    }
+
+    /**
+     * Creates a unit vector pointing in the direction of this vector.
+     * The instance is not changed by this method.
+     *
+     * @return a unit vector pointing in direction of this vector.
+     * @throws MathArithmeticException if the norm is zero.
+     */
+    public RealVector unitVector() throws MathArithmeticException {
+<span class="fc" id="L725">        final double norm = getNorm();</span>
+<span class="fc bfc" id="L726" title="All 2 branches covered.">        if (norm == 0) {</span>
+<span class="fc" id="L727">            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);</span>
+        }
+<span class="fc" id="L729">        return mapDivide(norm);</span>
+    }
+
+    /**
+     * Converts this vector into a unit vector.
+     * The instance itself is changed by this method.
+     *
+     * @throws MathArithmeticException if the norm is zero.
+     */
+    public void unitize() throws MathArithmeticException {
+<span class="fc" id="L739">        final double norm = getNorm();</span>
+<span class="fc bfc" id="L740" title="All 2 branches covered.">        if (norm == 0) {</span>
+<span class="fc" id="L741">            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);</span>
+        }
+<span class="fc" id="L743">        mapDivideToSelf(getNorm());</span>
+<span class="fc" id="L744">    }</span>
+
+    /**
+     * Create a sparse iterator over the vector, which may omit some entries.
+     * Specialized implementations may choose to not iterate over all
+     * dimensions, either because those values are unset, or are equal
+     * to defaultValue(), or are small enough to be ignored for the
+     * purposes of iteration. No guarantees are made about order of iteration.
+     * In dense implementations, this method will often delegate to
+     * {@link #iterator()}.
+     *
+     * &lt;p&gt;Note: derived classes are required to return an {@link Iterator} that
+     * returns non-null {@link Entry} objects as long as {@link Iterator#hasNext()}
+     * returns {@code true}.&lt;/p&gt;
+     *
+     * @return a sparse iterator.
+     * @deprecated As of 3.1, this method is deprecated, because its interface
+     * is too confusing (see
+     * &lt;a href=&quot;https://issues.apache.org/jira/browse/MATH-875&quot;&gt;JIRA MATH-875&lt;/a&gt;).
+     * This method will be completely removed in 4.0.
+     */
+    @Deprecated
+    public Iterator&lt;Entry&gt; sparseIterator() {
+<span class="fc" id="L767">        return new SparseEntryIterator();</span>
+    }
+
+    /**
+     * Generic dense iterator. Iteration is in increasing order
+     * of the vector index.
+     *
+     * &lt;p&gt;Note: derived classes are required to return an {@link Iterator} that
+     * returns non-null {@link Entry} objects as long as {@link Iterator#hasNext()}
+     * returns {@code true}.&lt;/p&gt;
+     *
+     * @return a dense iterator.
+     */
+    public Iterator&lt;Entry&gt; iterator() {
+<span class="fc" id="L781">        final int dim = getDimension();</span>
+<span class="fc" id="L782">        return new Iterator&lt;Entry&gt;() {</span>
+
+            /** Current index. */
+<span class="fc" id="L785">            private int i = 0;</span>
+
+            /** Current entry. */
+<span class="fc" id="L788">            private Entry e = new Entry();</span>
+
+            /** {@inheritDoc} */
+            public boolean hasNext() {
+<span class="fc bfc" id="L792" title="All 2 branches covered.">                return i &lt; dim;</span>
+            }
+
+            /** {@inheritDoc} */
+            public Entry next() {
+<span class="fc bfc" id="L797" title="All 2 branches covered.">                if (i &lt; dim) {</span>
+<span class="fc" id="L798">                    e.setIndex(i++);</span>
+<span class="fc" id="L799">                    return e;</span>
+                } else {
+<span class="fc" id="L801">                    throw new NoSuchElementException();</span>
+                }
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @throws MathUnsupportedOperationException in all circumstances.
+             */
+            public void remove() throws MathUnsupportedOperationException {
+<span class="fc" id="L811">                throw new MathUnsupportedOperationException();</span>
+            }
+        };
+    }
+
+    /**
+     * Acts as if implemented as:
+     * &lt;pre&gt;
+     *  return copy().mapToSelf(function);
+     * &lt;/pre&gt;
+     * Returns a new vector. Does not change instance data.
+     *
+     * @param function Function to apply to each entry.
+     * @return a new vector.
+     */
+    public RealVector map(UnivariateFunction function) {
+<span class="fc" id="L827">        return copy().mapToSelf(function);</span>
+    }
+
+    /**
+     * Acts as if it is implemented as:
+     * &lt;pre&gt;
+     *  Entry e = null;
+     *  for(Iterator&lt;Entry&gt; it = iterator(); it.hasNext(); e = it.next()) {
+     *      e.setValue(function.value(e.getValue()));
+     *  }
+     * &lt;/pre&gt;
+     * Entries of this vector are modified in-place by this method.
+     *
+     * @param function Function to apply to each entry.
+     * @return a reference to this vector.
+     */
+    public RealVector mapToSelf(UnivariateFunction function) {
+<span class="fc" id="L844">        Iterator&lt;Entry&gt; it = iterator();</span>
+<span class="fc bfc" id="L845" title="All 2 branches covered.">        while (it.hasNext()) {</span>
+<span class="fc" id="L846">            final Entry e = it.next();</span>
+<span class="fc" id="L847">            e.setValue(function.value(e.getValue()));</span>
+<span class="fc" id="L848">        }</span>
+<span class="fc" id="L849">        return this;</span>
+    }
+
+    /**
+     * Returns a new vector representing {@code a * this + b * y}, the linear
+     * combination of {@code this} and {@code y}.
+     * Returns a new vector. Does not change instance data.
+     *
+     * @param a Coefficient of {@code this}.
+     * @param b Coefficient of {@code y}.
+     * @param y Vector with which {@code this} is linearly combined.
+     * @return a vector containing {@code a * this[i] + b * y[i]} for all
+     * {@code i}.
+     * @throws DimensionMismatchException if {@code y} is not the same size as
+     * {@code this} vector.
+     */
+    public RealVector combine(double a, double b, RealVector y)
+        throws DimensionMismatchException {
+<span class="fc" id="L867">        return copy().combineToSelf(a, b, y);</span>
+    }
+
+    /**
+     * Updates {@code this} with the linear combination of {@code this} and
+     * {@code y}.
+     *
+     * @param a Weight of {@code this}.
+     * @param b Weight of {@code y}.
+     * @param y Vector with which {@code this} is linearly combined.
+     * @return {@code this}, with components equal to
+     * {@code a * this[i] + b * y[i]} for all {@code i}.
+     * @throws DimensionMismatchException if {@code y} is not the same size as
+     * {@code this} vector.
+     */
+    public RealVector combineToSelf(double a, double b, RealVector y)
+        throws DimensionMismatchException {
+<span class="fc" id="L884">        checkVectorDimensions(y);</span>
+<span class="fc bfc" id="L885" title="All 2 branches covered.">        for (int i = 0; i &lt; getDimension(); i++) {</span>
+<span class="fc" id="L886">            final double xi = getEntry(i);</span>
+<span class="fc" id="L887">            final double yi = y.getEntry(i);</span>
+<span class="fc" id="L888">            setEntry(i, a * xi + b * yi);</span>
+        }
+<span class="fc" id="L890">        return this;</span>
+    }
+
+    /**
+     * Visits (but does not alter) all entries of this vector in default order
+     * (increasing index).
+     *
+     * @param visitor the visitor to be used to process the entries of this
+     * vector
+     * @return the value returned by {@link RealVectorPreservingVisitor#end()}
+     * at the end of the walk
+     * @since 3.1
+     */
+    public double walkInDefaultOrder(final RealVectorPreservingVisitor visitor) {
+<span class="fc" id="L904">        final int dim = getDimension();</span>
+<span class="fc" id="L905">        visitor.start(dim, 0, dim - 1);</span>
+<span class="fc bfc" id="L906" title="All 2 branches covered.">        for (int i = 0; i &lt; dim; i++) {</span>
+<span class="fc" id="L907">            visitor.visit(i, getEntry(i));</span>
+        }
+<span class="fc" id="L909">        return visitor.end();</span>
+    }
+
+    /**
+     * Visits (but does not alter) some entries of this vector in default order
+     * (increasing index).
+     *
+     * @param visitor visitor to be used to process the entries of this vector
+     * @param start the index of the first entry to be visited
+     * @param end the index of the last entry to be visited (inclusive)
+     * @return the value returned by {@link RealVectorPreservingVisitor#end()}
+     * at the end of the walk
+     * @throws NumberIsTooSmallException if {@code end &lt; start}.
+     * @throws OutOfRangeException if the indices are not valid.
+     * @since 3.1
+     */
+    public double walkInDefaultOrder(final RealVectorPreservingVisitor visitor,
+                                     final int start, final int end)
+        throws NumberIsTooSmallException, OutOfRangeException {
+<span class="fc" id="L928">        checkIndices(start, end);</span>
+<span class="fc" id="L929">        visitor.start(getDimension(), start, end);</span>
+<span class="fc bfc" id="L930" title="All 2 branches covered.">        for (int i = start; i &lt;= end; i++) {</span>
+<span class="fc" id="L931">            visitor.visit(i, getEntry(i));</span>
+        }
+<span class="fc" id="L933">        return visitor.end();</span>
+    }
+
+    /**
+     * Visits (but does not alter) all entries of this vector in optimized
+     * order. The order in which the entries are visited is selected so as to
+     * lead to the most efficient implementation; it might depend on the
+     * concrete implementation of this abstract class.
+     *
+     * @param visitor the visitor to be used to process the entries of this
+     * vector
+     * @return the value returned by {@link RealVectorPreservingVisitor#end()}
+     * at the end of the walk
+     * @since 3.1
+     */
+    public double walkInOptimizedOrder(final RealVectorPreservingVisitor visitor) {
+<span class="fc" id="L949">        return walkInDefaultOrder(visitor);</span>
+    }
+
+    /**
+     * Visits (but does not alter) some entries of this vector in optimized
+     * order. The order in which the entries are visited is selected so as to
+     * lead to the most efficient implementation; it might depend on the
+     * concrete implementation of this abstract class.
+     *
+     * @param visitor visitor to be used to process the entries of this vector
+     * @param start the index of the first entry to be visited
+     * @param end the index of the last entry to be visited (inclusive)
+     * @return the value returned by {@link RealVectorPreservingVisitor#end()}
+     * at the end of the walk
+     * @throws NumberIsTooSmallException if {@code end &lt; start}.
+     * @throws OutOfRangeException if the indices are not valid.
+     * @since 3.1
+     */
+    public double walkInOptimizedOrder(final RealVectorPreservingVisitor visitor,
+                                       final int start, final int end)
+        throws NumberIsTooSmallException, OutOfRangeException {
+<span class="fc" id="L970">        return walkInDefaultOrder(visitor, start, end);</span>
+    }
+
+    /**
+     * Visits (and possibly alters) all entries of this vector in default order
+     * (increasing index).
+     *
+     * @param visitor the visitor to be used to process and modify the entries
+     * of this vector
+     * @return the value returned by {@link RealVectorChangingVisitor#end()}
+     * at the end of the walk
+     * @since 3.1
+     */
+    public double walkInDefaultOrder(final RealVectorChangingVisitor visitor) {
+<span class="fc" id="L984">        final int dim = getDimension();</span>
+<span class="fc" id="L985">        visitor.start(dim, 0, dim - 1);</span>
+<span class="fc bfc" id="L986" title="All 2 branches covered.">        for (int i = 0; i &lt; dim; i++) {</span>
+<span class="fc" id="L987">            setEntry(i, visitor.visit(i, getEntry(i)));</span>
+        }
+<span class="fc" id="L989">        return visitor.end();</span>
+    }
+
+    /**
+     * Visits (and possibly alters) some entries of this vector in default order
+     * (increasing index).
+     *
+     * @param visitor visitor to be used to process the entries of this vector
+     * @param start the index of the first entry to be visited
+     * @param end the index of the last entry to be visited (inclusive)
+     * @return the value returned by {@link RealVectorChangingVisitor#end()}
+     * at the end of the walk
+     * @throws NumberIsTooSmallException if {@code end &lt; start}.
+     * @throws OutOfRangeException if the indices are not valid.
+     * @since 3.1
+     */
+    public double walkInDefaultOrder(final RealVectorChangingVisitor visitor,
+                              final int start, final int end)
+        throws NumberIsTooSmallException, OutOfRangeException {
+<span class="fc" id="L1008">        checkIndices(start, end);</span>
+<span class="fc" id="L1009">        visitor.start(getDimension(), start, end);</span>
+<span class="fc bfc" id="L1010" title="All 2 branches covered.">        for (int i = start; i &lt;= end; i++) {</span>
+<span class="fc" id="L1011">            setEntry(i, visitor.visit(i, getEntry(i)));</span>
+        }
+<span class="fc" id="L1013">        return visitor.end();</span>
+    }
+
+    /**
+     * Visits (and possibly alters) all entries of this vector in optimized
+     * order. The order in which the entries are visited is selected so as to
+     * lead to the most efficient implementation; it might depend on the
+     * concrete implementation of this abstract class.
+     *
+     * @param visitor the visitor to be used to process the entries of this
+     * vector
+     * @return the value returned by {@link RealVectorChangingVisitor#end()}
+     * at the end of the walk
+     * @since 3.1
+     */
+    public double walkInOptimizedOrder(final RealVectorChangingVisitor visitor) {
+<span class="fc" id="L1029">        return walkInDefaultOrder(visitor);</span>
+    }
+
+    /**
+     * Visits (and possibly change) some entries of this vector in optimized
+     * order. The order in which the entries are visited is selected so as to
+     * lead to the most efficient implementation; it might depend on the
+     * concrete implementation of this abstract class.
+     *
+     * @param visitor visitor to be used to process the entries of this vector
+     * @param start the index of the first entry to be visited
+     * @param end the index of the last entry to be visited (inclusive)
+     * @return the value returned by {@link RealVectorChangingVisitor#end()}
+     * at the end of the walk
+     * @throws NumberIsTooSmallException if {@code end &lt; start}.
+     * @throws OutOfRangeException if the indices are not valid.
+     * @since 3.1
+     */
+    public double walkInOptimizedOrder(final RealVectorChangingVisitor visitor,
+                                       final int start, final int end)
+        throws NumberIsTooSmallException, OutOfRangeException {
+<span class="fc" id="L1050">        return walkInDefaultOrder(visitor, start, end);</span>
+    }
+
+    /** An entry in the vector. */
+    protected class Entry {
+        /** Index of this entry. */
+        private int index;
+
+        /** Simple constructor. */
+<span class="fc" id="L1059">        public Entry() {</span>
+<span class="fc" id="L1060">            setIndex(0);</span>
+<span class="fc" id="L1061">        }</span>
+
+        /**
+         * Get the value of the entry.
+         *
+         * @return the value of the entry.
+         */
+        public double getValue() {
+<span class="fc" id="L1069">            return getEntry(getIndex());</span>
+        }
+
+        /**
+         * Set the value of the entry.
+         *
+         * @param value New value for the entry.
+         */
+        public void setValue(double value) {
+<span class="fc" id="L1078">            setEntry(getIndex(), value);</span>
+<span class="fc" id="L1079">        }</span>
+
+        /**
+         * Get the index of the entry.
+         *
+         * @return the index of the entry.
+         */
+        public int getIndex() {
+<span class="fc" id="L1087">            return index;</span>
+        }
+
+        /**
+         * Set the index of the entry.
+         *
+         * @param index New index for the entry.
+         */
+        public void setIndex(int index) {
+<span class="fc" id="L1096">            this.index = index;</span>
+<span class="fc" id="L1097">        }</span>
+    }
+
+    /**
+     * &lt;p&gt;
+     * Test for the equality of two real vectors. If all coordinates of two real
+     * vectors are exactly the same, and none are {@code NaN}, the two real
+     * vectors are considered to be equal. {@code NaN} coordinates are
+     * considered to affect globally the vector and be equals to each other -
+     * i.e, if either (or all) coordinates of the real vector are equal to
+     * {@code NaN}, the real vector is equal to a vector with all {@code NaN}
+     * coordinates.
+     * &lt;/p&gt;
+     * &lt;p&gt;
+     * This method &lt;em&gt;must&lt;/em&gt; be overriden by concrete subclasses of
+     * {@link RealVector} (the current implementation throws an exception).
+     * &lt;/p&gt;
+     *
+     * @param other Object to test for equality.
+     * @return {@code true} if two vector objects are equal, {@code false} if
+     * {@code other} is null, not an instance of {@code RealVector}, or
+     * not equal to this {@code RealVector} instance.
+     * @throws MathUnsupportedOperationException if this method is not
+     * overridden.
+     */
+    @Override
+    public boolean equals(Object other)
+        throws MathUnsupportedOperationException {
+<span class="nc" id="L1125">        throw new MathUnsupportedOperationException();</span>
+    }
+
+    /**
+     * {@inheritDoc}. This method &lt;em&gt;must&lt;/em&gt; be overriden by concrete
+     * subclasses of {@link RealVector} (current implementation throws an
+     * exception).
+     *
+     * @throws MathUnsupportedOperationException if this method is not
+     * overridden.
+     */
+    @Override
+    public int hashCode() throws MathUnsupportedOperationException {
+<span class="nc" id="L1138">        throw new MathUnsupportedOperationException();</span>
+    }
+
+    /**
+     * This class should rarely be used, but is here to provide
+     * a default implementation of sparseIterator(), which is implemented
+     * by walking over the entries, skipping those whose values are the default one.
+     *
+     * Concrete subclasses which are SparseVector implementations should
+     * make their own sparse iterator, rather than using this one.
+     *
+     * This implementation might be useful for ArrayRealVector, when expensive
+     * operations which preserve the default value are to be done on the entries,
+     * and the fraction of non-default values is small (i.e. someone took a
+     * SparseVector, and passed it into the copy-constructor of ArrayRealVector)
+     *
+     * @deprecated As of 3.1, this class is deprecated, see
+     * &lt;a href=&quot;https://issues.apache.org/jira/browse/MATH-875&quot;&gt;JIRA MATH-875&lt;/a&gt;.
+     * This class will be completely removed in 4.0.
+
+     */
+    @Deprecated
+    protected class SparseEntryIterator implements Iterator&lt;Entry&gt; {
+        /** Dimension of the vector. */
+        private final int dim;
+        /** Last entry returned by {@link #next()}. */
+        private Entry current;
+        /** Next entry for {@link #next()} to return. */
+        private Entry next;
+
+        /** Simple constructor. */
+<span class="fc" id="L1169">        protected SparseEntryIterator() {</span>
+<span class="fc" id="L1170">            dim = getDimension();</span>
+<span class="fc" id="L1171">            current = new Entry();</span>
+<span class="fc" id="L1172">            next = new Entry();</span>
+<span class="fc bfc" id="L1173" title="All 2 branches covered.">            if (next.getValue() == 0) {</span>
+<span class="fc" id="L1174">                advance(next);</span>
+            }
+<span class="fc" id="L1176">        }</span>
+
+        /**
+         * Advance an entry up to the next nonzero one.
+         *
+         * @param e entry to advance.
+         */
+        protected void advance(Entry e) {
+<span class="pc bpc" id="L1184" title="1 of 2 branches missed.">            if (e == null) {</span>
+<span class="nc" id="L1185">                return;</span>
+            }
+            do {
+<span class="fc" id="L1188">                e.setIndex(e.getIndex() + 1);</span>
+<span class="fc bfc" id="L1189" title="All 4 branches covered.">            } while (e.getIndex() &lt; dim &amp;&amp; e.getValue() == 0);</span>
+<span class="fc bfc" id="L1190" title="All 2 branches covered.">            if (e.getIndex() &gt;= dim) {</span>
+<span class="fc" id="L1191">                e.setIndex(-1);</span>
+            }
+<span class="fc" id="L1193">        }</span>
+
+        /** {@inheritDoc} */
+        public boolean hasNext() {
+<span class="fc bfc" id="L1197" title="All 2 branches covered.">            return next.getIndex() &gt;= 0;</span>
+        }
+
+        /** {@inheritDoc} */
+        public Entry next() {
+<span class="fc" id="L1202">            int index = next.getIndex();</span>
+<span class="pc bpc" id="L1203" title="1 of 2 branches missed.">            if (index &lt; 0) {</span>
+<span class="nc" id="L1204">                throw new NoSuchElementException();</span>
+            }
+<span class="fc" id="L1206">            current.setIndex(index);</span>
+<span class="fc" id="L1207">            advance(next);</span>
+<span class="fc" id="L1208">            return current;</span>
+        }
+
+        /**
+         * {@inheritDoc}
+         *
+         * @throws MathUnsupportedOperationException in all circumstances.
+         */
+        public void remove() throws MathUnsupportedOperationException {
+<span class="nc" id="L1217">            throw new MathUnsupportedOperationException();</span>
+        }
+    }
+
+    /**
+     * Returns an unmodifiable view of the specified vector.
+     * The returned vector has read-only access. An attempt to modify it will
+     * result in a {@link MathUnsupportedOperationException}. However, the
+     * returned vector is &lt;em&gt;not&lt;/em&gt; immutable, since any modification of
+     * {@code v} will also change the returned view.
+     * For example, in the following piece of code
+     * &lt;pre&gt;
+     *     RealVector v = new ArrayRealVector(2);
+     *     RealVector w = RealVector.unmodifiableRealVector(v);
+     *     v.setEntry(0, 1.2);
+     *     v.setEntry(1, -3.4);
+     * &lt;/pre&gt;
+     * the changes will be seen in the {@code w} view of {@code v}.
+     *
+     * @param v Vector for which an unmodifiable view is to be returned.
+     * @return an unmodifiable view of {@code v}.
+     */
+    public static RealVector unmodifiableRealVector(final RealVector v) {
+        /**
+         * This anonymous class is an implementation of {@link RealVector}
+         * with read-only access.
+         * It wraps any {@link RealVector}, and exposes all methods which
+         * do not modify it. Invoking methods which should normally result
+         * in the modification of the calling {@link RealVector} results in
+         * a {@link MathUnsupportedOperationException}. It should be noted
+         * that {@link UnmodifiableVector} is &lt;em&gt;not&lt;/em&gt; immutable.
+         */
+<span class="fc" id="L1249">        return new RealVector() {</span>
+            /**
+             * {@inheritDoc}
+             *
+             * @throws MathUnsupportedOperationException in all circumstances.
+             */
+            @Override
+            public RealVector mapToSelf(UnivariateFunction function)
+                throws MathUnsupportedOperationException {
+<span class="fc" id="L1258">                throw new MathUnsupportedOperationException();</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector map(UnivariateFunction function) {
+<span class="fc" id="L1264">                return v.map(function);</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public Iterator&lt;Entry&gt; iterator() {
+<span class="fc" id="L1270">                final Iterator&lt;Entry&gt; i = v.iterator();</span>
+<span class="fc" id="L1271">                return new Iterator&lt;Entry&gt;() {</span>
+                    /** The current entry. */
+<span class="fc" id="L1273">                    private final UnmodifiableEntry e = new UnmodifiableEntry();</span>
+
+                    /** {@inheritDoc} */
+                    public boolean hasNext() {
+<span class="fc" id="L1277">                        return i.hasNext();</span>
+                    }
+
+                    /** {@inheritDoc} */
+                    public Entry next() {
+<span class="fc" id="L1282">                        e.setIndex(i.next().getIndex());</span>
+<span class="fc" id="L1283">                        return e;</span>
+                    }
+
+                    /**
+                     * {@inheritDoc}
+                     *
+                     * @throws MathUnsupportedOperationException in all
+                     * circumstances.
+                     */
+                    public void remove() throws MathUnsupportedOperationException {
+<span class="nc" id="L1293">                        throw new MathUnsupportedOperationException();</span>
+                    }
+                };
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public Iterator&lt;Entry&gt; sparseIterator() {
+<span class="fc" id="L1301">                final Iterator&lt;Entry&gt; i = v.sparseIterator();</span>
+
+<span class="fc" id="L1303">                return new Iterator&lt;Entry&gt;() {</span>
+                    /** The current entry. */
+<span class="fc" id="L1305">                    private final UnmodifiableEntry e = new UnmodifiableEntry();</span>
+
+                    /** {@inheritDoc} */
+                    public boolean hasNext() {
+<span class="fc" id="L1309">                        return i.hasNext();</span>
+                    }
+
+                    /** {@inheritDoc} */
+                    public Entry next() {
+<span class="fc" id="L1314">                        e.setIndex(i.next().getIndex());</span>
+<span class="fc" id="L1315">                        return e;</span>
+                    }
+
+                    /**
+                     * {@inheritDoc}
+                     *
+                     * @throws MathUnsupportedOperationException in all
+                     * circumstances.
+                     */
+                    public void remove()
+                        throws MathUnsupportedOperationException {
+<span class="nc" id="L1326">                        throw new MathUnsupportedOperationException();</span>
+                    }
+                };
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector copy() {
+<span class="fc" id="L1334">                return v.copy();</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector add(RealVector w)
+                throws DimensionMismatchException {
+<span class="fc" id="L1341">                return v.add(w);</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector subtract(RealVector w)
+                throws DimensionMismatchException {
+<span class="fc" id="L1348">                return v.subtract(w);</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector mapAdd(double d) {
+<span class="fc" id="L1354">                return v.mapAdd(d);</span>
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @throws MathUnsupportedOperationException in all
+             * circumstances.
+             */
+            @Override
+            public RealVector mapAddToSelf(double d)
+                throws MathUnsupportedOperationException {
+<span class="fc" id="L1366">                throw new MathUnsupportedOperationException();</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector mapSubtract(double d) {
+<span class="fc" id="L1372">                return v.mapSubtract(d);</span>
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @throws MathUnsupportedOperationException in all
+             * circumstances.
+             */
+            @Override
+            public RealVector mapSubtractToSelf(double d)
+                throws MathUnsupportedOperationException {
+<span class="fc" id="L1384">                throw new MathUnsupportedOperationException();</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector mapMultiply(double d) {
+<span class="fc" id="L1390">                return v.mapMultiply(d);</span>
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @throws MathUnsupportedOperationException in all
+             * circumstances.
+             */
+            @Override
+            public RealVector mapMultiplyToSelf(double d)
+                throws MathUnsupportedOperationException {
+<span class="fc" id="L1402">                throw new MathUnsupportedOperationException();</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector mapDivide(double d) {
+<span class="fc" id="L1408">                return v.mapDivide(d);</span>
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @throws MathUnsupportedOperationException in all
+             * circumstances.
+             */
+            @Override
+            public RealVector mapDivideToSelf(double d)
+                throws MathUnsupportedOperationException {
+<span class="fc" id="L1420">                throw new MathUnsupportedOperationException();</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector ebeMultiply(RealVector w)
+                throws DimensionMismatchException {
+<span class="nc" id="L1427">                return v.ebeMultiply(w);</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector ebeDivide(RealVector w)
+                throws DimensionMismatchException {
+<span class="nc" id="L1434">                return v.ebeDivide(w);</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public double dotProduct(RealVector w)
+                throws DimensionMismatchException {
+<span class="fc" id="L1441">                return v.dotProduct(w);</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public double cosine(RealVector w)
+                throws DimensionMismatchException, MathArithmeticException {
+<span class="fc" id="L1448">                return v.cosine(w);</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public double getNorm() {
+<span class="fc" id="L1454">                return v.getNorm();</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public double getL1Norm() {
+<span class="fc" id="L1460">                return v.getL1Norm();</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public double getLInfNorm() {
+<span class="fc" id="L1466">                return v.getLInfNorm();</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public double getDistance(RealVector w)
+                throws DimensionMismatchException {
+<span class="fc" id="L1473">                return v.getDistance(w);</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public double getL1Distance(RealVector w)
+                throws DimensionMismatchException {
+<span class="fc" id="L1480">                return v.getL1Distance(w);</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public double getLInfDistance(RealVector w)
+                throws DimensionMismatchException {
+<span class="fc" id="L1487">                return v.getLInfDistance(w);</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector unitVector() throws MathArithmeticException {
+<span class="fc" id="L1493">                return v.unitVector();</span>
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @throws MathUnsupportedOperationException in all
+             * circumstances.
+             */
+            @Override
+            public void unitize() throws MathUnsupportedOperationException {
+<span class="fc" id="L1504">                throw new MathUnsupportedOperationException();</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealMatrix outerProduct(RealVector w) {
+<span class="fc" id="L1510">                return v.outerProduct(w);</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public double getEntry(int index) throws OutOfRangeException {
+<span class="fc" id="L1516">                return v.getEntry(index);</span>
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @throws MathUnsupportedOperationException in all
+             * circumstances.
+             */
+            @Override
+            public void setEntry(int index, double value)
+                throws MathUnsupportedOperationException {
+<span class="fc" id="L1528">                throw new MathUnsupportedOperationException();</span>
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @throws MathUnsupportedOperationException in all
+             * circumstances.
+             */
+            @Override
+            public void addToEntry(int index, double value)
+                throws MathUnsupportedOperationException {
+<span class="fc" id="L1540">                throw new MathUnsupportedOperationException();</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public int getDimension() {
+<span class="fc" id="L1546">                return v.getDimension();</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector append(RealVector w) {
+<span class="fc" id="L1552">                return v.append(w);</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector append(double d) {
+<span class="fc" id="L1558">                return v.append(d);</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector getSubVector(int index, int n)
+                throws OutOfRangeException, NotPositiveException {
+<span class="fc" id="L1565">                return v.getSubVector(index, n);</span>
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @throws MathUnsupportedOperationException in all
+             * circumstances.
+             */
+            @Override
+            public void setSubVector(int index, RealVector w)
+                throws MathUnsupportedOperationException {
+<span class="fc" id="L1577">                throw new MathUnsupportedOperationException();</span>
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @throws MathUnsupportedOperationException in all
+             * circumstances.
+             */
+            @Override
+            public void set(double value)
+                throws MathUnsupportedOperationException {
+<span class="fc" id="L1589">                throw new MathUnsupportedOperationException();</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public double[] toArray() {
+<span class="fc" id="L1595">                return v.toArray();</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public boolean isNaN() {
+<span class="fc" id="L1601">                return v.isNaN();</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public boolean isInfinite() {
+<span class="fc" id="L1607">                return v.isInfinite();</span>
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector combine(double a, double b, RealVector y)
+                throws DimensionMismatchException {
+<span class="fc" id="L1614">                return v.combine(a, b, y);</span>
+            }
+
+            /**
+             * {@inheritDoc}
+             *
+             * @throws MathUnsupportedOperationException in all
+             * circumstances.
+             */
+            @Override
+            public RealVector combineToSelf(double a, double b, RealVector y)
+                throws MathUnsupportedOperationException {
+<span class="fc" id="L1626">                throw new MathUnsupportedOperationException();</span>
+            }
+
+            /** An entry in the vector. */
+<span class="fc" id="L1630">            class UnmodifiableEntry extends Entry {</span>
+                /** {@inheritDoc} */
+                @Override
+                public double getValue() {
+<span class="fc" id="L1634">                    return v.getEntry(getIndex());</span>
+                }
+
+                /**
+                 * {@inheritDoc}
+                 *
+                 * @throws MathUnsupportedOperationException in all
+                 * circumstances.
+                 */
+                @Override
+                public void setValue(double value)
+                    throws MathUnsupportedOperationException {
+<span class="fc" id="L1646">                    throw new MathUnsupportedOperationException();</span>
+                }
+            }
+        };
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

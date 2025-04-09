@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Array2DRowFieldMatrix.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Commons Math</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.math3.linear</a> &gt; <span class="el_source">Array2DRowFieldMatrix.java</span></div><h1>Array2DRowFieldMatrix.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.math3.linear;
+
+import java.io.Serializable;
+
+import org.apache.commons.math3.Field;
+import org.apache.commons.math3.FieldElement;
+import org.apache.commons.math3.exception.NoDataException;
+import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.apache.commons.math3.exception.MathIllegalStateException;
+import org.apache.commons.math3.exception.NotStrictlyPositiveException;
+import org.apache.commons.math3.exception.NullArgumentException;
+import org.apache.commons.math3.exception.NumberIsTooSmallException;
+import org.apache.commons.math3.exception.OutOfRangeException;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
+import org.apache.commons.math3.util.MathArrays;
+import org.apache.commons.math3.util.MathUtils;
+
+/**
+ * Implementation of FieldMatrix&lt;T&gt; using a {@link FieldElement}[][] array to store entries.
+ * &lt;p&gt;
+ * As specified in the {@link FieldMatrix} interface, matrix element indexing
+ * is 0-based -- e.g., &lt;code&gt;getEntry(0, 0)&lt;/code&gt;
+ * returns the element in the first row, first column of the matrix.&lt;/li&gt;&lt;/ul&gt;
+ * &lt;/p&gt;
+ *
+ * @param &lt;T&gt; the type of the field elements
+ * @version $Id$
+ */
+public class Array2DRowFieldMatrix&lt;T extends FieldElement&lt;T&gt;&gt;
+    extends AbstractFieldMatrix&lt;T&gt;
+    implements Serializable {
+    /** Serializable version identifier */
+    private static final long serialVersionUID = 7260756672015356458L;
+    /** Entries of the matrix */
+    private T[][] data;
+
+    /**
+     * Creates a matrix with no data
+     * @param field field to which the elements belong
+     */
+    public Array2DRowFieldMatrix(final Field&lt;T&gt; field) {
+<span class="fc" id="L59">        super(field);</span>
+<span class="fc" id="L60">    }</span>
+
+    /**
+     * Create a new {@code FieldMatrix&lt;T&gt;} with the supplied row and column dimensions.
+     *
+     * @param field Field to which the elements belong.
+     * @param rowDimension Number of rows in the new matrix.
+     * @param columnDimension Number of columns in the new matrix.
+     * @throws NotStrictlyPositiveException if row or column dimension is not positive.
+     */
+    public Array2DRowFieldMatrix(final Field&lt;T&gt; field, final int rowDimension,
+                                 final int columnDimension)
+        throws NotStrictlyPositiveException {
+<span class="fc" id="L73">        super(field, rowDimension, columnDimension);</span>
+<span class="fc" id="L74">        data = MathArrays.buildArray(field, rowDimension, columnDimension);</span>
+<span class="fc" id="L75">    }</span>
+
+    /**
+     * Create a new {@code FieldMatrix&lt;T&gt;} using the input array as the underlying
+     * data array.
+     * &lt;p&gt;The input array is copied, not referenced. This constructor has
+     * the same effect as calling {@link #Array2DRowFieldMatrix(FieldElement[][], boolean)}
+     * with the second argument set to {@code true}.&lt;/p&gt;
+     *
+     * @param d Data for the new matrix.
+     * @throws DimensionMismatchException if {@code d} is not rectangular.
+     * @throws NullArgumentException if {@code d} is {@code null}.
+     * @throws NoDataException if there are not at least one row and one column.
+     * @see #Array2DRowFieldMatrix(FieldElement[][], boolean)
+     */
+    public Array2DRowFieldMatrix(final T[][] d)
+        throws DimensionMismatchException, NullArgumentException,
+        NoDataException {
+<span class="fc" id="L93">        this(extractField(d), d);</span>
+<span class="fc" id="L94">    }</span>
+
+    /**
+     * Create a new {@code FieldMatrix&lt;T&gt;} using the input array as the underlying
+     * data array.
+     * &lt;p&gt;The input array is copied, not referenced. This constructor has
+     * the same effect as calling {@link #Array2DRowFieldMatrix(FieldElement[][], boolean)}
+     * with the second argument set to {@code true}.&lt;/p&gt;
+     *
+     * @param field Field to which the elements belong.
+     * @param d Data for the new matrix.
+     * @throws DimensionMismatchException if {@code d} is not rectangular.
+     * @throws NullArgumentException if {@code d} is {@code null}.
+     * @throws NoDataException if there are not at least one row and one column.
+     * @see #Array2DRowFieldMatrix(FieldElement[][], boolean)
+     */
+    public Array2DRowFieldMatrix(final Field&lt;T&gt; field, final T[][] d)
+        throws DimensionMismatchException, NullArgumentException,
+        NoDataException {
+<span class="fc" id="L113">        super(field);</span>
+<span class="fc" id="L114">        copyIn(d);</span>
+<span class="fc" id="L115">    }</span>
+
+    /**
+     * Create a new {@code FieldMatrix&lt;T&gt;} using the input array as the underlying
+     * data array.
+     * &lt;p&gt;If an array is built specially in order to be embedded in a
+     * {@code FieldMatrix&lt;T&gt;} and not used directly, the {@code copyArray} may be
+     * set to {@code false}. This will prevent the copying and improve
+     * performance as no new array will be built and no data will be copied.&lt;/p&gt;
+     *
+     * @param d Data for the new matrix.
+     * @param copyArray Whether to copy or reference the input array.
+     * @throws DimensionMismatchException if {@code d} is not rectangular.
+     * @throws NoDataException if there are not at least one row and one column.
+     * @throws NullArgumentException if {@code d} is {@code null}.
+     * @see #Array2DRowFieldMatrix(FieldElement[][])
+     */
+    public Array2DRowFieldMatrix(final T[][] d, final boolean copyArray)
+        throws DimensionMismatchException, NoDataException,
+        NullArgumentException {
+<span class="fc" id="L135">        this(extractField(d), d, copyArray);</span>
+<span class="fc" id="L136">    }</span>
+
+    /**
+     * Create a new {@code FieldMatrix&lt;T&gt;} using the input array as the underlying
+     * data array.
+     * &lt;p&gt;If an array is built specially in order to be embedded in a
+     * {@code FieldMatrix&lt;T&gt;} and not used directly, the {@code copyArray} may be
+     * set to {@code false}. This will prevent the copying and improve
+     * performance as no new array will be built and no data will be copied.&lt;/p&gt;
+     *
+     * @param field Field to which the elements belong.
+     * @param d Data for the new matrix.
+     * @param copyArray Whether to copy or reference the input array.
+     * @throws DimensionMismatchException if {@code d} is not rectangular.
+     * @throws NoDataException if there are not at least one row and one column.
+     * @throws NullArgumentException if {@code d} is {@code null}.
+     * @see #Array2DRowFieldMatrix(FieldElement[][])
+     */
+    public Array2DRowFieldMatrix(final Field&lt;T&gt; field, final T[][] d, final boolean copyArray)
+        throws DimensionMismatchException, NoDataException, NullArgumentException {
+<span class="fc" id="L156">        super(field);</span>
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">        if (copyArray) {</span>
+<span class="nc" id="L158">            copyIn(d);</span>
+        } else {
+<span class="fc" id="L160">            MathUtils.checkNotNull(d);</span>
+<span class="fc" id="L161">            final int nRows = d.length;</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">            if (nRows == 0) {</span>
+<span class="nc" id="L163">                throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_ROW);</span>
+            }
+<span class="fc" id="L165">            final int nCols = d[0].length;</span>
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">            if (nCols == 0) {</span>
+<span class="nc" id="L167">                throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_COLUMN);</span>
+            }
+<span class="fc bfc" id="L169" title="All 2 branches covered.">            for (int r = 1; r &lt; nRows; r++) {</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">                if (d[r].length != nCols) {</span>
+<span class="nc" id="L171">                    throw new DimensionMismatchException(nCols, d[r].length);</span>
+                }
+            }
+<span class="fc" id="L174">            data = d;</span>
+        }
+<span class="fc" id="L176">    }</span>
+
+    /**
+     * Create a new (column) {@code FieldMatrix&lt;T&gt;} using {@code v} as the
+     * data for the unique column of the created matrix.
+     * The input array is copied.
+     *
+     * @param v Column vector holding data for new matrix.
+     * @throws NoDataException if v is empty
+     */
+    public Array2DRowFieldMatrix(final T[] v) throws NoDataException {
+<span class="nc" id="L187">        this(extractField(v), v);</span>
+<span class="nc" id="L188">    }</span>
+
+    /**
+     * Create a new (column) {@code FieldMatrix&lt;T&gt;} using {@code v} as the
+     * data for the unique column of the created matrix.
+     * The input array is copied.
+     *
+     * @param field Field to which the elements belong.
+     * @param v Column vector holding data for new matrix.
+     */
+    public Array2DRowFieldMatrix(final Field&lt;T&gt; field, final T[] v) {
+<span class="nc" id="L199">        super(field);</span>
+<span class="nc" id="L200">        final int nRows = v.length;</span>
+<span class="nc" id="L201">        data = MathArrays.buildArray(getField(), nRows, 1);</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">        for (int row = 0; row &lt; nRows; row++) {</span>
+<span class="nc" id="L203">            data[row][0] = v[row];</span>
+        }
+<span class="nc" id="L205">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public FieldMatrix&lt;T&gt; createMatrix(final int rowDimension,
+                                       final int columnDimension)
+        throws NotStrictlyPositiveException {
+<span class="fc" id="L212">        return new Array2DRowFieldMatrix&lt;T&gt;(getField(), rowDimension, columnDimension);</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FieldMatrix&lt;T&gt; copy() {
+<span class="fc" id="L218">        return new Array2DRowFieldMatrix&lt;T&gt;(getField(), copyOut(), false);</span>
+    }
+
+    /**
+     * Add {@code m} to this matrix.
+     *
+     * @param m Matrix to be added.
+     * @return {@code this} + m.
+     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * size as this matrix.
+     */
+    public Array2DRowFieldMatrix&lt;T&gt; add(final Array2DRowFieldMatrix&lt;T&gt; m)
+        throws MatrixDimensionMismatchException {
+        // safety check
+<span class="fc" id="L232">        checkAdditionCompatible(m);</span>
+
+<span class="fc" id="L234">        final int rowCount    = getRowDimension();</span>
+<span class="fc" id="L235">        final int columnCount = getColumnDimension();</span>
+<span class="fc" id="L236">        final T[][] outData = MathArrays.buildArray(getField(), rowCount, columnCount);</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        for (int row = 0; row &lt; rowCount; row++) {</span>
+<span class="fc" id="L238">            final T[] dataRow    = data[row];</span>
+<span class="fc" id="L239">            final T[] mRow       = m.data[row];</span>
+<span class="fc" id="L240">            final T[] outDataRow = outData[row];</span>
+<span class="fc bfc" id="L241" title="All 2 branches covered.">            for (int col = 0; col &lt; columnCount; col++) {</span>
+<span class="fc" id="L242">                outDataRow[col] = dataRow[col].add(mRow[col]);</span>
+            }
+        }
+
+<span class="fc" id="L246">        return new Array2DRowFieldMatrix&lt;T&gt;(getField(), outData, false);</span>
+    }
+
+    /**
+     * Subtract {@code m} from this matrix.
+     *
+     * @param m Matrix to be subtracted.
+     * @return {@code this} + m.
+     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * size as this matrix.
+     */
+    public Array2DRowFieldMatrix&lt;T&gt; subtract(final Array2DRowFieldMatrix&lt;T&gt; m)
+        throws MatrixDimensionMismatchException {
+        // safety check
+<span class="fc" id="L260">        checkSubtractionCompatible(m);</span>
+
+<span class="fc" id="L262">        final int rowCount    = getRowDimension();</span>
+<span class="fc" id="L263">        final int columnCount = getColumnDimension();</span>
+<span class="fc" id="L264">        final T[][] outData = MathArrays.buildArray(getField(), rowCount, columnCount);</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">        for (int row = 0; row &lt; rowCount; row++) {</span>
+<span class="fc" id="L266">            final T[] dataRow    = data[row];</span>
+<span class="fc" id="L267">            final T[] mRow       = m.data[row];</span>
+<span class="fc" id="L268">            final T[] outDataRow = outData[row];</span>
+<span class="fc bfc" id="L269" title="All 2 branches covered.">            for (int col = 0; col &lt; columnCount; col++) {</span>
+<span class="fc" id="L270">                outDataRow[col] = dataRow[col].subtract(mRow[col]);</span>
+            }
+        }
+
+<span class="fc" id="L274">        return new Array2DRowFieldMatrix&lt;T&gt;(getField(), outData, false);</span>
+
+    }
+
+    /**
+     * Postmultiplying this matrix by {@code m}.
+     *
+     * @param m Matrix to postmultiply by.
+     * @return {@code this} * m.
+     * @throws DimensionMismatchException if the number of columns of this
+     * matrix is not equal to the number of rows of {@code m}.
+     */
+    public Array2DRowFieldMatrix&lt;T&gt; multiply(final Array2DRowFieldMatrix&lt;T&gt; m)
+        throws DimensionMismatchException {
+        // safety check
+<span class="fc" id="L289">        checkMultiplicationCompatible(m);</span>
+
+<span class="fc" id="L291">        final int nRows = this.getRowDimension();</span>
+<span class="fc" id="L292">        final int nCols = m.getColumnDimension();</span>
+<span class="fc" id="L293">        final int nSum = this.getColumnDimension();</span>
+<span class="fc" id="L294">        final T[][] outData = MathArrays.buildArray(getField(), nRows, nCols);</span>
+<span class="fc bfc" id="L295" title="All 2 branches covered.">        for (int row = 0; row &lt; nRows; row++) {</span>
+<span class="fc" id="L296">            final T[] dataRow    = data[row];</span>
+<span class="fc" id="L297">            final T[] outDataRow = outData[row];</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">            for (int col = 0; col &lt; nCols; col++) {</span>
+<span class="fc" id="L299">                T sum = getField().getZero();</span>
+<span class="fc bfc" id="L300" title="All 2 branches covered.">                for (int i = 0; i &lt; nSum; i++) {</span>
+<span class="fc" id="L301">                    sum = sum.add(dataRow[i].multiply(m.data[i][col]));</span>
+                }
+<span class="fc" id="L303">                outDataRow[col] = sum;</span>
+            }
+        }
+
+<span class="fc" id="L307">        return new Array2DRowFieldMatrix&lt;T&gt;(getField(), outData, false);</span>
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public T[][] getData() {
+<span class="fc" id="L314">        return copyOut();</span>
+    }
+
+    /**
+     * Get a reference to the underlying data array.
+     * This methods returns internal data, &lt;strong&gt;not&lt;/strong&gt; fresh copy of it.
+     *
+     * @return the 2-dimensional array of entries.
+     */
+    public T[][] getDataRef() {
+<span class="nc" id="L324">        return data;</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setSubMatrix(final T[][] subMatrix, final int row,
+                             final int column)
+        throws OutOfRangeException, NullArgumentException, NoDataException,
+        DimensionMismatchException {
+<span class="fc bfc" id="L333" title="All 2 branches covered.">        if (data == null) {</span>
+<span class="fc bfc" id="L334" title="All 2 branches covered.">            if (row &gt; 0) {</span>
+<span class="fc" id="L335">                throw new MathIllegalStateException(LocalizedFormats.FIRST_ROWS_NOT_INITIALIZED_YET, row);</span>
+            }
+<span class="fc bfc" id="L337" title="All 2 branches covered.">            if (column &gt; 0) {</span>
+<span class="fc" id="L338">                throw new MathIllegalStateException(LocalizedFormats.FIRST_COLUMNS_NOT_INITIALIZED_YET, column);</span>
+            }
+<span class="fc" id="L340">            final int nRows = subMatrix.length;</span>
+<span class="pc bpc" id="L341" title="1 of 2 branches missed.">            if (nRows == 0) {</span>
+<span class="nc" id="L342">                throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_ROW);</span>
+            }
+
+<span class="fc" id="L345">            final int nCols = subMatrix[0].length;</span>
+<span class="pc bpc" id="L346" title="1 of 2 branches missed.">            if (nCols == 0) {</span>
+<span class="nc" id="L347">                throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_COLUMN);</span>
+            }
+<span class="fc" id="L349">            data = MathArrays.buildArray(getField(), subMatrix.length, nCols);</span>
+<span class="fc bfc" id="L350" title="All 2 branches covered.">            for (int i = 0; i &lt; data.length; ++i) {</span>
+<span class="fc bfc" id="L351" title="All 2 branches covered.">                if (subMatrix[i].length != nCols) {</span>
+<span class="fc" id="L352">                    throw new DimensionMismatchException(nCols, subMatrix[i].length);</span>
+                }
+<span class="fc" id="L354">                System.arraycopy(subMatrix[i], 0, data[i + row], column, nCols);</span>
+            }
+<span class="fc" id="L356">        } else {</span>
+<span class="fc" id="L357">            super.setSubMatrix(subMatrix, row, column);</span>
+        }
+
+<span class="fc" id="L360">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public T getEntry(final int row, final int column)
+        throws OutOfRangeException {
+<span class="fc" id="L366">        checkRowIndex(row);</span>
+<span class="fc" id="L367">        checkColumnIndex(column);</span>
+
+<span class="fc" id="L369">        return data[row][column];</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setEntry(final int row, final int column, final T value)
+        throws OutOfRangeException {
+<span class="fc" id="L376">        checkRowIndex(row);</span>
+<span class="fc" id="L377">        checkColumnIndex(column);</span>
+
+<span class="fc" id="L379">        data[row][column] = value;</span>
+<span class="fc" id="L380">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public void addToEntry(final int row, final int column, final T increment)
+        throws OutOfRangeException {
+<span class="nc" id="L386">        checkRowIndex(row);</span>
+<span class="nc" id="L387">        checkColumnIndex(column);</span>
+
+<span class="nc" id="L389">        data[row][column] = data[row][column].add(increment);</span>
+<span class="nc" id="L390">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public void multiplyEntry(final int row, final int column, final T factor)
+        throws OutOfRangeException {
+<span class="nc" id="L396">        checkRowIndex(row);</span>
+<span class="nc" id="L397">        checkColumnIndex(column);</span>
+
+<span class="nc" id="L399">        data[row][column] = data[row][column].multiply(factor);</span>
+<span class="nc" id="L400">    }</span>
+
+    /** {@inheritDoc} */
+    @Override
+    public int getRowDimension() {
+<span class="fc bfc" id="L405" title="All 2 branches covered.">        return (data == null) ? 0 : data.length;</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getColumnDimension() {
+<span class="pc bpc" id="L411" title="1 of 4 branches missed.">        return ((data == null) || (data[0] == null)) ? 0 : data[0].length;</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public T[] operate(final T[] v) throws DimensionMismatchException {
+<span class="fc" id="L417">        final int nRows = this.getRowDimension();</span>
+<span class="fc" id="L418">        final int nCols = this.getColumnDimension();</span>
+<span class="fc bfc" id="L419" title="All 2 branches covered.">        if (v.length != nCols) {</span>
+<span class="fc" id="L420">            throw new DimensionMismatchException(v.length, nCols);</span>
+        }
+<span class="fc" id="L422">        final T[] out = MathArrays.buildArray(getField(), nRows);</span>
+<span class="fc bfc" id="L423" title="All 2 branches covered.">        for (int row = 0; row &lt; nRows; row++) {</span>
+<span class="fc" id="L424">            final T[] dataRow = data[row];</span>
+<span class="fc" id="L425">            T sum = getField().getZero();</span>
+<span class="fc bfc" id="L426" title="All 2 branches covered.">            for (int i = 0; i &lt; nCols; i++) {</span>
+<span class="fc" id="L427">                sum = sum.add(dataRow[i].multiply(v[i]));</span>
+            }
+<span class="fc" id="L429">            out[row] = sum;</span>
+        }
+<span class="fc" id="L431">        return out;</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public T[] preMultiply(final T[] v) throws DimensionMismatchException {
+<span class="fc" id="L437">        final int nRows = getRowDimension();</span>
+<span class="fc" id="L438">        final int nCols = getColumnDimension();</span>
+<span class="fc bfc" id="L439" title="All 2 branches covered.">        if (v.length != nRows) {</span>
+<span class="fc" id="L440">            throw new DimensionMismatchException(v.length, nRows);</span>
+        }
+
+<span class="fc" id="L443">        final T[] out = MathArrays.buildArray(getField(), nCols);</span>
+<span class="fc bfc" id="L444" title="All 2 branches covered.">        for (int col = 0; col &lt; nCols; ++col) {</span>
+<span class="fc" id="L445">            T sum = getField().getZero();</span>
+<span class="fc bfc" id="L446" title="All 2 branches covered.">            for (int i = 0; i &lt; nRows; ++i) {</span>
+<span class="fc" id="L447">                sum = sum.add(data[i][col].multiply(v[i]));</span>
+            }
+<span class="fc" id="L449">            out[col] = sum;</span>
+        }
+
+<span class="fc" id="L452">        return out;</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public T walkInRowOrder(final FieldMatrixChangingVisitor&lt;T&gt; visitor) {
+<span class="fc" id="L458">        final int rows    = getRowDimension();</span>
+<span class="fc" id="L459">        final int columns = getColumnDimension();</span>
+<span class="fc" id="L460">        visitor.start(rows, columns, 0, rows - 1, 0, columns - 1);</span>
+<span class="fc bfc" id="L461" title="All 2 branches covered.">        for (int i = 0; i &lt; rows; ++i) {</span>
+<span class="fc" id="L462">            final T[] rowI = data[i];</span>
+<span class="fc bfc" id="L463" title="All 2 branches covered.">            for (int j = 0; j &lt; columns; ++j) {</span>
+<span class="fc" id="L464">                rowI[j] = visitor.visit(i, j, rowI[j]);</span>
+            }
+        }
+<span class="fc" id="L467">        return visitor.end();</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public T walkInRowOrder(final FieldMatrixPreservingVisitor&lt;T&gt; visitor) {
+<span class="fc" id="L473">        final int rows    = getRowDimension();</span>
+<span class="fc" id="L474">        final int columns = getColumnDimension();</span>
+<span class="fc" id="L475">        visitor.start(rows, columns, 0, rows - 1, 0, columns - 1);</span>
+<span class="fc bfc" id="L476" title="All 2 branches covered.">        for (int i = 0; i &lt; rows; ++i) {</span>
+<span class="fc" id="L477">            final T[] rowI = data[i];</span>
+<span class="fc bfc" id="L478" title="All 2 branches covered.">            for (int j = 0; j &lt; columns; ++j) {</span>
+<span class="fc" id="L479">                visitor.visit(i, j, rowI[j]);</span>
+            }
+        }
+<span class="fc" id="L482">        return visitor.end();</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public T walkInRowOrder(final FieldMatrixChangingVisitor&lt;T&gt; visitor,
+                            final int startRow, final int endRow,
+                            final int startColumn, final int endColumn)
+        throws OutOfRangeException, NumberIsTooSmallException {
+<span class="fc" id="L491">        checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);</span>
+<span class="fc" id="L492">        visitor.start(getRowDimension(), getColumnDimension(),</span>
+                      startRow, endRow, startColumn, endColumn);
+<span class="fc bfc" id="L494" title="All 2 branches covered.">        for (int i = startRow; i &lt;= endRow; ++i) {</span>
+<span class="fc" id="L495">            final T[] rowI = data[i];</span>
+<span class="fc bfc" id="L496" title="All 2 branches covered.">            for (int j = startColumn; j &lt;= endColumn; ++j) {</span>
+<span class="fc" id="L497">                rowI[j] = visitor.visit(i, j, rowI[j]);</span>
+            }
+        }
+<span class="fc" id="L500">        return visitor.end();</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public T walkInRowOrder(final FieldMatrixPreservingVisitor&lt;T&gt; visitor,
+                            final int startRow, final int endRow,
+                            final int startColumn, final int endColumn)
+        throws OutOfRangeException, NumberIsTooSmallException {
+<span class="fc" id="L509">        checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);</span>
+<span class="fc" id="L510">        visitor.start(getRowDimension(), getColumnDimension(),</span>
+                      startRow, endRow, startColumn, endColumn);
+<span class="fc bfc" id="L512" title="All 2 branches covered.">        for (int i = startRow; i &lt;= endRow; ++i) {</span>
+<span class="fc" id="L513">            final T[] rowI = data[i];</span>
+<span class="fc bfc" id="L514" title="All 2 branches covered.">            for (int j = startColumn; j &lt;= endColumn; ++j) {</span>
+<span class="fc" id="L515">                visitor.visit(i, j, rowI[j]);</span>
+            }
+        }
+<span class="fc" id="L518">        return visitor.end();</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public T walkInColumnOrder(final FieldMatrixChangingVisitor&lt;T&gt; visitor) {
+<span class="fc" id="L524">        final int rows    = getRowDimension();</span>
+<span class="fc" id="L525">        final int columns = getColumnDimension();</span>
+<span class="fc" id="L526">        visitor.start(rows, columns, 0, rows - 1, 0, columns - 1);</span>
+<span class="fc bfc" id="L527" title="All 2 branches covered.">        for (int j = 0; j &lt; columns; ++j) {</span>
+<span class="fc bfc" id="L528" title="All 2 branches covered.">            for (int i = 0; i &lt; rows; ++i) {</span>
+<span class="fc" id="L529">                final T[] rowI = data[i];</span>
+<span class="fc" id="L530">                rowI[j] = visitor.visit(i, j, rowI[j]);</span>
+            }
+        }
+<span class="fc" id="L533">        return visitor.end();</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public T walkInColumnOrder(final FieldMatrixPreservingVisitor&lt;T&gt; visitor) {
+<span class="fc" id="L539">        final int rows    = getRowDimension();</span>
+<span class="fc" id="L540">        final int columns = getColumnDimension();</span>
+<span class="fc" id="L541">        visitor.start(rows, columns, 0, rows - 1, 0, columns - 1);</span>
+<span class="fc bfc" id="L542" title="All 2 branches covered.">        for (int j = 0; j &lt; columns; ++j) {</span>
+<span class="fc bfc" id="L543" title="All 2 branches covered.">            for (int i = 0; i &lt; rows; ++i) {</span>
+<span class="fc" id="L544">                visitor.visit(i, j, data[i][j]);</span>
+            }
+        }
+<span class="fc" id="L547">        return visitor.end();</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public T walkInColumnOrder(final FieldMatrixChangingVisitor&lt;T&gt; visitor,
+                               final int startRow, final int endRow,
+                               final int startColumn, final int endColumn)
+        throws OutOfRangeException, NumberIsTooSmallException {
+<span class="fc" id="L556">    checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);</span>
+<span class="fc" id="L557">        visitor.start(getRowDimension(), getColumnDimension(),</span>
+                      startRow, endRow, startColumn, endColumn);
+<span class="fc bfc" id="L559" title="All 2 branches covered.">        for (int j = startColumn; j &lt;= endColumn; ++j) {</span>
+<span class="fc bfc" id="L560" title="All 2 branches covered.">            for (int i = startRow; i &lt;= endRow; ++i) {</span>
+<span class="fc" id="L561">                final T[] rowI = data[i];</span>
+<span class="fc" id="L562">                rowI[j] = visitor.visit(i, j, rowI[j]);</span>
+            }
+        }
+<span class="fc" id="L565">        return visitor.end();</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public T walkInColumnOrder(final FieldMatrixPreservingVisitor&lt;T&gt; visitor,
+                               final int startRow, final int endRow,
+                               final int startColumn, final int endColumn)
+        throws OutOfRangeException, NumberIsTooSmallException {
+<span class="fc" id="L574">        checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);</span>
+<span class="fc" id="L575">        visitor.start(getRowDimension(), getColumnDimension(),</span>
+                      startRow, endRow, startColumn, endColumn);
+<span class="fc bfc" id="L577" title="All 2 branches covered.">        for (int j = startColumn; j &lt;= endColumn; ++j) {</span>
+<span class="fc bfc" id="L578" title="All 2 branches covered.">            for (int i = startRow; i &lt;= endRow; ++i) {</span>
+<span class="fc" id="L579">                visitor.visit(i, j, data[i][j]);</span>
+            }
+        }
+<span class="fc" id="L582">        return visitor.end();</span>
+    }
+
+    /**
+     * Get a fresh copy of the underlying data array.
+     *
+     * @return a copy of the underlying data array.
+     */
+    private T[][] copyOut() {
+<span class="fc" id="L591">        final int nRows = this.getRowDimension();</span>
+<span class="fc" id="L592">        final T[][] out = MathArrays.buildArray(getField(), nRows, getColumnDimension());</span>
+        // can't copy 2-d array in one shot, otherwise get row references
+<span class="fc bfc" id="L594" title="All 2 branches covered.">        for (int i = 0; i &lt; nRows; i++) {</span>
+<span class="fc" id="L595">            System.arraycopy(data[i], 0, out[i], 0, data[i].length);</span>
+        }
+<span class="fc" id="L597">        return out;</span>
+    }
+
+    /**
+     * Replace data with a fresh copy of the input array.
+     *
+     * @param in Data to copy.
+     * @throws NoDataException if the input array is empty.
+     * @throws DimensionMismatchException if the input array is not rectangular.
+     * @throws NullArgumentException if the input array is {@code null}.
+     */
+    private void copyIn(final T[][] in)
+        throws NullArgumentException, NoDataException,
+        DimensionMismatchException {
+<span class="fc" id="L611">        setSubMatrix(in, 0, 0);</span>
+<span class="fc" id="L612">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

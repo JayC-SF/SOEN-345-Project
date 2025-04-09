@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FilterType.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Commons Math</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.math3.ode.events</a> &gt; <span class="el_source">FilterType.java</span></div><h1>FilterType.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.math3.ode.events;
+
+import org.apache.commons.math3.exception.MathInternalError;
+
+/** Enumerate for {@link EventFilter filtering events}.
+ *
+ * @version $Id$
+ * @since 3.2
+ */
+
+<span class="fc" id="L28">public enum FilterType {</span>
+
+    /** Constant for triggering only decreasing events.
+     * &lt;p&gt;When this filter is used, the wrapped {@link EventHandler
+     * event handler} {@link EventHandler#eventOccurred(double, double[],
+     * boolean) eventOccurred} method will be called &lt;em&gt;only&lt;/em&gt; with
+     * its {@code increasing} argument set to false.&lt;/p&gt;
+     */
+<span class="fc" id="L36">    TRIGGER_ONLY_DECREASING_EVENTS {</span>
+
+        /**  {@inheritDoc} */
+        protected boolean getTriggeredIncreasing() {
+<span class="fc" id="L40">            return false;</span>
+        }
+
+        /** {@inheritDoc}
+         * &lt;p&gt;
+         * states scheduling for computing h(t,y) as an altered version of g(t, y)
+         * &lt;ul&gt;
+         * &lt;li&gt;0 are triggered events for which a zero is produced (here decreasing events)&lt;/li&gt;
+         * &lt;li&gt;X are ignored events for which zero is masked (here increasing events)&lt;/li&gt;
+         * &lt;/ul&gt;
+         * &lt;/p&gt;
+         * &lt;pre&gt;
+         *  g(t)
+         *             ___                     ___                     ___
+         *            /   \                   /   \                   /   \
+         *           /     \                 /     \                 /     \
+         *          /  g&gt;0  \               /  g&gt;0  \               /  g&gt;0  \
+         *         /         \             /         \             /         \
+         *  ----- X --------- 0 --------- X --------- 0 --------- X --------- 0 ---
+         *       /             \         /             \         /             \
+         *      /               \ g&lt;0   /               \  g&lt;0  /               \ g&lt;0
+         *     /                 \     /                 \     /                 \     /
+         * ___/                   \___/                   \___/                   \___/
+         * &lt;/pre&gt;
+         * &lt;pre&gt;
+         *  h(t,y)) as an alteration of g(t,y)
+         *             ___                                 ___         ___
+         *    \       /   \                               /   \       /   \
+         *     \     /     \ h=+g                        /     \     /     \
+         *      \   /       \      h=min(-s,-g,+g)      /       \   /       \
+         *       \_/         \                         /         \_/         \
+         *  ------ ---------- 0 ----------_---------- 0 --------------------- 0 ---
+         *                     \         / \         /                         \
+         *   h=max(+s,-g,+g)    \       /   \       /       h=max(+s,-g,+g)     \
+         *                       \     /     \     / h=-g                        \     /
+         *                        \___/       \___/                               \___/
+         * &lt;/pre&gt;
+         * &lt;p&gt;
+         * As shown by the figure above, several expressions are used to compute h,
+         * depending on the current state:
+         * &lt;ul&gt;
+         *   &lt;li&gt;h = max(+s,-g,+g)&lt;/li&gt;
+         *   &lt;li&gt;h = +g&lt;/li&gt;
+         *   &lt;li&gt;h = min(-s,-g,+g)&lt;/li&gt;
+         *   &lt;li&gt;h = -g&lt;/li&gt;
+         * &lt;/ul&gt;
+         * where s is a tiny positive value: {@link org.apache.commons.math3.util.Precision#SAFE_MIN}.
+         * &lt;/p&gt;
+         */
+        protected  Transformer selectTransformer(final Transformer previous,
+                                                 final double g, final boolean forward) {
+<span class="fc bfc" id="L91" title="All 2 branches covered.">            if (forward) {</span>
+<span class="pc bpc" id="L92" title="1 of 6 branches missed.">                switch (previous) {</span>
+                    case UNINITIALIZED :
+                        // we are initializing the first point
+<span class="fc bfc" id="L95" title="All 2 branches covered.">                        if (g &gt; 0) {</span>
+                            // initialize as if previous root (i.e. backward one) was an ignored increasing event
+<span class="fc" id="L97">                            return Transformer.MAX;</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">                        } else if (g &lt; 0) {</span>
+                            // initialize as if previous root (i.e. backward one) was a triggered decreasing event
+<span class="fc" id="L100">                            return Transformer.PLUS;</span>
+                        } else {
+                            // we are exactly at a root, we don't know if it is an increasing
+                            // or a decreasing event, we remain in uninitialized state
+<span class="fc" id="L104">                            return Transformer.UNINITIALIZED;</span>
+                        }
+                    case PLUS  :
+<span class="fc bfc" id="L107" title="All 2 branches covered.">                        if (g &gt;= 0) {</span>
+                            // we have crossed the zero line on an ignored increasing event,
+                            // we must change the transformer
+<span class="fc" id="L110">                            return Transformer.MIN;</span>
+                        } else {
+                            // we are still in the same status
+<span class="fc" id="L113">                            return previous;</span>
+                        }
+                    case MINUS :
+<span class="fc bfc" id="L116" title="All 2 branches covered.">                        if (g &gt;= 0) {</span>
+                            // we have crossed the zero line on an ignored increasing event,
+                            // we must change the transformer
+<span class="fc" id="L119">                            return Transformer.MAX;</span>
+                        } else {
+                            // we are still in the same status
+<span class="fc" id="L122">                            return previous;</span>
+                        }
+                    case MIN   :
+<span class="fc bfc" id="L125" title="All 2 branches covered.">                        if (g &lt;= 0) {</span>
+                            // we have crossed the zero line on a triggered decreasing event,
+                            // we must change the transformer
+<span class="fc" id="L128">                            return Transformer.MINUS;</span>
+                        } else {
+                            // we are still in the same status
+<span class="fc" id="L131">                            return previous;</span>
+                        }
+                    case MAX   :
+<span class="fc bfc" id="L134" title="All 2 branches covered.">                        if (g &lt;= 0) {</span>
+                            // we have crossed the zero line on a triggered decreasing event,
+                            // we must change the transformer
+<span class="fc" id="L137">                            return Transformer.PLUS;</span>
+                        } else {
+                            // we are still in the same status
+<span class="fc" id="L140">                            return previous;</span>
+                        }
+                    default    :
+                        // this should never happen
+<span class="nc" id="L144">                        throw new MathInternalError();</span>
+                }
+            } else {
+<span class="pc bpc" id="L147" title="1 of 6 branches missed.">                switch (previous) {</span>
+                    case UNINITIALIZED :
+                        // we are initializing the first point
+<span class="fc bfc" id="L150" title="All 2 branches covered.">                        if (g &gt; 0) {</span>
+                            // initialize as if previous root (i.e. forward one) was a triggered decreasing event
+<span class="fc" id="L152">                            return Transformer.MINUS;</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">                        } else if (g &lt; 0) {</span>
+                            // initialize as if previous root (i.e. forward one) was an ignored increasing event
+<span class="fc" id="L155">                            return Transformer.MIN;</span>
+                        } else {
+                            // we are exactly at a root, we don't know if it is an increasing
+                            // or a decreasing event, we remain in uninitialized state
+<span class="fc" id="L159">                            return Transformer.UNINITIALIZED;</span>
+                        }
+                    case PLUS  :
+<span class="fc bfc" id="L162" title="All 2 branches covered.">                        if (g &lt;= 0) {</span>
+                            // we have crossed the zero line on an ignored increasing event,
+                            // we must change the transformer
+<span class="fc" id="L165">                            return Transformer.MAX;</span>
+                        } else {
+                            // we are still in the same status
+<span class="fc" id="L168">                            return previous;</span>
+                        }
+                    case MINUS :
+<span class="fc bfc" id="L171" title="All 2 branches covered.">                        if (g &lt;= 0) {</span>
+                            // we have crossed the zero line on an ignored increasing event,
+                            // we must change the transformer
+<span class="fc" id="L174">                            return Transformer.MIN;</span>
+                        } else {
+                            // we are still in the same status
+<span class="fc" id="L177">                            return previous;</span>
+                        }
+                    case MIN   :
+<span class="fc bfc" id="L180" title="All 2 branches covered.">                        if (g &gt;= 0) {</span>
+                            // we have crossed the zero line on a triggered decreasing event,
+                            // we must change the transformer
+<span class="fc" id="L183">                            return Transformer.PLUS;</span>
+                        } else {
+                            // we are still in the same status
+<span class="fc" id="L186">                            return previous;</span>
+                        }
+                    case MAX   :
+<span class="fc bfc" id="L189" title="All 2 branches covered.">                        if (g &gt;= 0) {</span>
+                            // we have crossed the zero line on a triggered decreasing event,
+                            // we must change the transformer
+<span class="fc" id="L192">                            return Transformer.MINUS;</span>
+                        } else {
+                            // we are still in the same status
+<span class="fc" id="L195">                            return previous;</span>
+                        }
+                    default    :
+                        // this should never happen
+<span class="nc" id="L199">                        throw new MathInternalError();</span>
+                }
+            }
+        }
+
+    },
+
+    /** Constant for triggering only increasing events.
+     * &lt;p&gt;When this filter is used, the wrapped {@link EventHandler
+     * event handler} {@link EventHandler#eventOccurred(double, double[],
+     * boolean) eventOccurred} method will be called &lt;em&gt;only&lt;/em&gt; with
+     * its {@code increasing} argument set to true.&lt;/p&gt;
+     */
+<span class="fc" id="L212">    TRIGGER_ONLY_INCREASING_EVENTS {</span>
+
+        /**  {@inheritDoc} */
+        protected boolean getTriggeredIncreasing() {
+<span class="fc" id="L216">            return true;</span>
+        }
+
+        /** {@inheritDoc}
+         * &lt;p&gt;
+         * states scheduling for computing h(t,y) as an altered version of g(t, y)
+         * &lt;ul&gt;
+         * &lt;li&gt;0 are triggered events for which a zero is produced (here increasing events)&lt;/li&gt;
+         * &lt;li&gt;X are ignored events for which zero is masked (here decreasing events)&lt;/li&gt;
+         * &lt;/ul&gt;
+         * &lt;/p&gt;
+         * &lt;pre&gt;
+         *  g(t)
+         *             ___                     ___                     ___
+         *            /   \                   /   \                   /   \
+         *           /     \                 /     \                 /     \
+         *          /  g&gt;0  \               /  g&gt;0  \               /  g&gt;0  \
+         *         /         \             /         \             /         \
+         *  ----- 0 --------- X --------- 0 --------- X --------- 0 --------- X ---
+         *       /             \         /             \         /             \
+         *      /               \ g&lt;0   /               \  g&lt;0  /               \ g&lt;0
+         *     /                 \     /                 \     /                 \     /
+         * ___/                   \___/                   \___/                   \___/
+         * &lt;/pre&gt;
+         * &lt;pre&gt;
+         *  h(t,y)) as an alteration of g(t,y)
+         *                                     ___         ___
+         *    \                               /   \       /   \
+         *     \ h=-g                        /     \     /     \ h=-g
+         *      \      h=min(-s,-g,+g)      /       \   /       \      h=min(-s,-g,+g)
+         *       \                         /         \_/         \
+         *  ------0 ----------_---------- 0 --------------------- 0 --------- _ ---
+         *         \         / \         /                         \         / \
+         *          \       /   \       /       h=max(+s,-g,+g)     \       /   \
+         *           \     /     \     / h=+g                        \     /     \     /
+         *            \___/       \___/                               \___/       \___/
+         * &lt;/pre&gt;
+         * &lt;p&gt;
+         * As shown by the figure above, several expressions are used to compute h,
+         * depending on the current state:
+         * &lt;ul&gt;
+         *   &lt;li&gt;h = max(+s,-g,+g)&lt;/li&gt;
+         *   &lt;li&gt;h = +g&lt;/li&gt;
+         *   &lt;li&gt;h = min(-s,-g,+g)&lt;/li&gt;
+         *   &lt;li&gt;h = -g&lt;/li&gt;
+         * &lt;/ul&gt;
+         * where s is a tiny positive value: {@link org.apache.commons.math3.util.Precision#SAFE_MIN}.
+         * &lt;/p&gt;
+         */
+        protected  Transformer selectTransformer(final Transformer previous,
+                                                 final double g, final boolean forward) {
+<span class="fc bfc" id="L267" title="All 2 branches covered.">            if (forward) {</span>
+<span class="pc bpc" id="L268" title="1 of 6 branches missed.">                switch (previous) {</span>
+                    case UNINITIALIZED :
+                        // we are initializing the first point
+<span class="fc bfc" id="L271" title="All 2 branches covered.">                        if (g &gt; 0) {</span>
+                            // initialize as if previous root (i.e. backward one) was a triggered increasing event
+<span class="fc" id="L273">                            return Transformer.PLUS;</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">                        } else if (g &lt; 0) {</span>
+                            // initialize as if previous root (i.e. backward one) was an ignored decreasing event
+<span class="fc" id="L276">                            return Transformer.MIN;</span>
+                        } else {
+                            // we are exactly at a root, we don't know if it is an increasing
+                            // or a decreasing event, we remain in uninitialized state
+<span class="fc" id="L280">                            return Transformer.UNINITIALIZED;</span>
+                        }
+                    case PLUS  :
+<span class="fc bfc" id="L283" title="All 2 branches covered.">                        if (g &lt;= 0) {</span>
+                            // we have crossed the zero line on an ignored decreasing event,
+                            // we must change the transformer
+<span class="fc" id="L286">                            return Transformer.MAX;</span>
+                        } else {
+                            // we are still in the same status
+<span class="fc" id="L289">                            return previous;</span>
+                        }
+                    case MINUS :
+<span class="fc bfc" id="L292" title="All 2 branches covered.">                        if (g &lt;= 0) {</span>
+                            // we have crossed the zero line on an ignored decreasing event,
+                            // we must change the transformer
+<span class="fc" id="L295">                            return Transformer.MIN;</span>
+                        } else {
+                            // we are still in the same status
+<span class="fc" id="L298">                            return previous;</span>
+                        }
+                    case MIN   :
+<span class="fc bfc" id="L301" title="All 2 branches covered.">                        if (g &gt;= 0) {</span>
+                            // we have crossed the zero line on a triggered increasing event,
+                            // we must change the transformer
+<span class="fc" id="L304">                            return Transformer.PLUS;</span>
+                        } else {
+                            // we are still in the same status
+<span class="fc" id="L307">                            return previous;</span>
+                        }
+                    case MAX   :
+<span class="fc bfc" id="L310" title="All 2 branches covered.">                        if (g &gt;= 0) {</span>
+                            // we have crossed the zero line on a triggered increasing event,
+                            // we must change the transformer
+<span class="fc" id="L313">                            return Transformer.MINUS;</span>
+                        } else {
+                            // we are still in the same status
+<span class="fc" id="L316">                            return previous;</span>
+                        }
+                    default    :
+                        // this should never happen
+<span class="nc" id="L320">                        throw new MathInternalError();</span>
+                }
+            } else {
+<span class="pc bpc" id="L323" title="1 of 6 branches missed.">                switch (previous) {</span>
+                    case UNINITIALIZED :
+                        // we are initializing the first point
+<span class="fc bfc" id="L326" title="All 2 branches covered.">                        if (g &gt; 0) {</span>
+                            // initialize as if previous root (i.e. forward one) was an ignored decreasing event
+<span class="fc" id="L328">                            return Transformer.MAX;</span>
+<span class="fc bfc" id="L329" title="All 2 branches covered.">                        } else if (g &lt; 0) {</span>
+                            // initialize as if previous root (i.e. forward one) was a triggered increasing event
+<span class="fc" id="L331">                            return Transformer.MINUS;</span>
+                        } else {
+                            // we are exactly at a root, we don't know if it is an increasing
+                            // or a decreasing event, we remain in uninitialized state
+<span class="fc" id="L335">                            return Transformer.UNINITIALIZED;</span>
+                        }
+                    case PLUS  :
+<span class="fc bfc" id="L338" title="All 2 branches covered.">                        if (g &gt;= 0) {</span>
+                            // we have crossed the zero line on an ignored decreasing event,
+                            // we must change the transformer
+<span class="fc" id="L341">                            return Transformer.MIN;</span>
+                        } else {
+                            // we are still in the same status
+<span class="fc" id="L344">                            return previous;</span>
+                        }
+                    case MINUS :
+<span class="fc bfc" id="L347" title="All 2 branches covered.">                        if (g &gt;= 0) {</span>
+                            // we have crossed the zero line on an ignored decreasing event,
+                            // we must change the transformer
+<span class="fc" id="L350">                            return Transformer.MAX;</span>
+                        } else {
+                            // we are still in the same status
+<span class="fc" id="L353">                            return previous;</span>
+                        }
+                    case MIN   :
+<span class="fc bfc" id="L356" title="All 2 branches covered.">                        if (g &lt;= 0) {</span>
+                            // we have crossed the zero line on a triggered increasing event,
+                            // we must change the transformer
+<span class="fc" id="L359">                            return Transformer.MINUS;</span>
+                        } else {
+                            // we are still in the same status
+<span class="fc" id="L362">                            return previous;</span>
+                        }
+                    case MAX   :
+<span class="fc bfc" id="L365" title="All 2 branches covered.">                        if (g &lt;= 0) {</span>
+                            // we have crossed the zero line on a triggered increasing event,
+                            // we must change the transformer
+<span class="fc" id="L368">                            return Transformer.PLUS;</span>
+                        } else {
+                            // we are still in the same status
+<span class="fc" id="L371">                            return previous;</span>
+                        }
+                    default    :
+                        // this should never happen
+<span class="nc" id="L375">                        throw new MathInternalError();</span>
+                }
+            }
+        }
+
+    };
+
+    /** Get the increasing status of triggered events.
+     * @return true if triggered events are increasing events
+     */
+    protected abstract boolean getTriggeredIncreasing();
+
+    /** Get next function transformer in the specified direction.
+     * @param previous transformer active on the previous point with respect
+     * to integration direction (may be null if no previous point is known)
+     * @param g current value of the g function
+     * @param forward true if integration goes forward
+     * @return next transformer transformer
+     */
+    protected abstract Transformer selectTransformer(Transformer previous,
+                                                     double g, boolean forward);
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

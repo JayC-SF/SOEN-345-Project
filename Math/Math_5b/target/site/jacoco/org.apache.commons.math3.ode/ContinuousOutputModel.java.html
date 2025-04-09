@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContinuousOutputModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Commons Math</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.math3.ode</a> &gt; <span class="el_source">ContinuousOutputModel.java</span></div><h1>ContinuousOutputModel.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.math3.ode;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.apache.commons.math3.exception.MathIllegalArgumentException;
+import org.apache.commons.math3.exception.MaxCountExceededException;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
+import org.apache.commons.math3.ode.sampling.StepHandler;
+import org.apache.commons.math3.ode.sampling.StepInterpolator;
+import org.apache.commons.math3.util.FastMath;
+
+/**
+ * This class stores all information provided by an ODE integrator
+ * during the integration process and build a continuous model of the
+ * solution from this.
+ *
+ * &lt;p&gt;This class act as a step handler from the integrator point of
+ * view. It is called iteratively during the integration process and
+ * stores a copy of all steps information in a sorted collection for
+ * later use. Once the integration process is over, the user can use
+ * the {@link #setInterpolatedTime setInterpolatedTime} and {@link
+ * #getInterpolatedState getInterpolatedState} to retrieve this
+ * information at any time. It is important to wait for the
+ * integration to be over before attempting to call {@link
+ * #setInterpolatedTime setInterpolatedTime} because some internal
+ * variables are set only once the last step has been handled.&lt;/p&gt;
+ *
+ * &lt;p&gt;This is useful for example if the main loop of the user
+ * application should remain independent from the integration process
+ * or if one needs to mimic the behaviour of an analytical model
+ * despite a numerical model is used (i.e. one needs the ability to
+ * get the model value at any time or to navigate through the
+ * data).&lt;/p&gt;
+ *
+ * &lt;p&gt;If problem modeling is done with several separate
+ * integration phases for contiguous intervals, the same
+ * ContinuousOutputModel can be used as step handler for all
+ * integration phases as long as they are performed in order and in
+ * the same direction. As an example, one can extrapolate the
+ * trajectory of a satellite with one model (i.e. one set of
+ * differential equations) up to the beginning of a maneuver, use
+ * another more complex model including thrusters modeling and
+ * accurate attitude control during the maneuver, and revert to the
+ * first model after the end of the maneuver. If the same continuous
+ * output model handles the steps of all integration phases, the user
+ * do not need to bother when the maneuver begins or ends, he has all
+ * the data available in a transparent manner.&lt;/p&gt;
+ *
+ * &lt;p&gt;An important feature of this class is that it implements the
+ * &lt;code&gt;Serializable&lt;/code&gt; interface. This means that the result of
+ * an integration can be serialized and reused later (if stored into a
+ * persistent medium like a filesystem or a database) or elsewhere (if
+ * sent to another application). Only the result of the integration is
+ * stored, there is no reference to the integrated problem by
+ * itself.&lt;/p&gt;
+ *
+ * &lt;p&gt;One should be aware that the amount of data stored in a
+ * ContinuousOutputModel instance can be important if the state vector
+ * is large, if the integration interval is long or if the steps are
+ * small (which can result from small tolerance settings in {@link
+ * org.apache.commons.math3.ode.nonstiff.AdaptiveStepsizeIntegrator adaptive
+ * step size integrators}).&lt;/p&gt;
+ *
+ * @see StepHandler
+ * @see StepInterpolator
+ * @version $Id$
+ * @since 1.2
+ */
+
+public class ContinuousOutputModel
+  implements StepHandler, Serializable {
+
+    /** Serializable version identifier */
+    private static final long serialVersionUID = -1417964919405031606L;
+
+    /** Initial integration time. */
+    private double initialTime;
+
+    /** Final integration time. */
+    private double finalTime;
+
+    /** Integration direction indicator. */
+    private boolean forward;
+
+    /** Current interpolator index. */
+    private int index;
+
+    /** Steps table. */
+    private List&lt;StepInterpolator&gt; steps;
+
+  /** Simple constructor.
+   * Build an empty continuous output model.
+   */
+<span class="fc" id="L114">  public ContinuousOutputModel() {</span>
+<span class="fc" id="L115">    steps = new ArrayList&lt;StepInterpolator&gt;();</span>
+<span class="fc" id="L116">    initialTime = Double.NaN;</span>
+<span class="fc" id="L117">    finalTime   = Double.NaN;</span>
+<span class="fc" id="L118">    forward     = true;</span>
+<span class="fc" id="L119">    index       = 0;</span>
+<span class="fc" id="L120">  }</span>
+
+  /** Append another model at the end of the instance.
+   * @param model model to add at the end of the instance
+   * @exception MathIllegalArgumentException if the model to append is not
+   * compatible with the instance (dimension of the state vector,
+   * propagation direction, hole between the dates)
+   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+   * during step finalization
+   */
+  public void append(final ContinuousOutputModel model)
+    throws MathIllegalArgumentException, MaxCountExceededException {
+
+<span class="fc bfc" id="L133" title="All 2 branches covered.">    if (model.steps.size() == 0) {</span>
+<span class="fc" id="L134">      return;</span>
+    }
+
+<span class="fc bfc" id="L137" title="All 2 branches covered.">    if (steps.size() == 0) {</span>
+<span class="fc" id="L138">      initialTime = model.initialTime;</span>
+<span class="fc" id="L139">      forward     = model.forward;</span>
+    } else {
+
+<span class="fc bfc" id="L142" title="All 2 branches covered.">      if (getInterpolatedState().length != model.getInterpolatedState().length) {</span>
+<span class="fc" id="L143">          throw new DimensionMismatchException(model.getInterpolatedState().length,</span>
+<span class="fc" id="L144">                                               getInterpolatedState().length);</span>
+      }
+
+<span class="fc bfc" id="L147" title="All 2 branches covered.">      if (forward ^ model.forward) {</span>
+<span class="fc" id="L148">          throw new MathIllegalArgumentException(LocalizedFormats.PROPAGATION_DIRECTION_MISMATCH);</span>
+      }
+
+<span class="fc" id="L151">      final StepInterpolator lastInterpolator = steps.get(index);</span>
+<span class="fc" id="L152">      final double current  = lastInterpolator.getCurrentTime();</span>
+<span class="fc" id="L153">      final double previous = lastInterpolator.getPreviousTime();</span>
+<span class="fc" id="L154">      final double step = current - previous;</span>
+<span class="fc" id="L155">      final double gap = model.getInitialTime() - current;</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">      if (FastMath.abs(gap) &gt; 1.0e-3 * FastMath.abs(step)) {</span>
+<span class="fc" id="L157">        throw new MathIllegalArgumentException(LocalizedFormats.HOLE_BETWEEN_MODELS_TIME_RANGES,</span>
+<span class="fc" id="L158">                                               FastMath.abs(gap));</span>
+      }
+
+    }
+
+<span class="fc bfc" id="L163" title="All 2 branches covered.">    for (StepInterpolator interpolator : model.steps) {</span>
+<span class="fc" id="L164">      steps.add(interpolator.copy());</span>
+<span class="fc" id="L165">    }</span>
+
+<span class="fc" id="L167">    index = steps.size() - 1;</span>
+<span class="fc" id="L168">    finalTime = (steps.get(index)).getCurrentTime();</span>
+
+<span class="fc" id="L170">  }</span>
+
+  /** {@inheritDoc} */
+  public void init(double t0, double[] y0, double t) {
+<span class="fc" id="L174">    initialTime = Double.NaN;</span>
+<span class="fc" id="L175">    finalTime   = Double.NaN;</span>
+<span class="fc" id="L176">    forward     = true;</span>
+<span class="fc" id="L177">    index       = 0;</span>
+<span class="fc" id="L178">    steps.clear();</span>
+<span class="fc" id="L179">  }</span>
+
+  /** Handle the last accepted step.
+   * A copy of the information provided by the last step is stored in
+   * the instance for later use.
+   * @param interpolator interpolator for the last accepted step.
+   * @param isLast true if the step is the last one
+   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+   * during step finalization
+   */
+  public void handleStep(final StepInterpolator interpolator, final boolean isLast)
+      throws MaxCountExceededException {
+
+<span class="fc bfc" id="L192" title="All 2 branches covered.">    if (steps.size() == 0) {</span>
+<span class="fc" id="L193">      initialTime = interpolator.getPreviousTime();</span>
+<span class="fc" id="L194">      forward     = interpolator.isForward();</span>
+    }
+
+<span class="fc" id="L197">    steps.add(interpolator.copy());</span>
+
+<span class="fc bfc" id="L199" title="All 2 branches covered.">    if (isLast) {</span>
+<span class="fc" id="L200">      finalTime = interpolator.getCurrentTime();</span>
+<span class="fc" id="L201">      index     = steps.size() - 1;</span>
+    }
+
+<span class="fc" id="L204">  }</span>
+
+  /**
+   * Get the initial integration time.
+   * @return initial integration time
+   */
+  public double getInitialTime() {
+<span class="fc" id="L211">    return initialTime;</span>
+  }
+
+  /**
+   * Get the final integration time.
+   * @return final integration time
+   */
+  public double getFinalTime() {
+<span class="fc" id="L219">    return finalTime;</span>
+  }
+
+  /**
+   * Get the time of the interpolated point.
+   * If {@link #setInterpolatedTime} has not been called, it returns
+   * the final integration time.
+   * @return interpolation point time
+   */
+  public double getInterpolatedTime() {
+<span class="fc" id="L229">    return steps.get(index).getInterpolatedTime();</span>
+  }
+
+  /** Set the time of the interpolated point.
+   * &lt;p&gt;This method should &lt;strong&gt;not&lt;/strong&gt; be called before the
+   * integration is over because some internal variables are set only
+   * once the last step has been handled.&lt;/p&gt;
+   * &lt;p&gt;Setting the time outside of the integration interval is now
+   * allowed (it was not allowed up to version 5.9 of Mantissa), but
+   * should be used with care since the accuracy of the interpolator
+   * will probably be very poor far from this interval. This allowance
+   * has been added to simplify implementation of search algorithms
+   * near the interval endpoints.&lt;/p&gt;
+   * @param time time of the interpolated point
+   */
+  public void setInterpolatedTime(final double time) {
+
+      // initialize the search with the complete steps table
+<span class="fc" id="L247">      int iMin = 0;</span>
+<span class="fc" id="L248">      final StepInterpolator sMin = steps.get(iMin);</span>
+<span class="fc" id="L249">      double tMin = 0.5 * (sMin.getPreviousTime() + sMin.getCurrentTime());</span>
+
+<span class="fc" id="L251">      int iMax = steps.size() - 1;</span>
+<span class="fc" id="L252">      final StepInterpolator sMax = steps.get(iMax);</span>
+<span class="fc" id="L253">      double tMax = 0.5 * (sMax.getPreviousTime() + sMax.getCurrentTime());</span>
+
+      // handle points outside of the integration interval
+      // or in the first and last step
+<span class="fc bfc" id="L257" title="All 2 branches covered.">      if (locatePoint(time, sMin) &lt;= 0) {</span>
+<span class="fc" id="L258">        index = iMin;</span>
+<span class="fc" id="L259">        sMin.setInterpolatedTime(time);</span>
+<span class="fc" id="L260">        return;</span>
+      }
+<span class="fc bfc" id="L262" title="All 2 branches covered.">      if (locatePoint(time, sMax) &gt;= 0) {</span>
+<span class="fc" id="L263">        index = iMax;</span>
+<span class="fc" id="L264">        sMax.setInterpolatedTime(time);</span>
+<span class="fc" id="L265">        return;</span>
+      }
+
+      // reduction of the table slice size
+<span class="fc bfc" id="L269" title="All 2 branches covered.">      while (iMax - iMin &gt; 5) {</span>
+
+        // use the last estimated index as the splitting index
+<span class="fc" id="L272">        final StepInterpolator si = steps.get(index);</span>
+<span class="fc" id="L273">        final int location = locatePoint(time, si);</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">        if (location &lt; 0) {</span>
+<span class="fc" id="L275">          iMax = index;</span>
+<span class="fc" id="L276">          tMax = 0.5 * (si.getPreviousTime() + si.getCurrentTime());</span>
+<span class="fc bfc" id="L277" title="All 2 branches covered.">        } else if (location &gt; 0) {</span>
+<span class="fc" id="L278">          iMin = index;</span>
+<span class="fc" id="L279">          tMin = 0.5 * (si.getPreviousTime() + si.getCurrentTime());</span>
+        } else {
+          // we have found the target step, no need to continue searching
+<span class="fc" id="L282">          si.setInterpolatedTime(time);</span>
+<span class="fc" id="L283">          return;</span>
+        }
+
+        // compute a new estimate of the index in the reduced table slice
+<span class="fc" id="L287">        final int iMed = (iMin + iMax) / 2;</span>
+<span class="fc" id="L288">        final StepInterpolator sMed = steps.get(iMed);</span>
+<span class="fc" id="L289">        final double tMed = 0.5 * (sMed.getPreviousTime() + sMed.getCurrentTime());</span>
+
+<span class="pc bpc" id="L291" title="2 of 4 branches missed.">        if ((FastMath.abs(tMed - tMin) &lt; 1e-6) || (FastMath.abs(tMax - tMed) &lt; 1e-6)) {</span>
+          // too close to the bounds, we estimate using a simple dichotomy
+<span class="nc" id="L293">          index = iMed;</span>
+        } else {
+          // estimate the index using a reverse quadratic polynom
+          // (reverse means we have i = P(t), thus allowing to simply
+          // compute index = P(time) rather than solving a quadratic equation)
+<span class="fc" id="L298">          final double d12 = tMax - tMed;</span>
+<span class="fc" id="L299">          final double d23 = tMed - tMin;</span>
+<span class="fc" id="L300">          final double d13 = tMax - tMin;</span>
+<span class="fc" id="L301">          final double dt1 = time - tMax;</span>
+<span class="fc" id="L302">          final double dt2 = time - tMed;</span>
+<span class="fc" id="L303">          final double dt3 = time - tMin;</span>
+<span class="fc" id="L304">          final double iLagrange = ((dt2 * dt3 * d23) * iMax -</span>
+                                    (dt1 * dt3 * d13) * iMed +
+                                    (dt1 * dt2 * d12) * iMin) /
+                                   (d12 * d23 * d13);
+<span class="fc" id="L308">          index = (int) FastMath.rint(iLagrange);</span>
+        }
+
+        // force the next size reduction to be at least one tenth
+<span class="fc" id="L312">        final int low  = FastMath.max(iMin + 1, (9 * iMin + iMax) / 10);</span>
+<span class="fc" id="L313">        final int high = FastMath.min(iMax - 1, (iMin + 9 * iMax) / 10);</span>
+<span class="fc bfc" id="L314" title="All 2 branches covered.">        if (index &lt; low) {</span>
+<span class="fc" id="L315">          index = low;</span>
+<span class="fc bfc" id="L316" title="All 2 branches covered.">        } else if (index &gt; high) {</span>
+<span class="fc" id="L317">          index = high;</span>
+        }
+
+<span class="fc" id="L320">      }</span>
+
+      // now the table slice is very small, we perform an iterative search
+<span class="fc" id="L323">      index = iMin;</span>
+<span class="pc bpc" id="L324" title="1 of 4 branches missed.">      while ((index &lt;= iMax) &amp;&amp; (locatePoint(time, steps.get(index)) &gt; 0)) {</span>
+<span class="fc" id="L325">        ++index;</span>
+      }
+
+<span class="fc" id="L328">      steps.get(index).setInterpolatedTime(time);</span>
+
+<span class="fc" id="L330">  }</span>
+
+  /**
+   * Get the state vector of the interpolated point.
+   * @return state vector at time {@link #getInterpolatedTime}
+   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+   */
+  public double[] getInterpolatedState() throws MaxCountExceededException {
+<span class="fc" id="L338">    return steps.get(index).getInterpolatedState();</span>
+  }
+
+  /** Compare a step interval and a double.
+   * @param time point to locate
+   * @param interval step interval
+   * @return -1 if the double is before the interval, 0 if it is in
+   * the interval, and +1 if it is after the interval, according to
+   * the interval direction
+   */
+  private int locatePoint(final double time, final StepInterpolator interval) {
+<span class="fc bfc" id="L349" title="All 2 branches covered.">    if (forward) {</span>
+<span class="fc bfc" id="L350" title="All 2 branches covered.">      if (time &lt; interval.getPreviousTime()) {</span>
+<span class="fc" id="L351">        return -1;</span>
+<span class="fc bfc" id="L352" title="All 2 branches covered.">      } else if (time &gt; interval.getCurrentTime()) {</span>
+<span class="fc" id="L353">        return +1;</span>
+      } else {
+<span class="fc" id="L355">        return 0;</span>
+      }
+    }
+<span class="fc bfc" id="L358" title="All 2 branches covered.">    if (time &gt; interval.getPreviousTime()) {</span>
+<span class="fc" id="L359">      return -1;</span>
+<span class="fc bfc" id="L360" title="All 2 branches covered.">    } else if (time &lt; interval.getCurrentTime()) {</span>
+<span class="fc" id="L361">      return +1;</span>
+    } else {
+<span class="fc" id="L363">      return 0;</span>
+    }
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

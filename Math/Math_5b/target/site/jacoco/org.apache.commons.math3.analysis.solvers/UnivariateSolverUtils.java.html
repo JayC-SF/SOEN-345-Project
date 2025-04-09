@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UnivariateSolverUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Commons Math</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.math3.analysis.solvers</a> &gt; <span class="el_source">UnivariateSolverUtils.java</span></div><h1>UnivariateSolverUtils.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.math3.analysis.solvers;
+
+import org.apache.commons.math3.analysis.UnivariateFunction;
+import org.apache.commons.math3.exception.NoBracketingException;
+import org.apache.commons.math3.exception.NotStrictlyPositiveException;
+import org.apache.commons.math3.exception.NullArgumentException;
+import org.apache.commons.math3.exception.NumberIsTooLargeException;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
+import org.apache.commons.math3.util.FastMath;
+
+/**
+ * Utility routines for {@link UnivariateSolver} objects.
+ *
+ * @version $Id$
+ */
+public class UnivariateSolverUtils {
+    /**
+     * Class contains only static methods.
+     */
+    private UnivariateSolverUtils() {}
+
+    /**
+     * Convenience method to find a zero of a univariate real function.  A default
+     * solver is used.
+     *
+     * @param function Function.
+     * @param x0 Lower bound for the interval.
+     * @param x1 Upper bound for the interval.
+     * @return a value where the function is zero.
+     * @throws NoBracketingException if the function has the same sign at the
+     * endpoints.
+     * @throws NullArgumentException if {@code function} is {@code null}.
+     */
+    public static double solve(UnivariateFunction function, double x0, double x1)
+        throws NullArgumentException,
+               NoBracketingException {
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (function == null) {</span>
+<span class="fc" id="L54">            throw new NullArgumentException(LocalizedFormats.FUNCTION);</span>
+        }
+<span class="fc" id="L56">        final UnivariateSolver solver = new BrentSolver();</span>
+<span class="fc" id="L57">        return solver.solve(Integer.MAX_VALUE, function, x0, x1);</span>
+    }
+
+    /**
+     * Convenience method to find a zero of a univariate real function.  A default
+     * solver is used.
+     *
+     * @param function Function.
+     * @param x0 Lower bound for the interval.
+     * @param x1 Upper bound for the interval.
+     * @param absoluteAccuracy Accuracy to be used by the solver.
+     * @return a value where the function is zero.
+     * @throws NoBracketingException if the function has the same sign at the
+     * endpoints.
+     * @throws NullArgumentException if {@code function} is {@code null}.
+     */
+    public static double solve(UnivariateFunction function,
+                               double x0, double x1,
+                               double absoluteAccuracy)
+        throws NullArgumentException,
+               NoBracketingException {
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (function == null) {</span>
+<span class="fc" id="L79">            throw new NullArgumentException(LocalizedFormats.FUNCTION);</span>
+        }
+<span class="fc" id="L81">        final UnivariateSolver solver = new BrentSolver(absoluteAccuracy);</span>
+<span class="fc" id="L82">        return solver.solve(Integer.MAX_VALUE, function, x0, x1);</span>
+    }
+
+    /** Force a root found by a non-bracketing solver to lie on a specified side,
+     * as if the solver was a bracketing one.
+     * @param maxEval maximal number of new evaluations of the function
+     * (evaluations already done for finding the root should have already been subtracted
+     * from this number)
+     * @param f function to solve
+     * @param bracketing bracketing solver to use for shifting the root
+     * @param baseRoot original root found by a previous non-bracketing solver
+     * @param min minimal bound of the search interval
+     * @param max maximal bound of the search interval
+     * @param allowedSolution the kind of solutions that the root-finding algorithm may
+     * accept as solutions.
+     * @return a root approximation, on the specified side of the exact root
+     * @throws NoBracketingException if the function has the same sign at the
+     * endpoints.
+     */
+    public static double forceSide(final int maxEval, final UnivariateFunction f,
+                                   final BracketedUnivariateSolver&lt;UnivariateFunction&gt; bracketing,
+                                   final double baseRoot, final double min, final double max,
+                                   final AllowedSolution allowedSolution)
+        throws NoBracketingException {
+
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (allowedSolution == AllowedSolution.ANY_SIDE) {</span>
+            // no further bracketing required
+<span class="nc" id="L109">            return baseRoot;</span>
+        }
+
+        // find a very small interval bracketing the root
+<span class="fc" id="L113">        final double step = FastMath.max(bracketing.getAbsoluteAccuracy(),</span>
+<span class="fc" id="L114">                                         FastMath.abs(baseRoot * bracketing.getRelativeAccuracy()));</span>
+<span class="fc" id="L115">        double xLo        = FastMath.max(min, baseRoot - step);</span>
+<span class="fc" id="L116">        double fLo        = f.value(xLo);</span>
+<span class="fc" id="L117">        double xHi        = FastMath.min(max, baseRoot + step);</span>
+<span class="fc" id="L118">        double fHi        = f.value(xHi);</span>
+<span class="fc" id="L119">        int remainingEval = maxEval - 2;</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        while (remainingEval &gt; 0) {</span>
+
+<span class="pc bpc" id="L122" title="2 of 8 branches missed.">            if ((fLo &gt;= 0 &amp;&amp; fHi &lt;= 0) || (fLo &lt;= 0 &amp;&amp; fHi &gt;= 0)) {</span>
+                // compute the root on the selected side
+<span class="fc" id="L124">                return bracketing.solve(remainingEval, f, xLo, xHi, baseRoot, allowedSolution);</span>
+            }
+
+            // try increasing the interval
+<span class="nc" id="L128">            boolean changeLo = false;</span>
+<span class="nc" id="L129">            boolean changeHi = false;</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">            if (fLo &lt; fHi) {</span>
+                // increasing function
+<span class="nc bnc" id="L132" title="All 2 branches missed.">                if (fLo &gt;= 0) {</span>
+<span class="nc" id="L133">                    changeLo = true;</span>
+                } else {
+<span class="nc" id="L135">                    changeHi = true;</span>
+                }
+<span class="nc bnc" id="L137" title="All 2 branches missed.">            } else if (fLo &gt; fHi) {</span>
+                // decreasing function
+<span class="nc bnc" id="L139" title="All 2 branches missed.">                if (fLo &lt;= 0) {</span>
+<span class="nc" id="L140">                    changeLo = true;</span>
+                } else {
+<span class="nc" id="L142">                    changeHi = true;</span>
+                }
+            } else {
+                // unknown variation
+<span class="nc" id="L146">                changeLo = true;</span>
+<span class="nc" id="L147">                changeHi = true;</span>
+            }
+
+            // update the lower bound
+<span class="nc bnc" id="L151" title="All 2 branches missed.">            if (changeLo) {</span>
+<span class="nc" id="L152">                xLo = FastMath.max(min, xLo - step);</span>
+<span class="nc" id="L153">                fLo  = f.value(xLo);</span>
+<span class="nc" id="L154">                remainingEval--;</span>
+            }
+
+            // update the higher bound
+<span class="nc bnc" id="L158" title="All 2 branches missed.">            if (changeHi) {</span>
+<span class="nc" id="L159">                xHi = FastMath.min(max, xHi + step);</span>
+<span class="nc" id="L160">                fHi  = f.value(xHi);</span>
+<span class="nc" id="L161">                remainingEval--;</span>
+            }
+
+<span class="nc" id="L164">        }</span>
+
+<span class="nc" id="L166">        throw new NoBracketingException(LocalizedFormats.FAILED_BRACKETING,</span>
+                                        xLo, xHi, fLo, fHi,
+<span class="nc" id="L168">                                        maxEval - remainingEval, maxEval, baseRoot,</span>
+<span class="nc" id="L169">                                        min, max);</span>
+
+    }
+
+    /**
+     * This method attempts to find two values a and b satisfying &lt;ul&gt;
+     * &lt;li&gt; &lt;code&gt; lowerBound &lt;= a &lt; initial &lt; b &lt;= upperBound&lt;/code&gt; &lt;/li&gt;
+     * &lt;li&gt; &lt;code&gt; f(a) * f(b) &lt; 0 &lt;/code&gt;&lt;/li&gt;
+     * &lt;/ul&gt;
+     * If f is continuous on &lt;code&gt;[a,b],&lt;/code&gt; this means that &lt;code&gt;a&lt;/code&gt;
+     * and &lt;code&gt;b&lt;/code&gt; bracket a root of f.
+     * &lt;p&gt;
+     * The algorithm starts by setting
+     * &lt;code&gt;a := initial -1; b := initial +1,&lt;/code&gt; examines the value of the
+     * function at &lt;code&gt;a&lt;/code&gt; and &lt;code&gt;b&lt;/code&gt; and keeps moving
+     * the endpoints out by one unit each time through a loop that terminates
+     * when one of the following happens: &lt;ul&gt;
+     * &lt;li&gt; &lt;code&gt; f(a) * f(b) &lt; 0 &lt;/code&gt; --  success!&lt;/li&gt;
+     * &lt;li&gt; &lt;code&gt; a = lower &lt;/code&gt; and &lt;code&gt; b = upper&lt;/code&gt;
+     * -- NoBracketingException &lt;/li&gt;
+     * &lt;li&gt; &lt;code&gt; Integer.MAX_VALUE&lt;/code&gt; iterations elapse
+     * -- NoBracketingException &lt;/li&gt;
+     * &lt;/ul&gt;&lt;/p&gt;
+     * &lt;p&gt;
+     * &lt;strong&gt;Note: &lt;/strong&gt; this method can take
+     * &lt;code&gt;Integer.MAX_VALUE&lt;/code&gt; iterations to throw a
+     * &lt;code&gt;ConvergenceException.&lt;/code&gt;  Unless you are confident that there
+     * is a root between &lt;code&gt;lowerBound&lt;/code&gt; and &lt;code&gt;upperBound&lt;/code&gt;
+     * near &lt;code&gt;initial,&lt;/code&gt; it is better to use
+     * {@link #bracket(UnivariateFunction, double, double, double, int)},
+     * explicitly specifying the maximum number of iterations.&lt;/p&gt;
+     *
+     * @param function Function.
+     * @param initial Initial midpoint of interval being expanded to
+     * bracket a root.
+     * @param lowerBound Lower bound (a is never lower than this value)
+     * @param upperBound Upper bound (b never is greater than this
+     * value).
+     * @return a two-element array holding a and b.
+     * @throws NoBracketingException if a root cannot be bracketted.
+     * @throws NotStrictlyPositiveException if {@code maximumIterations &lt;= 0}.
+     * @throws NullArgumentException if {@code function} is {@code null}.
+     */
+    public static double[] bracket(UnivariateFunction function,
+                                   double initial,
+                                   double lowerBound, double upperBound)
+        throws NullArgumentException,
+               NotStrictlyPositiveException,
+               NoBracketingException {
+<span class="fc" id="L218">        return bracket(function, initial, lowerBound, upperBound, Integer.MAX_VALUE);</span>
+    }
+
+     /**
+     * This method attempts to find two values a and b satisfying &lt;ul&gt;
+     * &lt;li&gt; &lt;code&gt; lowerBound &lt;= a &lt; initial &lt; b &lt;= upperBound&lt;/code&gt; &lt;/li&gt;
+     * &lt;li&gt; &lt;code&gt; f(a) * f(b) &lt;= 0 &lt;/code&gt; &lt;/li&gt;
+     * &lt;/ul&gt;
+     * If f is continuous on &lt;code&gt;[a,b],&lt;/code&gt; this means that &lt;code&gt;a&lt;/code&gt;
+     * and &lt;code&gt;b&lt;/code&gt; bracket a root of f.
+     * &lt;p&gt;
+     * The algorithm starts by setting
+     * &lt;code&gt;a := initial -1; b := initial +1,&lt;/code&gt; examines the value of the
+     * function at &lt;code&gt;a&lt;/code&gt; and &lt;code&gt;b&lt;/code&gt; and keeps moving
+     * the endpoints out by one unit each time through a loop that terminates
+     * when one of the following happens: &lt;ul&gt;
+     * &lt;li&gt; &lt;code&gt; f(a) * f(b) &lt;= 0 &lt;/code&gt; --  success!&lt;/li&gt;
+     * &lt;li&gt; &lt;code&gt; a = lower &lt;/code&gt; and &lt;code&gt; b = upper&lt;/code&gt;
+     * -- NoBracketingException &lt;/li&gt;
+     * &lt;li&gt; &lt;code&gt; maximumIterations&lt;/code&gt; iterations elapse
+     * -- NoBracketingException &lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;
+     *
+     * @param function Function.
+     * @param initial Initial midpoint of interval being expanded to
+     * bracket a root.
+     * @param lowerBound Lower bound (a is never lower than this value).
+     * @param upperBound Upper bound (b never is greater than this
+     * value).
+     * @param maximumIterations Maximum number of iterations to perform
+     * @return a two element array holding a and b.
+     * @throws NoBracketingException if the algorithm fails to find a and b
+     * satisfying the desired conditions.
+     * @throws NotStrictlyPositiveException if {@code maximumIterations &lt;= 0}.
+     * @throws NullArgumentException if {@code function} is {@code null}.
+     */
+    public static double[] bracket(UnivariateFunction function,
+                                   double initial,
+                                   double lowerBound, double upperBound,
+                                   int maximumIterations)
+        throws NullArgumentException,
+               NotStrictlyPositiveException,
+               NoBracketingException {
+<span class="fc bfc" id="L260" title="All 2 branches covered.">        if (function == null) {</span>
+<span class="fc" id="L261">            throw new NullArgumentException(LocalizedFormats.FUNCTION);</span>
+        }
+<span class="fc bfc" id="L263" title="All 2 branches covered.">        if (maximumIterations &lt;= 0)  {</span>
+<span class="fc" id="L264">            throw new NotStrictlyPositiveException(LocalizedFormats.INVALID_MAX_ITERATIONS, maximumIterations);</span>
+        }
+<span class="fc" id="L266">        verifySequence(lowerBound, initial, upperBound);</span>
+
+<span class="fc" id="L268">        double a = initial;</span>
+<span class="fc" id="L269">        double b = initial;</span>
+        double fa;
+        double fb;
+<span class="fc" id="L272">        int numIterations = 0;</span>
+
+        do {
+<span class="fc" id="L275">            a = FastMath.max(a - 1.0, lowerBound);</span>
+<span class="fc" id="L276">            b = FastMath.min(b + 1.0, upperBound);</span>
+<span class="fc" id="L277">            fa = function.value(a);</span>
+
+<span class="fc" id="L279">            fb = function.value(b);</span>
+<span class="fc" id="L280">            ++numIterations;</span>
+<span class="pc bpc" id="L281" title="4 of 8 branches missed.">        } while ((fa * fb &gt; 0.0) &amp;&amp; (numIterations &lt; maximumIterations) &amp;&amp;</span>
+                ((a &gt; lowerBound) || (b &lt; upperBound)));
+
+<span class="pc bpc" id="L284" title="1 of 2 branches missed.">        if (fa * fb &gt; 0.0) {</span>
+<span class="nc" id="L285">            throw new NoBracketingException(LocalizedFormats.FAILED_BRACKETING,</span>
+                                            a, b, fa, fb,
+<span class="nc" id="L287">                                            numIterations, maximumIterations, initial,</span>
+<span class="nc" id="L288">                                            lowerBound, upperBound);</span>
+        }
+
+<span class="fc" id="L291">        return new double[] {a, b};</span>
+    }
+
+    /**
+     * Compute the midpoint of two values.
+     *
+     * @param a first value.
+     * @param b second value.
+     * @return the midpoint.
+     */
+    public static double midpoint(double a, double b) {
+<span class="fc" id="L302">        return (a + b) * 0.5;</span>
+    }
+
+    /**
+     * Check whether the interval bounds bracket a root. That is, if the
+     * values at the endpoints are not equal to zero, then the function takes
+     * opposite signs at the endpoints.
+     *
+     * @param function Function.
+     * @param lower Lower endpoint.
+     * @param upper Upper endpoint.
+     * @return {@code true} if the function values have opposite signs at the
+     * given points.
+     * @throws NullArgumentException if {@code function} is {@code null}.
+     */
+    public static boolean isBracketing(UnivariateFunction function,
+                                       final double lower,
+                                       final double upper)
+        throws NullArgumentException {
+<span class="pc bpc" id="L321" title="1 of 2 branches missed.">        if (function == null) {</span>
+<span class="nc" id="L322">            throw new NullArgumentException(LocalizedFormats.FUNCTION);</span>
+        }
+<span class="fc" id="L324">        final double fLo = function.value(lower);</span>
+<span class="fc" id="L325">        final double fHi = function.value(upper);</span>
+<span class="fc bfc" id="L326" title="All 8 branches covered.">        return (fLo &gt;= 0 &amp;&amp; fHi &lt;= 0) || (fLo &lt;= 0 &amp;&amp; fHi &gt;= 0);</span>
+    }
+
+    /**
+     * Check whether the arguments form a (strictly) increasing sequence.
+     *
+     * @param start First number.
+     * @param mid Second number.
+     * @param end Third number.
+     * @return {@code true} if the arguments form an increasing sequence.
+     */
+    public static boolean isSequence(final double start,
+                                     final double mid,
+                                     final double end) {
+<span class="fc bfc" id="L340" title="All 4 branches covered.">        return (start &lt; mid) &amp;&amp; (mid &lt; end);</span>
+    }
+
+    /**
+     * Check that the endpoints specify an interval.
+     *
+     * @param lower Lower endpoint.
+     * @param upper Upper endpoint.
+     * @throws NumberIsTooLargeException if {@code lower &gt;= upper}.
+     */
+    public static void verifyInterval(final double lower,
+                                      final double upper)
+        throws NumberIsTooLargeException {
+<span class="fc bfc" id="L353" title="All 2 branches covered.">        if (lower &gt;= upper) {</span>
+<span class="fc" id="L354">            throw new NumberIsTooLargeException(LocalizedFormats.ENDPOINTS_NOT_AN_INTERVAL,</span>
+<span class="fc" id="L355">                                                lower, upper, false);</span>
+        }
+<span class="fc" id="L357">    }</span>
+
+    /**
+     * Check that {@code lower &lt; initial &lt; upper}.
+     *
+     * @param lower Lower endpoint.
+     * @param initial Initial value.
+     * @param upper Upper endpoint.
+     * @throws NumberIsTooLargeException if {@code lower &gt;= initial} or
+     * {@code initial &gt;= upper}.
+     */
+    public static void verifySequence(final double lower,
+                                      final double initial,
+                                      final double upper)
+        throws NumberIsTooLargeException {
+<span class="fc" id="L372">        verifyInterval(lower, initial);</span>
+<span class="fc" id="L373">        verifyInterval(initial, upper);</span>
+<span class="fc" id="L374">    }</span>
+
+    /**
+     * Check that the endpoints specify an interval and the end points
+     * bracket a root.
+     *
+     * @param function Function.
+     * @param lower Lower endpoint.
+     * @param upper Upper endpoint.
+     * @throws NoBracketingException if the function has the same sign at the
+     * endpoints.
+     * @throws NullArgumentException if {@code function} is {@code null}.
+     */
+    public static void verifyBracketing(UnivariateFunction function,
+                                        final double lower,
+                                        final double upper)
+        throws NullArgumentException,
+               NoBracketingException {
+<span class="pc bpc" id="L392" title="1 of 2 branches missed.">        if (function == null) {</span>
+<span class="nc" id="L393">            throw new NullArgumentException(LocalizedFormats.FUNCTION);</span>
+        }
+<span class="fc" id="L395">        verifyInterval(lower, upper);</span>
+<span class="fc bfc" id="L396" title="All 2 branches covered.">        if (!isBracketing(function, lower, upper)) {</span>
+<span class="fc" id="L397">            throw new NoBracketingException(lower, upper,</span>
+<span class="fc" id="L398">                                            function.value(lower),</span>
+<span class="fc" id="L399">                                            function.value(upper));</span>
+        }
+<span class="fc" id="L401">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

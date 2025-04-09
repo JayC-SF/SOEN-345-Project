@@ -1,0 +1,866 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PolygonsSet.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Commons Math</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.math3.geometry.euclidean.twod</a> &gt; <span class="el_source">PolygonsSet.java</span></div><h1>PolygonsSet.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.math3.geometry.euclidean.twod;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.apache.commons.math3.exception.MathInternalError;
+import org.apache.commons.math3.geometry.euclidean.oned.Euclidean1D;
+import org.apache.commons.math3.geometry.euclidean.oned.Interval;
+import org.apache.commons.math3.geometry.euclidean.oned.IntervalsSet;
+import org.apache.commons.math3.geometry.euclidean.oned.Vector1D;
+import org.apache.commons.math3.geometry.partitioning.AbstractRegion;
+import org.apache.commons.math3.geometry.partitioning.AbstractSubHyperplane;
+import org.apache.commons.math3.geometry.partitioning.BSPTree;
+import org.apache.commons.math3.geometry.partitioning.BSPTreeVisitor;
+import org.apache.commons.math3.geometry.partitioning.BoundaryAttribute;
+import org.apache.commons.math3.geometry.partitioning.Side;
+import org.apache.commons.math3.geometry.partitioning.SubHyperplane;
+import org.apache.commons.math3.geometry.partitioning.utilities.AVLTree;
+import org.apache.commons.math3.geometry.partitioning.utilities.OrderedTuple;
+import org.apache.commons.math3.util.FastMath;
+
+/** This class represents a 2D region: a set of polygons.
+ * @version $Id$
+ * @since 3.0
+ */
+public class PolygonsSet extends AbstractRegion&lt;Euclidean2D, Euclidean1D&gt; {
+
+    /** Vertices organized as boundary loops. */
+    private Vector2D[][] vertices;
+
+    /** Build a polygons set representing the whole real line.
+     */
+    public PolygonsSet() {
+<span class="fc" id="L51">        super();</span>
+<span class="fc" id="L52">    }</span>
+
+    /** Build a polygons set from a BSP tree.
+     * &lt;p&gt;The leaf nodes of the BSP tree &lt;em&gt;must&lt;/em&gt; have a
+     * {@code Boolean} attribute representing the inside status of
+     * the corresponding cell (true for inside cells, false for outside
+     * cells). In order to avoid building too many small objects, it is
+     * recommended to use the predefined constants
+     * {@code Boolean.TRUE} and {@code Boolean.FALSE}&lt;/p&gt;
+     * @param tree inside/outside BSP tree representing the region
+     */
+    public PolygonsSet(final BSPTree&lt;Euclidean2D&gt; tree) {
+<span class="fc" id="L64">        super(tree);</span>
+<span class="fc" id="L65">    }</span>
+
+    /** Build a polygons set from a Boundary REPresentation (B-rep).
+     * &lt;p&gt;The boundary is provided as a collection of {@link
+     * SubHyperplane sub-hyperplanes}. Each sub-hyperplane has the
+     * interior part of the region on its minus side and the exterior on
+     * its plus side.&lt;/p&gt;
+     * &lt;p&gt;The boundary elements can be in any order, and can form
+     * several non-connected sets (like for example polygons with holes
+     * or a set of disjoint polyhedrons considered as a whole). In
+     * fact, the elements do not even need to be connected together
+     * (their topological connections are not used here). However, if the
+     * boundary does not really separate an inside open from an outside
+     * open (open having here its topological meaning), then subsequent
+     * calls to the {@link
+     * org.apache.commons.math3.geometry.partitioning.Region#checkPoint(org.apache.commons.math3.geometry.Vector)
+     * checkPoint} method will not be meaningful anymore.&lt;/p&gt;
+     * &lt;p&gt;If the boundary is empty, the region will represent the whole
+     * space.&lt;/p&gt;
+     * @param boundary collection of boundary elements, as a
+     * collection of {@link SubHyperplane SubHyperplane} objects
+     */
+    public PolygonsSet(final Collection&lt;SubHyperplane&lt;Euclidean2D&gt;&gt; boundary) {
+<span class="fc" id="L88">        super(boundary);</span>
+<span class="fc" id="L89">    }</span>
+
+    /** Build a parallellepipedic box.
+     * @param xMin low bound along the x direction
+     * @param xMax high bound along the x direction
+     * @param yMin low bound along the y direction
+     * @param yMax high bound along the y direction
+     */
+    public PolygonsSet(final double xMin, final double xMax,
+                       final double yMin, final double yMax) {
+<span class="nc" id="L99">        super(boxBoundary(xMin, xMax, yMin, yMax));</span>
+<span class="nc" id="L100">    }</span>
+
+    /** Build a polygon from a simple list of vertices.
+     * &lt;p&gt;The boundary is provided as a list of points considering to
+     * represent the vertices of a simple loop. The interior part of the
+     * region is on the left side of this path and the exterior is on its
+     * right side.&lt;/p&gt;
+     * &lt;p&gt;This constructor does not handle polygons with a boundary
+     * forming several disconnected paths (such as polygons with holes).&lt;/p&gt;
+     * &lt;p&gt;For cases where this simple constructor applies, it is expected to
+     * be numerically more robust than the {@link #PolygonsSet(Collection) general
+     * constructor} using {@link SubHyperplane subhyperplanes}.&lt;/p&gt;
+     * &lt;p&gt;If the list is empty, the region will represent the whole
+     * space.&lt;/p&gt;
+     * &lt;p&gt;
+     * Polygons with thin pikes or dents are inherently difficult to handle because
+     * they involve lines with almost opposite directions at some vertices. Polygons
+     * whose vertices come from some physical measurement with noise are also
+     * difficult because an edge that should be straight may be broken in lots of
+     * different pieces with almost equal directions. In both cases, computing the
+     * lines intersections is not numerically robust due to the almost 0 or almost
+     * &amp;pi; angle. Such cases need to carefully adjust the {@code hyperplaneThickness}
+     * parameter. A too small value would often lead to completely wrong polygons
+     * with large area wrongly identified as inside or outside. Large values are
+     * often much safer. As a rule of thumb, a value slightly below the size of the
+     * most accurate detail needed is a good value for the {@code hyperplaneThickness}
+     * parameter.
+     * &lt;/p&gt;
+     * @param hyperplaneThickness tolerance below which points are considered to
+     * belong to the hyperplane (which is therefore more a slab)
+     * @param vertices vertices of the simple loop boundary
+     * @since 3.1
+     */
+    public PolygonsSet(final double hyperplaneThickness, final Vector2D ... vertices) {
+<span class="fc" id="L134">        super(verticesToTree(hyperplaneThickness, vertices));</span>
+<span class="fc" id="L135">    }</span>
+
+    /** Create a list of hyperplanes representing the boundary of a box.
+     * @param xMin low bound along the x direction
+     * @param xMax high bound along the x direction
+     * @param yMin low bound along the y direction
+     * @param yMax high bound along the y direction
+     * @return boundary of the box
+     */
+    private static Line[] boxBoundary(final double xMin, final double xMax,
+                                      final double yMin, final double yMax) {
+<span class="nc" id="L146">        final Vector2D minMin = new Vector2D(xMin, yMin);</span>
+<span class="nc" id="L147">        final Vector2D minMax = new Vector2D(xMin, yMax);</span>
+<span class="nc" id="L148">        final Vector2D maxMin = new Vector2D(xMax, yMin);</span>
+<span class="nc" id="L149">        final Vector2D maxMax = new Vector2D(xMax, yMax);</span>
+<span class="nc" id="L150">        return new Line[] {</span>
+            new Line(minMin, maxMin),
+            new Line(maxMin, maxMax),
+            new Line(maxMax, minMax),
+            new Line(minMax, minMin)
+        };
+    }
+
+    /** Build the BSP tree of a polygons set from a simple list of vertices.
+     * &lt;p&gt;The boundary is provided as a list of points considering to
+     * represent the vertices of a simple loop. The interior part of the
+     * region is on the left side of this path and the exterior is on its
+     * right side.&lt;/p&gt;
+     * &lt;p&gt;This constructor does not handle polygons with a boundary
+     * forming several disconnected paths (such as polygons with holes).&lt;/p&gt;
+     * &lt;p&gt;For cases where this simple constructor applies, it is expected to
+     * be numerically more robust than the {@link #PolygonsSet(Collection) general
+     * constructor} using {@link SubHyperplane subhyperplanes}.&lt;/p&gt;
+     * @param hyperplaneThickness tolerance below which points are consider to
+     * belong to the hyperplane (which is therefore more a slab)
+     * @param vertices vertices of the simple loop boundary
+     * @return the BSP tree of the input vertices
+     */
+    private static BSPTree&lt;Euclidean2D&gt; verticesToTree(final double hyperplaneThickness,
+                                                       final Vector2D ... vertices) {
+
+<span class="fc" id="L176">        final int n = vertices.length;</span>
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        if (n == 0) {</span>
+            // the tree represents the whole space
+<span class="nc" id="L179">            return new BSPTree&lt;Euclidean2D&gt;(Boolean.TRUE);</span>
+        }
+
+        // build the vertices
+<span class="fc" id="L183">        final Vertex[] vArray = new Vertex[n];</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        for (int i = 0; i &lt; n; ++i) {</span>
+<span class="fc" id="L185">            vArray[i] = new Vertex(vertices[i]);</span>
+        }
+
+        // build the edges
+<span class="fc" id="L189">        List&lt;Edge&gt; edges = new ArrayList&lt;Edge&gt;();</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        for (int i = 0; i &lt; n; ++i) {</span>
+
+            // get the endpoints of the edge
+<span class="fc" id="L193">            final Vertex start = vArray[i];</span>
+<span class="fc" id="L194">            final Vertex end   = vArray[(i + 1) % n];</span>
+
+            // get the line supporting the edge, taking care not to recreate it
+            // if it was already created earlier due to another edge being aligned
+            // with the current one
+<span class="fc" id="L199">            Line line = start.sharedLineWith(end);</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">            if (line == null) {</span>
+<span class="fc" id="L201">                line = new Line(start.getLocation(), end.getLocation());</span>
+            }
+
+            // create the edge and store it
+<span class="fc" id="L205">            edges.add(new Edge(start, end, line));</span>
+
+            // check if another vertex also happens to be on this line
+<span class="fc bfc" id="L208" title="All 2 branches covered.">            for (final Vertex vertex : vArray) {</span>
+<span class="fc bfc" id="L209" title="All 4 branches covered.">                if (vertex != start &amp;&amp; vertex != end &amp;&amp;</span>
+<span class="fc bfc" id="L210" title="All 2 branches covered.">                    FastMath.abs(line.getOffset(vertex.getLocation())) &lt;= hyperplaneThickness) {</span>
+<span class="fc" id="L211">                    vertex.bindWith(line);</span>
+                }
+            }
+
+        }
+
+        // build the tree top-down
+<span class="fc" id="L218">        final BSPTree&lt;Euclidean2D&gt; tree = new BSPTree&lt;Euclidean2D&gt;();</span>
+<span class="fc" id="L219">        insertEdges(hyperplaneThickness, tree, edges);</span>
+
+<span class="fc" id="L221">        return tree;</span>
+
+    }
+
+    /** Recursively build a tree by inserting cut sub-hyperplanes.
+     * @param hyperplaneThickness tolerance below which points are consider to
+     * belong to the hyperplane (which is therefore more a slab)
+     * @param node current tree node (it is a leaf node at the beginning
+     * of the call)
+     * @param edges list of edges to insert in the cell defined by this node
+     * (excluding edges not belonging to the cell defined by this node)
+     */
+    private static void insertEdges(final double hyperplaneThickness,
+                                    final BSPTree&lt;Euclidean2D&gt; node,
+                                    final List&lt;Edge&gt; edges) {
+
+        // find an edge with an hyperplane that can be inserted in the node
+<span class="fc" id="L238">        int index = 0;</span>
+<span class="fc" id="L239">        Edge inserted =null;</span>
+<span class="fc bfc" id="L240" title="All 4 branches covered.">        while (inserted == null &amp;&amp; index &lt; edges.size()) {</span>
+<span class="fc" id="L241">            inserted = edges.get(index++);</span>
+<span class="pc bpc" id="L242" title="1 of 2 branches missed.">            if (inserted.getNode() == null) {</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">                if (node.insertCut(inserted.getLine())) {</span>
+<span class="fc" id="L244">                    inserted.setNode(node);</span>
+                } else {
+<span class="fc" id="L246">                    inserted = null;</span>
+                }
+            } else {
+<span class="nc" id="L249">                inserted = null;</span>
+            }
+        }
+
+<span class="fc bfc" id="L253" title="All 2 branches covered.">        if (inserted == null) {</span>
+            // no suitable edge was found, the node remains a leaf node
+            // we need to set its inside/outside boolean indicator
+<span class="fc" id="L256">            final BSPTree&lt;Euclidean2D&gt; parent = node.getParent();</span>
+<span class="pc bpc" id="L257" title="2 of 4 branches missed.">            if (parent == null || node == parent.getMinus()) {</span>
+<span class="fc" id="L258">                node.setAttribute(Boolean.TRUE);</span>
+            } else {
+<span class="nc" id="L260">                node.setAttribute(Boolean.FALSE);</span>
+            }
+<span class="fc" id="L262">            return;</span>
+        }
+
+        // we have split the node by inserted an edge as a cut sub-hyperplane
+        // distribute the remaining edges in the two sub-trees
+<span class="fc" id="L267">        final List&lt;Edge&gt; plusList  = new ArrayList&lt;Edge&gt;();</span>
+<span class="fc" id="L268">        final List&lt;Edge&gt; minusList = new ArrayList&lt;Edge&gt;();</span>
+<span class="fc bfc" id="L269" title="All 2 branches covered.">        for (final Edge edge : edges) {</span>
+<span class="fc bfc" id="L270" title="All 2 branches covered.">            if (edge != inserted) {</span>
+<span class="fc" id="L271">                final double startOffset = inserted.getLine().getOffset(edge.getStart().getLocation());</span>
+<span class="fc" id="L272">                final double endOffset   = inserted.getLine().getOffset(edge.getEnd().getLocation());</span>
+<span class="fc bfc" id="L273" title="All 2 branches covered.">                Side startSide = (FastMath.abs(startOffset) &lt;= hyperplaneThickness) ?</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">                                 Side.HYPER : ((startOffset &lt; 0) ? Side.MINUS : Side.PLUS);</span>
+<span class="fc bfc" id="L275" title="All 2 branches covered.">                Side endSide   = (FastMath.abs(endOffset) &lt;= hyperplaneThickness) ?</span>
+<span class="fc bfc" id="L276" title="All 2 branches covered.">                                 Side.HYPER : ((endOffset &lt; 0) ? Side.MINUS : Side.PLUS);</span>
+<span class="fc bfc" id="L277" title="All 3 branches covered.">                switch (startSide) {</span>
+                    case PLUS:
+<span class="fc bfc" id="L279" title="All 2 branches covered.">                        if (endSide == Side.MINUS) {</span>
+                            // we need to insert a split point on the hyperplane
+<span class="fc" id="L281">                            final Vertex splitPoint = edge.split(inserted.getLine());</span>
+<span class="fc" id="L282">                            minusList.add(splitPoint.getOutgoing());</span>
+<span class="fc" id="L283">                            plusList.add(splitPoint.getIncoming());</span>
+<span class="fc" id="L284">                        } else {</span>
+<span class="fc" id="L285">                            plusList.add(edge);</span>
+                        }
+<span class="fc" id="L287">                        break;</span>
+                    case MINUS:
+<span class="fc bfc" id="L289" title="All 2 branches covered.">                        if (endSide == Side.PLUS) {</span>
+                            // we need to insert a split point on the hyperplane
+<span class="fc" id="L291">                            final Vertex splitPoint = edge.split(inserted.getLine());</span>
+<span class="fc" id="L292">                            minusList.add(splitPoint.getIncoming());</span>
+<span class="fc" id="L293">                            plusList.add(splitPoint.getOutgoing());</span>
+<span class="fc" id="L294">                        } else {</span>
+<span class="fc" id="L295">                            minusList.add(edge);</span>
+                        }
+<span class="fc" id="L297">                        break;</span>
+                    default:
+<span class="fc bfc" id="L299" title="All 2 branches covered.">                        if (endSide == Side.PLUS) {</span>
+<span class="fc" id="L300">                            plusList.add(edge);</span>
+<span class="fc bfc" id="L301" title="All 2 branches covered.">                        } else if (endSide == Side.MINUS) {</span>
+<span class="fc" id="L302">                            minusList.add(edge);</span>
+                        }
+                        break;
+                }
+            }
+<span class="fc" id="L307">        }</span>
+
+        // recurse through lower levels
+<span class="fc bfc" id="L310" title="All 2 branches covered.">        if (!plusList.isEmpty()) {</span>
+<span class="fc" id="L311">            insertEdges(hyperplaneThickness, node.getPlus(),  plusList);</span>
+        } else {
+<span class="fc" id="L313">            node.getPlus().setAttribute(Boolean.FALSE);</span>
+        }
+<span class="fc bfc" id="L315" title="All 2 branches covered.">        if (!minusList.isEmpty()) {</span>
+<span class="fc" id="L316">            insertEdges(hyperplaneThickness, node.getMinus(), minusList);</span>
+        } else {
+<span class="fc" id="L318">            node.getMinus().setAttribute(Boolean.TRUE);</span>
+        }
+
+<span class="fc" id="L321">    }</span>
+
+    /** Internal class for holding vertices while they are processed to build a BSP tree. */
+    private static class Vertex {
+
+        /** Vertex location. */
+        private final Vector2D location;
+
+        /** Incoming edge. */
+        private Edge incoming;
+
+        /** Outgoing edge. */
+        private Edge outgoing;
+
+        /** Lines bound with this vertex. */
+        private final List&lt;Line&gt; lines;
+
+        /** Build a non-processed vertex not owned by any node yet.
+         * @param location vertex location
+         */
+<span class="fc" id="L341">        public Vertex(final Vector2D location) {</span>
+<span class="fc" id="L342">            this.location = location;</span>
+<span class="fc" id="L343">            this.incoming = null;</span>
+<span class="fc" id="L344">            this.outgoing = null;</span>
+<span class="fc" id="L345">            this.lines    = new ArrayList&lt;Line&gt;();</span>
+<span class="fc" id="L346">        }</span>
+
+        /** Get Vertex location.
+         * @return vertex location
+         */
+        public Vector2D getLocation() {
+<span class="fc" id="L352">            return location;</span>
+        }
+
+        /** Bind a line considered to contain this vertex.
+         * @param line line to bind with this vertex
+         */
+        public void bindWith(final Line line) {
+<span class="fc" id="L359">            lines.add(line);</span>
+<span class="fc" id="L360">        }</span>
+
+        /** Get the common line bound with both the instance and another vertex, if any.
+         * &lt;p&gt;
+         * When two vertices are both bound to the same line, this means they are
+         * already handled by node associated with this line, so there is no need
+         * to create a cut hyperplane for them.
+         * &lt;/p&gt;
+         * @param vertex other vertex to check instance against
+         * @return line bound with both the instance and another vertex, or null if the
+         * two vertices do not share a line yet
+         */
+        public Line sharedLineWith(final Vertex vertex) {
+<span class="fc bfc" id="L373" title="All 2 branches covered.">            for (final Line line1 : lines) {</span>
+<span class="fc bfc" id="L374" title="All 2 branches covered.">                for (final Line line2 : vertex.lines) {</span>
+<span class="fc bfc" id="L375" title="All 2 branches covered.">                    if (line1 == line2) {</span>
+<span class="fc" id="L376">                        return line1;</span>
+                    }
+<span class="fc" id="L378">                }</span>
+<span class="fc" id="L379">            }</span>
+<span class="fc" id="L380">            return null;</span>
+        }
+
+        /** Set incoming edge.
+         * &lt;p&gt;
+         * The line supporting the incoming edge is automatically bound
+         * with the instance.
+         * &lt;/p&gt;
+         * @param incoming incoming edge
+         */
+        public void setIncoming(final Edge incoming) {
+<span class="fc" id="L391">            this.incoming = incoming;</span>
+<span class="fc" id="L392">            bindWith(incoming.getLine());</span>
+<span class="fc" id="L393">        }</span>
+
+        /** Get incoming edge.
+         * @return incoming edge
+         */
+        public Edge getIncoming() {
+<span class="fc" id="L399">            return incoming;</span>
+        }
+
+        /** Set outgoing edge.
+         * &lt;p&gt;
+         * The line supporting the outgoing edge is automatically bound
+         * with the instance.
+         * &lt;/p&gt;
+         * @param outgoing outgoing edge
+         */
+        public void setOutgoing(final Edge outgoing) {
+<span class="fc" id="L410">            this.outgoing = outgoing;</span>
+<span class="fc" id="L411">            bindWith(outgoing.getLine());</span>
+<span class="fc" id="L412">        }</span>
+
+        /** Get outgoing edge.
+         * @return outgoing edge
+         */
+        public Edge getOutgoing() {
+<span class="fc" id="L418">            return outgoing;</span>
+        }
+
+    }
+
+    /** Internal class for holding edges while they are processed to build a BSP tree. */
+    private static class Edge {
+
+        /** Start vertex. */
+        private final Vertex start;
+
+        /** End vertex. */
+        private final Vertex end;
+
+        /** Line supporting the edge. */
+        private final Line line;
+
+        /** Node whose cut hyperplane contains this edge. */
+        private BSPTree&lt;Euclidean2D&gt; node;
+
+        /** Build an edge not contained in any node yet.
+         * @param start start vertex
+         * @param end end vertex
+         * @param line line supporting the edge
+         */
+<span class="fc" id="L443">        public Edge(final Vertex start, final Vertex end, final Line line) {</span>
+
+<span class="fc" id="L445">            this.start = start;</span>
+<span class="fc" id="L446">            this.end   = end;</span>
+<span class="fc" id="L447">            this.line  = line;</span>
+<span class="fc" id="L448">            this.node  = null;</span>
+
+            // connect the vertices back to the edge
+<span class="fc" id="L451">            start.setOutgoing(this);</span>
+<span class="fc" id="L452">            end.setIncoming(this);</span>
+
+<span class="fc" id="L454">        }</span>
+
+        /** Get start vertex.
+         * @return start vertex
+         */
+        public Vertex getStart() {
+<span class="fc" id="L460">            return start;</span>
+        }
+
+        /** Get end vertex.
+         * @return end vertex
+         */
+        public Vertex getEnd() {
+<span class="fc" id="L467">            return end;</span>
+        }
+
+        /** Get the line supporting this edge.
+         * @return line supporting this edge
+         */
+        public Line getLine() {
+<span class="fc" id="L474">            return line;</span>
+        }
+
+        /** Set the node whose cut hyperplane contains this edge.
+         * @param node node whose cut hyperplane contains this edge
+         */
+        public void setNode(final BSPTree&lt;Euclidean2D&gt; node) {
+<span class="fc" id="L481">            this.node = node;</span>
+<span class="fc" id="L482">        }</span>
+
+        /** Get the node whose cut hyperplane contains this edge.
+         * @return node whose cut hyperplane contains this edge
+         * (null if edge has not yet been inserted into the BSP tree)
+         */
+        public BSPTree&lt;Euclidean2D&gt; getNode() {
+<span class="fc" id="L489">            return node;</span>
+        }
+
+        /** Split the edge.
+         * &lt;p&gt;
+         * Once split, this edge is not referenced anymore by the vertices,
+         * it is replaced by the two half-edges and an intermediate splitting
+         * vertex is introduced to connect these two halves.
+         * &lt;/p&gt;
+         * @param splitLine line splitting the edge in two halves
+         * @return split vertex (its incoming and outgoing edges are the two halves)
+         */
+        public Vertex split(final Line splitLine) {
+<span class="fc" id="L502">            final Vertex splitVertex = new Vertex(line.intersection(splitLine));</span>
+<span class="fc" id="L503">            splitVertex.bindWith(splitLine);</span>
+<span class="fc" id="L504">            final Edge startHalf = new Edge(start, splitVertex, line);</span>
+<span class="fc" id="L505">            final Edge endHalf   = new Edge(splitVertex, end, line);</span>
+<span class="fc" id="L506">            startHalf.node = node;</span>
+<span class="fc" id="L507">            endHalf.node   = node;</span>
+<span class="fc" id="L508">            return splitVertex;</span>
+        }
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public PolygonsSet buildNew(final BSPTree&lt;Euclidean2D&gt; tree) {
+<span class="fc" id="L516">        return new PolygonsSet(tree);</span>
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected void computeGeometricalProperties() {
+
+<span class="fc" id="L523">        final Vector2D[][] v = getVertices();</span>
+
+<span class="fc bfc" id="L525" title="All 2 branches covered.">        if (v.length == 0) {</span>
+<span class="fc" id="L526">            final BSPTree&lt;Euclidean2D&gt; tree = getTree(false);</span>
+<span class="pc bpc" id="L527" title="3 of 4 branches missed.">            if (tree.getCut() == null &amp;&amp; (Boolean) tree.getAttribute()) {</span>
+                // the instance covers the whole space
+<span class="nc" id="L529">                setSize(Double.POSITIVE_INFINITY);</span>
+<span class="nc" id="L530">                setBarycenter(Vector2D.NaN);</span>
+            } else {
+<span class="fc" id="L532">                setSize(0);</span>
+<span class="fc" id="L533">                setBarycenter(new Vector2D(0, 0));</span>
+            }
+<span class="pc bpc" id="L535" title="1 of 2 branches missed.">        } else if (v[0][0] == null) {</span>
+            // there is at least one open-loop: the polygon is infinite
+<span class="nc" id="L537">            setSize(Double.POSITIVE_INFINITY);</span>
+<span class="nc" id="L538">            setBarycenter(Vector2D.NaN);</span>
+        } else {
+            // all loops are closed, we compute some integrals around the shape
+
+<span class="fc" id="L542">            double sum  = 0;</span>
+<span class="fc" id="L543">            double sumX = 0;</span>
+<span class="fc" id="L544">            double sumY = 0;</span>
+
+<span class="fc bfc" id="L546" title="All 2 branches covered.">            for (Vector2D[] loop : v) {</span>
+<span class="fc" id="L547">                double x1 = loop[loop.length - 1].getX();</span>
+<span class="fc" id="L548">                double y1 = loop[loop.length - 1].getY();</span>
+<span class="fc bfc" id="L549" title="All 2 branches covered.">                for (final Vector2D point : loop) {</span>
+<span class="fc" id="L550">                    final double x0 = x1;</span>
+<span class="fc" id="L551">                    final double y0 = y1;</span>
+<span class="fc" id="L552">                    x1 = point.getX();</span>
+<span class="fc" id="L553">                    y1 = point.getY();</span>
+<span class="fc" id="L554">                    final double factor = x0 * y1 - y0 * x1;</span>
+<span class="fc" id="L555">                    sum  += factor;</span>
+<span class="fc" id="L556">                    sumX += factor * (x0 + x1);</span>
+<span class="fc" id="L557">                    sumY += factor * (y0 + y1);</span>
+                }
+            }
+
+<span class="pc bpc" id="L561" title="1 of 2 branches missed.">            if (sum &lt; 0) {</span>
+                // the polygon as a finite outside surrounded by an infinite inside
+<span class="nc" id="L563">                setSize(Double.POSITIVE_INFINITY);</span>
+<span class="nc" id="L564">                setBarycenter(Vector2D.NaN);</span>
+            } else {
+<span class="fc" id="L566">                setSize(sum / 2);</span>
+<span class="fc" id="L567">                setBarycenter(new Vector2D(sumX / (3 * sum), sumY / (3 * sum)));</span>
+            }
+
+        }
+
+<span class="fc" id="L572">    }</span>
+
+    /** Get the vertices of the polygon.
+     * &lt;p&gt;The polygon boundary can be represented as an array of loops,
+     * each loop being itself an array of vertices.&lt;/p&gt;
+     * &lt;p&gt;In order to identify open loops which start and end by
+     * infinite edges, the open loops arrays start with a null point. In
+     * this case, the first non null point and the last point of the
+     * array do not represent real vertices, they are dummy points
+     * intended only to get the direction of the first and last edge. An
+     * open loop consisting of a single infinite line will therefore be
+     * represented by a three elements array with one null point
+     * followed by two dummy points. The open loops are always the first
+     * ones in the loops array.&lt;/p&gt;
+     * &lt;p&gt;If the polygon has no boundary at all, a zero length loop
+     * array will be returned.&lt;/p&gt;
+     * &lt;p&gt;All line segments in the various loops have the inside of the
+     * region on their left side and the outside on their right side
+     * when moving in the underlying line direction. This means that
+     * closed loops surrounding finite areas obey the direct
+     * trigonometric orientation.&lt;/p&gt;
+     * @return vertices of the polygon, organized as oriented boundary
+     * loops with the open loops first (the returned value is guaranteed
+     * to be non-null)
+     */
+    public Vector2D[][] getVertices() {
+<span class="fc bfc" id="L598" title="All 2 branches covered.">        if (vertices == null) {</span>
+<span class="pc bpc" id="L599" title="1 of 2 branches missed.">            if (getTree(false).getCut() == null) {</span>
+<span class="nc" id="L600">                vertices = new Vector2D[0][];</span>
+            } else {
+
+                // sort the segments according to their start point
+<span class="fc" id="L604">                final SegmentsBuilder visitor = new SegmentsBuilder();</span>
+<span class="fc" id="L605">                getTree(true).visit(visitor);</span>
+<span class="fc" id="L606">                final AVLTree&lt;ComparableSegment&gt; sorted = visitor.getSorted();</span>
+
+                // identify the loops, starting from the open ones
+                // (their start segments are naturally at the sorted set beginning)
+<span class="fc" id="L610">                final ArrayList&lt;List&lt;ComparableSegment&gt;&gt; loops = new ArrayList&lt;List&lt;ComparableSegment&gt;&gt;();</span>
+<span class="fc bfc" id="L611" title="All 2 branches covered.">                while (!sorted.isEmpty()) {</span>
+<span class="fc" id="L612">                    final AVLTree&lt;ComparableSegment&gt;.Node node = sorted.getSmallest();</span>
+<span class="fc" id="L613">                    final List&lt;ComparableSegment&gt; loop = followLoop(node, sorted);</span>
+<span class="fc bfc" id="L614" title="All 2 branches covered.">                    if (loop != null) {</span>
+<span class="fc" id="L615">                        loops.add(loop);</span>
+                    }
+<span class="fc" id="L617">                }</span>
+
+                // tranform the loops in an array of arrays of points
+<span class="fc" id="L620">                vertices = new Vector2D[loops.size()][];</span>
+<span class="fc" id="L621">                int i = 0;</span>
+
+<span class="fc bfc" id="L623" title="All 2 branches covered.">                for (final List&lt;ComparableSegment&gt; loop : loops) {</span>
+<span class="pc bpc" id="L624" title="1 of 2 branches missed.">                    if (loop.size() &lt; 2) {</span>
+                        // single infinite line
+<span class="nc" id="L626">                        final Line line = loop.get(0).getLine();</span>
+<span class="nc" id="L627">                        vertices[i++] = new Vector2D[] {</span>
+                            null,
+<span class="nc" id="L629">                            line.toSpace(new Vector1D(-Float.MAX_VALUE)),</span>
+<span class="nc" id="L630">                            line.toSpace(new Vector1D(+Float.MAX_VALUE))</span>
+                        };
+<span class="pc bpc" id="L632" title="1 of 2 branches missed.">                    } else if (loop.get(0).getStart() == null) {</span>
+                        // open loop with at least one real point
+<span class="nc" id="L634">                        final Vector2D[] array = new Vector2D[loop.size() + 2];</span>
+<span class="nc" id="L635">                        int j = 0;</span>
+<span class="nc bnc" id="L636" title="All 2 branches missed.">                        for (Segment segment : loop) {</span>
+
+<span class="nc bnc" id="L638" title="All 2 branches missed.">                            if (j == 0) {</span>
+                                // null point and first dummy point
+<span class="nc" id="L640">                                double x = segment.getLine().toSubSpace(segment.getEnd()).getX();</span>
+<span class="nc" id="L641">                                x -= FastMath.max(1.0, FastMath.abs(x / 2));</span>
+<span class="nc" id="L642">                                array[j++] = null;</span>
+<span class="nc" id="L643">                                array[j++] = segment.getLine().toSpace(new Vector1D(x));</span>
+                            }
+
+<span class="nc bnc" id="L646" title="All 2 branches missed.">                            if (j &lt; (array.length - 1)) {</span>
+                                // current point
+<span class="nc" id="L648">                                array[j++] = segment.getEnd();</span>
+                            }
+
+<span class="nc bnc" id="L651" title="All 2 branches missed.">                            if (j == (array.length - 1)) {</span>
+                                // last dummy point
+<span class="nc" id="L653">                                double x = segment.getLine().toSubSpace(segment.getStart()).getX();</span>
+<span class="nc" id="L654">                                x += FastMath.max(1.0, FastMath.abs(x / 2));</span>
+<span class="nc" id="L655">                                array[j++] = segment.getLine().toSpace(new Vector1D(x));</span>
+                            }
+
+<span class="nc" id="L658">                        }</span>
+<span class="nc" id="L659">                        vertices[i++] = array;</span>
+<span class="nc" id="L660">                    } else {</span>
+<span class="fc" id="L661">                        final Vector2D[] array = new Vector2D[loop.size()];</span>
+<span class="fc" id="L662">                        int j = 0;</span>
+<span class="fc bfc" id="L663" title="All 2 branches covered.">                        for (Segment segment : loop) {</span>
+<span class="fc" id="L664">                            array[j++] = segment.getStart();</span>
+<span class="fc" id="L665">                        }</span>
+<span class="fc" id="L666">                        vertices[i++] = array;</span>
+                    }
+<span class="fc" id="L668">                }</span>
+
+            }
+        }
+
+<span class="fc" id="L673">        return vertices.clone();</span>
+
+    }
+
+    /** Follow a boundary loop.
+     * @param node node containing the segment starting the loop
+     * @param sorted set of segments belonging to the boundary, sorted by
+     * start points (contains {@code node})
+     * @return a list of connected sub-hyperplanes starting at
+     * {@code node}
+     */
+    private List&lt;ComparableSegment&gt; followLoop(final AVLTree&lt;ComparableSegment&gt;.Node node,
+                                               final AVLTree&lt;ComparableSegment&gt; sorted) {
+
+<span class="fc" id="L687">        final ArrayList&lt;ComparableSegment&gt; loop = new ArrayList&lt;ComparableSegment&gt;();</span>
+<span class="fc" id="L688">        ComparableSegment segment = node.getElement();</span>
+<span class="fc" id="L689">        loop.add(segment);</span>
+<span class="fc" id="L690">        final Vector2D globalStart = segment.getStart();</span>
+<span class="fc" id="L691">        Vector2D end = segment.getEnd();</span>
+<span class="fc" id="L692">        node.delete();</span>
+
+        // is this an open or a closed loop ?
+<span class="pc bpc" id="L695" title="1 of 2 branches missed.">        final boolean open = segment.getStart() == null;</span>
+
+<span class="pc bpc" id="L697" title="2 of 6 branches missed.">        while ((end != null) &amp;&amp; (open || (globalStart.distance(end) &gt; 1.0e-10))) {</span>
+
+            // search the sub-hyperplane starting where the previous one ended
+<span class="fc" id="L700">            AVLTree&lt;ComparableSegment&gt;.Node selectedNode = null;</span>
+<span class="fc" id="L701">            ComparableSegment       selectedSegment  = null;</span>
+<span class="fc" id="L702">            double                  selectedDistance = Double.POSITIVE_INFINITY;</span>
+<span class="fc" id="L703">            final ComparableSegment lowerLeft        = new ComparableSegment(end, -1.0e-10, -1.0e-10);</span>
+<span class="fc" id="L704">            final ComparableSegment upperRight       = new ComparableSegment(end, +1.0e-10, +1.0e-10);</span>
+<span class="fc" id="L705">            for (AVLTree&lt;ComparableSegment&gt;.Node n = sorted.getNotSmaller(lowerLeft);</span>
+<span class="fc bfc" id="L706" title="All 4 branches covered.">                 (n != null) &amp;&amp; (n.getElement().compareTo(upperRight) &lt;= 0);</span>
+<span class="fc" id="L707">                 n = n.getNext()) {</span>
+<span class="fc" id="L708">                segment = n.getElement();</span>
+<span class="fc" id="L709">                final double distance = end.distance(segment.getStart());</span>
+<span class="fc bfc" id="L710" title="All 2 branches covered.">                if (distance &lt; selectedDistance) {</span>
+<span class="fc" id="L711">                    selectedNode     = n;</span>
+<span class="fc" id="L712">                    selectedSegment  = segment;</span>
+<span class="fc" id="L713">                    selectedDistance = distance;</span>
+                }
+            }
+
+<span class="fc bfc" id="L717" title="All 2 branches covered.">            if (selectedDistance &gt; 1.0e-10) {</span>
+                // this is a degenerated loop, it probably comes from a very
+                // tiny region with some segments smaller than the threshold, we
+                // simply ignore it
+<span class="fc" id="L721">                return null;</span>
+            }
+
+<span class="fc" id="L724">            end = selectedSegment.getEnd();</span>
+<span class="fc" id="L725">            loop.add(selectedSegment);</span>
+<span class="fc" id="L726">            selectedNode.delete();</span>
+
+<span class="fc" id="L728">        }</span>
+
+<span class="pc bpc" id="L730" title="1 of 4 branches missed.">        if ((loop.size() == 2) &amp;&amp; !open) {</span>
+            // this is a degenerated infinitely thin loop, we simply ignore it
+<span class="fc" id="L732">            return null;</span>
+        }
+
+<span class="pc bpc" id="L735" title="3 of 4 branches missed.">        if ((end == null) &amp;&amp; !open) {</span>
+<span class="nc" id="L736">            throw new MathInternalError();</span>
+        }
+
+<span class="fc" id="L739">        return loop;</span>
+
+    }
+
+    /** Private extension of Segment allowing comparison. */
+    private static class ComparableSegment extends Segment implements Comparable&lt;ComparableSegment&gt; {
+
+        /** Sorting key. */
+        private OrderedTuple sortingKey;
+
+        /** Build a segment.
+         * @param start start point of the segment
+         * @param end end point of the segment
+         * @param line line containing the segment
+         */
+        public ComparableSegment(final Vector2D start, final Vector2D end, final Line line) {
+<span class="fc" id="L755">            super(start, end, line);</span>
+<span class="pc bpc" id="L756" title="1 of 2 branches missed.">            sortingKey = (start == null) ?</span>
+<span class="nc" id="L757">                         new OrderedTuple(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY) :</span>
+<span class="fc" id="L758">                         new OrderedTuple(start.getX(), start.getY());</span>
+<span class="fc" id="L759">        }</span>
+
+        /** Build a dummy segment.
+         * &lt;p&gt;
+         * The object built is not a real segment, only the sorting key is used to
+         * allow searching in the neighborhood of a point. This is an horrible hack ...
+         * &lt;/p&gt;
+         * @param start start point of the segment
+         * @param dx abscissa offset from the start point
+         * @param dy ordinate offset from the start point
+         */
+        public ComparableSegment(final Vector2D start, final double dx, final double dy) {
+<span class="fc" id="L771">            super(null, null, null);</span>
+<span class="fc" id="L772">            sortingKey = new OrderedTuple(start.getX() + dx, start.getY() + dy);</span>
+<span class="fc" id="L773">        }</span>
+
+        /** {@inheritDoc} */
+        public int compareTo(final ComparableSegment o) {
+<span class="fc" id="L777">            return sortingKey.compareTo(o.sortingKey);</span>
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public boolean equals(final Object other) {
+<span class="nc bnc" id="L783" title="All 2 branches missed.">            if (this == other) {</span>
+<span class="nc" id="L784">                return true;</span>
+<span class="nc bnc" id="L785" title="All 2 branches missed.">            } else if (other instanceof ComparableSegment) {</span>
+<span class="nc bnc" id="L786" title="All 2 branches missed.">                return compareTo((ComparableSegment) other) == 0;</span>
+            } else {
+<span class="nc" id="L788">                return false;</span>
+            }
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public int hashCode() {
+<span class="nc" id="L795">            return getStart().hashCode() ^ getEnd().hashCode() ^</span>
+<span class="nc" id="L796">                   getLine().hashCode() ^ sortingKey.hashCode();</span>
+        }
+
+    }
+
+    /** Visitor building segments. */
+    private static class SegmentsBuilder implements BSPTreeVisitor&lt;Euclidean2D&gt; {
+
+        /** Sorted segments. */
+        private AVLTree&lt;ComparableSegment&gt; sorted;
+
+        /** Simple constructor. */
+<span class="fc" id="L808">        public SegmentsBuilder() {</span>
+<span class="fc" id="L809">            sorted = new AVLTree&lt;ComparableSegment&gt;();</span>
+<span class="fc" id="L810">        }</span>
+
+        /** {@inheritDoc} */
+        public Order visitOrder(final BSPTree&lt;Euclidean2D&gt; node) {
+<span class="fc" id="L814">            return Order.MINUS_SUB_PLUS;</span>
+        }
+
+        /** {@inheritDoc} */
+        public void visitInternalNode(final BSPTree&lt;Euclidean2D&gt; node) {
+            @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L820">            final BoundaryAttribute&lt;Euclidean2D&gt; attribute = (BoundaryAttribute&lt;Euclidean2D&gt;) node.getAttribute();</span>
+<span class="fc bfc" id="L821" title="All 2 branches covered.">            if (attribute.getPlusOutside() != null) {</span>
+<span class="fc" id="L822">                addContribution(attribute.getPlusOutside(), false);</span>
+            }
+<span class="fc bfc" id="L824" title="All 2 branches covered.">            if (attribute.getPlusInside() != null) {</span>
+<span class="fc" id="L825">                addContribution(attribute.getPlusInside(), true);</span>
+            }
+<span class="fc" id="L827">        }</span>
+
+        /** {@inheritDoc} */
+        public void visitLeafNode(final BSPTree&lt;Euclidean2D&gt; node) {
+<span class="fc" id="L831">        }</span>
+
+        /** Add he contribution of a boundary facet.
+         * @param sub boundary facet
+         * @param reversed if true, the facet has the inside on its plus side
+         */
+        private void addContribution(final SubHyperplane&lt;Euclidean2D&gt; sub, final boolean reversed) {
+            @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L839">            final AbstractSubHyperplane&lt;Euclidean2D, Euclidean1D&gt; absSub =</span>
+                (AbstractSubHyperplane&lt;Euclidean2D, Euclidean1D&gt;) sub;
+<span class="fc" id="L841">            final Line line      = (Line) sub.getHyperplane();</span>
+<span class="fc" id="L842">            final List&lt;Interval&gt; intervals = ((IntervalsSet) absSub.getRemainingRegion()).asList();</span>
+<span class="fc bfc" id="L843" title="All 2 branches covered.">            for (final Interval i : intervals) {</span>
+<span class="pc bpc" id="L844" title="1 of 2 branches missed.">                final Vector2D start = Double.isInfinite(i.getInf()) ?</span>
+<span class="pc" id="L845">                                      null : (Vector2D) line.toSpace(new Vector1D(i.getInf()));</span>
+<span class="pc bpc" id="L846" title="1 of 2 branches missed.">                final Vector2D end   = Double.isInfinite(i.getSup()) ?</span>
+<span class="pc" id="L847">                                      null : (Vector2D) line.toSpace(new Vector1D(i.getSup()));</span>
+<span class="fc bfc" id="L848" title="All 2 branches covered.">                if (reversed) {</span>
+<span class="fc" id="L849">                    sorted.insert(new ComparableSegment(end, start, line.getReverse()));</span>
+                } else {
+<span class="fc" id="L851">                    sorted.insert(new ComparableSegment(start, end, line));</span>
+                }
+<span class="fc" id="L853">            }</span>
+<span class="fc" id="L854">        }</span>
+
+        /** Get the sorted segments.
+         * @return sorted segments
+         */
+        public AVLTree&lt;ComparableSegment&gt; getSorted() {
+<span class="fc" id="L860">            return sorted;</span>
+        }
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

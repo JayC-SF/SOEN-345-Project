@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SchurTransformer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Commons Math</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.math3.linear</a> &gt; <span class="el_source">SchurTransformer.java</span></div><h1>SchurTransformer.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.math3.linear;
+
+import org.apache.commons.math3.exception.MaxCountExceededException;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
+import org.apache.commons.math3.util.FastMath;
+import org.apache.commons.math3.util.Precision;
+
+/**
+ * Class transforming a general real matrix to Schur form.
+ * &lt;p&gt;A m &amp;times; m matrix A can be written as the product of three matrices: A = P
+ * &amp;times; T &amp;times; P&lt;sup&gt;T&lt;/sup&gt; with P an orthogonal matrix and T an quasi-triangular
+ * matrix. Both P and T are m &amp;times; m matrices.&lt;/p&gt;
+ * &lt;p&gt;Transformation to Schur form is often not a goal by itself, but it is an
+ * intermediate step in more general decomposition algorithms like
+ * {@link EigenDecomposition eigen decomposition}. This class is therefore
+ * intended for internal use by the library and is not public. As a consequence
+ * of this explicitly limited scope, many methods directly returns references to
+ * internal arrays, not copies.&lt;/p&gt;
+ * &lt;p&gt;This class is based on the method hqr2 in class EigenvalueDecomposition
+ * from the &lt;a href=&quot;http://math.nist.gov/javanumerics/jama/&quot;&gt;JAMA&lt;/a&gt; library.&lt;/p&gt;
+ *
+ * @see &lt;a href=&quot;http://mathworld.wolfram.com/SchurDecomposition.html&quot;&gt;Schur Decomposition - MathWorld&lt;/a&gt;
+ * @see &lt;a href=&quot;http://en.wikipedia.org/wiki/Schur_decomposition&quot;&gt;Schur Decomposition - Wikipedia&lt;/a&gt;
+ * @see &lt;a href=&quot;http://en.wikipedia.org/wiki/Householder_transformation&quot;&gt;Householder Transformations&lt;/a&gt;
+ * @version $Id$
+ * @since 3.1
+ */
+class SchurTransformer {
+    /** Maximum allowed iterations for convergence of the transformation. */
+    private static final int MAX_ITERATIONS = 100;
+
+    /** P matrix. */
+    private final double matrixP[][];
+    /** T matrix. */
+    private final double matrixT[][];
+    /** Cached value of P. */
+    private RealMatrix cachedP;
+    /** Cached value of T. */
+    private RealMatrix cachedT;
+    /** Cached value of PT. */
+    private RealMatrix cachedPt;
+
+    /** Epsilon criteria taken from JAMA code (originally was 2^-52). */
+<span class="fc" id="L61">    private final double epsilon = Precision.EPSILON;</span>
+
+    /**
+     * Build the transformation to Schur form of a general real matrix.
+     *
+     * @param matrix matrix to transform
+     * @throws NonSquareMatrixException if the matrix is not square
+     */
+<span class="fc" id="L69">    public SchurTransformer(final RealMatrix matrix) {</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (!matrix.isSquare()) {</span>
+<span class="fc" id="L71">            throw new NonSquareMatrixException(matrix.getRowDimension(),</span>
+<span class="fc" id="L72">                                               matrix.getColumnDimension());</span>
+        }
+
+<span class="fc" id="L75">        HessenbergTransformer transformer = new HessenbergTransformer(matrix);</span>
+<span class="fc" id="L76">        matrixT = transformer.getH().getData();</span>
+<span class="fc" id="L77">        matrixP = transformer.getP().getData();</span>
+<span class="fc" id="L78">        cachedT = null;</span>
+<span class="fc" id="L79">        cachedP = null;</span>
+<span class="fc" id="L80">        cachedPt = null;</span>
+
+        // transform matrix
+<span class="fc" id="L83">        transform();</span>
+<span class="fc" id="L84">    }</span>
+
+    /**
+     * Returns the matrix P of the transform.
+     * &lt;p&gt;P is an orthogonal matrix, i.e. its inverse is also its transpose.&lt;/p&gt;
+     *
+     * @return the P matrix
+     */
+    public RealMatrix getP() {
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (cachedP == null) {</span>
+<span class="fc" id="L94">            cachedP = MatrixUtils.createRealMatrix(matrixP);</span>
+        }
+<span class="fc" id="L96">        return cachedP;</span>
+    }
+
+    /**
+     * Returns the transpose of the matrix P of the transform.
+     * &lt;p&gt;P is an orthogonal matrix, i.e. its inverse is also its transpose.&lt;/p&gt;
+     *
+     * @return the transpose of the P matrix
+     */
+    public RealMatrix getPT() {
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        if (cachedPt == null) {</span>
+<span class="fc" id="L107">            cachedPt = getP().transpose();</span>
+        }
+
+        // return the cached matrix
+<span class="fc" id="L111">        return cachedPt;</span>
+    }
+
+    /**
+     * Returns the quasi-triangular Schur matrix T of the transform.
+     *
+     * @return the T matrix
+     */
+    public RealMatrix getT() {
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (cachedT == null) {</span>
+<span class="fc" id="L121">            cachedT = MatrixUtils.createRealMatrix(matrixT);</span>
+        }
+
+        // return the cached matrix
+<span class="fc" id="L125">        return cachedT;</span>
+    }
+
+    /**
+     * Transform original matrix to Schur form.
+     * @throws MaxCountExceededException if the transformation does not converge
+     */
+    private void transform() {
+<span class="fc" id="L133">        final int n = matrixT.length;</span>
+
+        // compute matrix norm
+<span class="fc" id="L136">        final double norm = getNorm();</span>
+
+        // shift information
+<span class="fc" id="L139">        final ShiftInfo shift = new ShiftInfo();</span>
+
+        // Outer loop over eigenvalue index
+<span class="fc" id="L142">        int iteration = 0;</span>
+<span class="fc" id="L143">        int iu = n - 1;</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        while (iu &gt;= 0) {</span>
+
+            // Look for single small sub-diagonal element
+<span class="fc" id="L147">            final int il = findSmallSubDiagonalElement(iu, norm);</span>
+
+            // Check for convergence
+<span class="fc bfc" id="L150" title="All 2 branches covered.">            if (il == iu) {</span>
+                // One root found
+<span class="fc" id="L152">                matrixT[iu][iu] = matrixT[iu][iu] + shift.exShift;</span>
+<span class="fc" id="L153">                iu--;</span>
+<span class="fc" id="L154">                iteration = 0;</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">            } else if (il == iu - 1) {</span>
+                // Two roots found
+<span class="fc" id="L157">                double p = (matrixT[iu - 1][iu - 1] - matrixT[iu][iu]) / 2.0;</span>
+<span class="fc" id="L158">                double q = p * p + matrixT[iu][iu - 1] * matrixT[iu - 1][iu];</span>
+<span class="fc" id="L159">                matrixT[iu][iu] += shift.exShift;</span>
+<span class="fc" id="L160">                matrixT[iu - 1][iu - 1] += shift.exShift;</span>
+
+<span class="fc bfc" id="L162" title="All 2 branches covered.">                if (q &gt;= 0) {</span>
+<span class="fc" id="L163">                    double z = FastMath.sqrt(FastMath.abs(q));</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">                    if (p &gt;= 0) {</span>
+<span class="fc" id="L165">                        z = p + z;</span>
+                    } else {
+<span class="fc" id="L167">                        z = p - z;</span>
+                    }
+<span class="fc" id="L169">                    final double x = matrixT[iu][iu - 1];</span>
+<span class="fc" id="L170">                    final double s = FastMath.abs(x) + FastMath.abs(z);</span>
+<span class="fc" id="L171">                    p = x / s;</span>
+<span class="fc" id="L172">                    q = z / s;</span>
+<span class="fc" id="L173">                    final double r = FastMath.sqrt(p * p + q * q);</span>
+<span class="fc" id="L174">                    p = p / r;</span>
+<span class="fc" id="L175">                    q = q / r;</span>
+
+                    // Row modification
+<span class="fc bfc" id="L178" title="All 2 branches covered.">                    for (int j = iu - 1; j &lt; n; j++) {</span>
+<span class="fc" id="L179">                        z = matrixT[iu - 1][j];</span>
+<span class="fc" id="L180">                        matrixT[iu - 1][j] = q * z + p * matrixT[iu][j];</span>
+<span class="fc" id="L181">                        matrixT[iu][j] = q * matrixT[iu][j] - p * z;</span>
+                    }
+
+                    // Column modification
+<span class="fc bfc" id="L185" title="All 2 branches covered.">                    for (int i = 0; i &lt;= iu; i++) {</span>
+<span class="fc" id="L186">                        z = matrixT[i][iu - 1];</span>
+<span class="fc" id="L187">                        matrixT[i][iu - 1] = q * z + p * matrixT[i][iu];</span>
+<span class="fc" id="L188">                        matrixT[i][iu] = q * matrixT[i][iu] - p * z;</span>
+                    }
+
+                    // Accumulate transformations
+<span class="fc bfc" id="L192" title="All 2 branches covered.">                    for (int i = 0; i &lt;= n - 1; i++) {</span>
+<span class="fc" id="L193">                        z = matrixP[i][iu - 1];</span>
+<span class="fc" id="L194">                        matrixP[i][iu - 1] = q * z + p * matrixP[i][iu];</span>
+<span class="fc" id="L195">                        matrixP[i][iu] = q * matrixP[i][iu] - p * z;</span>
+                    }
+                }
+<span class="fc" id="L198">                iu -= 2;</span>
+<span class="fc" id="L199">                iteration = 0;</span>
+<span class="fc" id="L200">            } else {</span>
+                // No convergence yet
+<span class="fc" id="L202">                computeShift(il, iu, iteration, shift);</span>
+
+                // stop transformation after too many iterations
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">                if (++iteration &gt; MAX_ITERATIONS) {</span>
+<span class="nc" id="L206">                    throw new MaxCountExceededException(LocalizedFormats.CONVERGENCE_FAILED,</span>
+<span class="nc" id="L207">                                                        MAX_ITERATIONS);</span>
+                }
+
+                // the initial houseHolder vector for the QR step
+<span class="fc" id="L211">                final double[] hVec = new double[3];</span>
+
+<span class="fc" id="L213">                final int im = initQRStep(il, iu, shift, hVec);</span>
+<span class="fc" id="L214">                performDoubleQRStep(il, im, iu, shift, hVec);</span>
+            }
+<span class="fc" id="L216">        }</span>
+<span class="fc" id="L217">    }</span>
+
+    /**
+     * Computes the L1 norm of the (quasi-)triangular matrix T.
+     *
+     * @return the L1 norm of matrix T
+     */
+    private double getNorm() {
+<span class="fc" id="L225">        double norm = 0.0;</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">        for (int i = 0; i &lt; matrixT.length; i++) {</span>
+            // as matrix T is (quasi-)triangular, also take the sub-diagonal element into account
+<span class="fc bfc" id="L228" title="All 2 branches covered.">            for (int j = FastMath.max(i - 1, 0); j &lt; matrixT.length; j++) {</span>
+<span class="fc" id="L229">                norm += FastMath.abs(matrixT[i][j]);</span>
+            }
+        }
+<span class="fc" id="L232">        return norm;</span>
+    }
+
+    /**
+     * Find the first small sub-diagonal element and returns its index.
+     *
+     * @param startIdx the starting index for the search
+     * @param norm the L1 norm of the matrix
+     * @return the index of the first small sub-diagonal element
+     */
+    private int findSmallSubDiagonalElement(final int startIdx, final double norm) {
+<span class="fc" id="L243">        int l = startIdx;</span>
+<span class="fc bfc" id="L244" title="All 2 branches covered.">        while (l &gt; 0) {</span>
+<span class="fc" id="L245">            double s = FastMath.abs(matrixT[l - 1][l - 1]) + FastMath.abs(matrixT[l][l]);</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">            if (s == 0.0) {</span>
+<span class="fc" id="L247">                s = norm;</span>
+            }
+<span class="fc bfc" id="L249" title="All 2 branches covered.">            if (FastMath.abs(matrixT[l][l - 1]) &lt; epsilon * s) {</span>
+<span class="fc" id="L250">                break;</span>
+            }
+<span class="fc" id="L252">            l--;</span>
+<span class="fc" id="L253">        }</span>
+<span class="fc" id="L254">        return l;</span>
+    }
+
+    /**
+     * Compute the shift for the current iteration.
+     *
+     * @param l the index of the small sub-diagonal element
+     * @param idx the current eigenvalue index
+     * @param iteration the current iteration
+     * @param shift holder for shift information
+     */
+    private void computeShift(final int l, final int idx, final int iteration, final ShiftInfo shift) {
+        // Form shift
+<span class="fc" id="L267">        shift.x = matrixT[idx][idx];</span>
+<span class="fc" id="L268">        shift.y = shift.w = 0.0;</span>
+<span class="pc bpc" id="L269" title="1 of 2 branches missed.">        if (l &lt; idx) {</span>
+<span class="fc" id="L270">            shift.y = matrixT[idx - 1][idx - 1];</span>
+<span class="fc" id="L271">            shift.w = matrixT[idx][idx - 1] * matrixT[idx - 1][idx];</span>
+        }
+
+        // Wilkinson's original ad hoc shift
+<span class="fc bfc" id="L275" title="All 2 branches covered.">        if (iteration == 10) {</span>
+<span class="fc" id="L276">            shift.exShift += shift.x;</span>
+<span class="fc bfc" id="L277" title="All 2 branches covered.">            for (int i = 0; i &lt;= idx; i++) {</span>
+<span class="fc" id="L278">                matrixT[i][i] -= shift.x;</span>
+            }
+<span class="fc" id="L280">            final double s = FastMath.abs(matrixT[idx][idx - 1]) + FastMath.abs(matrixT[idx - 1][idx - 2]);</span>
+<span class="fc" id="L281">            shift.x = 0.75 * s;</span>
+<span class="fc" id="L282">            shift.y = 0.75 * s;</span>
+<span class="fc" id="L283">            shift.w = -0.4375 * s * s;</span>
+        }
+
+        // MATLAB's new ad hoc shift
+<span class="fc bfc" id="L287" title="All 2 branches covered.">        if (iteration == 30) {</span>
+<span class="fc" id="L288">            double s = (shift.y - shift.x) / 2.0;</span>
+<span class="fc" id="L289">            s = s * s + shift.w;</span>
+<span class="pc bpc" id="L290" title="1 of 2 branches missed.">            if (s &gt; 0.0) {</span>
+<span class="fc" id="L291">                s = FastMath.sqrt(s);</span>
+<span class="pc bpc" id="L292" title="1 of 2 branches missed.">                if (shift.y &lt; shift.x) {</span>
+<span class="fc" id="L293">                    s = -s;</span>
+                }
+<span class="fc" id="L295">                s = shift.x - shift.w / ((shift.y - shift.x) / 2.0 + s);</span>
+<span class="fc bfc" id="L296" title="All 2 branches covered.">                for (int i = 0; i &lt;= idx; i++) {</span>
+<span class="fc" id="L297">                    matrixT[i][i] -= s;</span>
+                }
+<span class="fc" id="L299">                shift.exShift += s;</span>
+<span class="fc" id="L300">                shift.x = shift.y = shift.w = 0.964;</span>
+            }
+        }
+<span class="fc" id="L303">    }</span>
+
+    /**
+     * Initialize the householder vectors for the QR step.
+     *
+     * @param il the index of the small sub-diagonal element
+     * @param iu the current eigenvalue index
+     * @param shift shift information holder
+     * @param hVec the initial houseHolder vector
+     * @return the start index for the QR step
+     */
+    private int initQRStep(int il, final int iu, final ShiftInfo shift, double[] hVec) {
+        // Look for two consecutive small sub-diagonal elements
+<span class="fc" id="L316">        int im = iu - 2;</span>
+<span class="pc bpc" id="L317" title="1 of 2 branches missed.">        while (im &gt;= il) {</span>
+<span class="fc" id="L318">            final double z = matrixT[im][im];</span>
+<span class="fc" id="L319">            final double r = shift.x - z;</span>
+<span class="fc" id="L320">            double s = shift.y - z;</span>
+<span class="fc" id="L321">            hVec[0] = (r * s - shift.w) / matrixT[im + 1][im] + matrixT[im][im + 1];</span>
+<span class="fc" id="L322">            hVec[1] = matrixT[im + 1][im + 1] - z - r - s;</span>
+<span class="fc" id="L323">            hVec[2] = matrixT[im + 2][im + 1];</span>
+
+<span class="fc bfc" id="L325" title="All 2 branches covered.">            if (im == il) {</span>
+<span class="fc" id="L326">                break;</span>
+            }
+
+<span class="fc" id="L329">            final double lhs = FastMath.abs(matrixT[im][im - 1]) * (FastMath.abs(hVec[1]) + FastMath.abs(hVec[2]));</span>
+<span class="fc" id="L330">            final double rhs = FastMath.abs(hVec[0]) * (FastMath.abs(matrixT[im - 1][im - 1]) +</span>
+<span class="fc" id="L331">                                                        FastMath.abs(z) +</span>
+<span class="fc" id="L332">                                                        FastMath.abs(matrixT[im + 1][im + 1]));</span>
+
+<span class="fc bfc" id="L334" title="All 2 branches covered.">            if (lhs &lt; epsilon * rhs) {</span>
+<span class="fc" id="L335">                break;</span>
+            }
+<span class="fc" id="L337">            im--;</span>
+<span class="fc" id="L338">        }</span>
+
+<span class="fc" id="L340">        return im;</span>
+    }
+
+    /**
+     * Perform a double QR step involving rows l:idx and columns m:n
+     *
+     * @param il the index of the small sub-diagonal element
+     * @param im the start index for the QR step
+     * @param iu the current eigenvalue index
+     * @param shift shift information holder
+     * @param hVec the initial houseHolder vector
+     */
+    private void performDoubleQRStep(final int il, final int im, final int iu,
+                                     final ShiftInfo shift, final double[] hVec) {
+
+<span class="fc" id="L355">        final int n = matrixT.length;</span>
+<span class="fc" id="L356">        double p = hVec[0];</span>
+<span class="fc" id="L357">        double q = hVec[1];</span>
+<span class="fc" id="L358">        double r = hVec[2];</span>
+
+<span class="fc bfc" id="L360" title="All 2 branches covered.">        for (int k = im; k &lt;= iu - 1; k++) {</span>
+<span class="fc bfc" id="L361" title="All 2 branches covered.">            boolean notlast = k != (iu - 1);</span>
+<span class="fc bfc" id="L362" title="All 2 branches covered.">            if (k != im) {</span>
+<span class="fc" id="L363">                p = matrixT[k][k - 1];</span>
+<span class="fc" id="L364">                q = matrixT[k + 1][k - 1];</span>
+<span class="fc bfc" id="L365" title="All 2 branches covered.">                r = notlast ? matrixT[k + 2][k - 1] : 0.0;</span>
+<span class="fc" id="L366">                shift.x = FastMath.abs(p) + FastMath.abs(q) + FastMath.abs(r);</span>
+<span class="fc bfc" id="L367" title="All 2 branches covered.">                if (!Precision.equals(shift.x, 0.0, epsilon)) {</span>
+<span class="fc" id="L368">                    p = p / shift.x;</span>
+<span class="fc" id="L369">                    q = q / shift.x;</span>
+<span class="fc" id="L370">                    r = r / shift.x;</span>
+                }
+            }
+<span class="fc bfc" id="L373" title="All 2 branches covered.">            if (shift.x == 0.0) {</span>
+<span class="fc" id="L374">                break;</span>
+            }
+<span class="fc" id="L376">            double s = FastMath.sqrt(p * p + q * q + r * r);</span>
+<span class="fc bfc" id="L377" title="All 2 branches covered.">            if (p &lt; 0.0) {</span>
+<span class="fc" id="L378">                s = -s;</span>
+            }
+<span class="pc bpc" id="L380" title="1 of 2 branches missed.">            if (s != 0.0) {</span>
+<span class="fc bfc" id="L381" title="All 2 branches covered.">                if (k != im) {</span>
+<span class="fc" id="L382">                    matrixT[k][k - 1] = -s * shift.x;</span>
+<span class="fc bfc" id="L383" title="All 2 branches covered.">                } else if (il != im) {</span>
+<span class="fc" id="L384">                    matrixT[k][k - 1] = -matrixT[k][k - 1];</span>
+                }
+<span class="fc" id="L386">                p = p + s;</span>
+<span class="fc" id="L387">                shift.x = p / s;</span>
+<span class="fc" id="L388">                shift.y = q / s;</span>
+<span class="fc" id="L389">                double z = r / s;</span>
+<span class="fc" id="L390">                q = q / p;</span>
+<span class="fc" id="L391">                r = r / p;</span>
+
+                // Row modification
+<span class="fc bfc" id="L394" title="All 2 branches covered.">                for (int j = k; j &lt; n; j++) {</span>
+<span class="fc" id="L395">                    p = matrixT[k][j] + q * matrixT[k + 1][j];</span>
+<span class="fc bfc" id="L396" title="All 2 branches covered.">                    if (notlast) {</span>
+<span class="fc" id="L397">                        p = p + r * matrixT[k + 2][j];</span>
+<span class="fc" id="L398">                        matrixT[k + 2][j] = matrixT[k + 2][j] - p * z;</span>
+                    }
+<span class="fc" id="L400">                    matrixT[k][j] = matrixT[k][j] - p * shift.x;</span>
+<span class="fc" id="L401">                    matrixT[k + 1][j] = matrixT[k + 1][j] - p * shift.y;</span>
+                }
+
+                // Column modification
+<span class="fc bfc" id="L405" title="All 2 branches covered.">                for (int i = 0; i &lt;= FastMath.min(iu, k + 3); i++) {</span>
+<span class="fc" id="L406">                    p = shift.x * matrixT[i][k] + shift.y * matrixT[i][k + 1];</span>
+<span class="fc bfc" id="L407" title="All 2 branches covered.">                    if (notlast) {</span>
+<span class="fc" id="L408">                        p = p + z * matrixT[i][k + 2];</span>
+<span class="fc" id="L409">                        matrixT[i][k + 2] = matrixT[i][k + 2] - p * r;</span>
+                    }
+<span class="fc" id="L411">                    matrixT[i][k] = matrixT[i][k] - p;</span>
+<span class="fc" id="L412">                    matrixT[i][k + 1] = matrixT[i][k + 1] - p * q;</span>
+                }
+
+                // Accumulate transformations
+<span class="fc" id="L416">                final int high = matrixT.length - 1;</span>
+<span class="fc bfc" id="L417" title="All 2 branches covered.">                for (int i = 0; i &lt;= high; i++) {</span>
+<span class="fc" id="L418">                    p = shift.x * matrixP[i][k] + shift.y * matrixP[i][k + 1];</span>
+<span class="fc bfc" id="L419" title="All 2 branches covered.">                    if (notlast) {</span>
+<span class="fc" id="L420">                        p = p + z * matrixP[i][k + 2];</span>
+<span class="fc" id="L421">                        matrixP[i][k + 2] = matrixP[i][k + 2] - p * r;</span>
+                    }
+<span class="fc" id="L423">                    matrixP[i][k] = matrixP[i][k] - p;</span>
+<span class="fc" id="L424">                    matrixP[i][k + 1] = matrixP[i][k + 1] - p * q;</span>
+                }
+            }  // (s != 0)
+        }  // k loop
+
+        // clean up pollution due to round-off errors
+<span class="fc bfc" id="L430" title="All 2 branches covered.">        for (int i = im + 2; i &lt;= iu; i++) {</span>
+<span class="fc" id="L431">            matrixT[i][i-2] = 0.0;</span>
+<span class="fc bfc" id="L432" title="All 2 branches covered.">            if (i &gt; im + 2) {</span>
+<span class="fc" id="L433">                matrixT[i][i-3] = 0.0;</span>
+            }
+        }
+<span class="fc" id="L436">    }</span>
+
+    /**
+     * Internal data structure holding the current shift information.
+     * Contains variable names as present in the original JAMA code.
+     */
+    private static class ShiftInfo {
+        // CHECKSTYLE: stop all
+
+        /** x shift info */
+        double x;
+        /** y shift info */
+        double y;
+        /** w shift info */
+        double w;
+        /** Indicates an exceptional shift. */
+        double exShift;
+
+        // CHECKSTYLE: resume all
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

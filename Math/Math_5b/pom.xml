@@ -308,32 +308,19 @@
     </dependency>
   </dependencies>
 
-  <properties>
-    <!-- Do not change: "math" is the name of the component even if the
-         name of the base package evolves with major release numbers
-         (see "commons.osgi.symbolicName", below). -->
-    <commons.componentid>math</commons.componentid>
-    <!-- This value must reflect the current name of the base package. -->
-    <commons.osgi.symbolicName>org.apache.commons.math3</commons.osgi.symbolicName>
-    <!-- do not use snapshot suffix here -->
-    <commons.release.version>3.2</commons.release.version>
-    <commons.release.desc>(requires Java 1.5+)</commons.release.desc>
-    <!-- <commons.rc.version>RC1</commons.rc.version> -->
-    <commons.binary.suffix>-bin</commons.binary.suffix>
- 
-    <commons.release.2.version>2.2</commons.release.2.version>
-    <!-- override parent name, because 2.2 uses different artifactId -->
-    <commons.release.2.name>commons-math-${commons.release.2.version}</commons.release.2.name>
-    <commons.release.2.desc>(requires Java 1.5+)</commons.release.2.desc>
-    <commons.release.2.binary.suffix></commons.release.2.binary.suffix>
- 
-    <commons.jira.id>MATH</commons.jira.id>
-    <commons.jira.pid>12310485</commons.jira.pid>
-    <commons.encoding>UTF-8</commons.encoding>
-    <maven.compile.source>1.5</maven.compile.source>
-    <maven.compile.target>1.5</maven.compile.target>
-    <math.pmd.version>2.7.1</math.pmd.version>
-  </properties> 
+<!-- filepath: /home/daniel/SOEN-345-Project/Math/Math_5b/pom.xml -->
+<properties>
+  <maven.compile.source>1.8</maven.compile.source>
+  <maven.compile.target>1.8</maven.compile.target>
+  <commons.componentid>math</commons.componentid>
+  <commons.osgi.symbolicName>org.apache.commons.math3</commons.osgi.symbolicName>
+  <commons.release.version>3.2</commons.release.version>
+  <commons.release.desc>(requires Java 1.5+)</commons.release.desc>
+  <commons.jira.id>MATH</commons.jira.id>
+  <commons.jira.pid>12310485</commons.jira.pid>
+  <commons.encoding>UTF-8</commons.encoding>
+  <math.pmd.version>2.7.1</math.pmd.version>
+</properties>
 
   <build>
       <plugins>
@@ -341,6 +328,7 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
+              <testFailureIgnore>true</testFailureIgnore>
               <includes>
                 <include>**/*Test.java</include>
                 <include>**/*TestBinary.java</include>
@@ -359,6 +347,26 @@
               <descriptor>src/main/assembly/bin.xml</descriptor>
             </descriptors>
           </configuration>
+        </plugin>
+        <!-- Add JaCoCo plugin -->
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.8.10</version> <!-- Use the latest version -->
+          <executions>
+            <execution>
+              <goals>
+                <goal>prepare-agent</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>report</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>report</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
