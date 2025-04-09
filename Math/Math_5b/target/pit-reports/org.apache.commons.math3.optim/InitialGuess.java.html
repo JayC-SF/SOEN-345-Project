@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="../style.css">
+</head>
+<body>
+
+
+<h1>InitialGuess.java</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_1'/>
+1
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_1'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>/*</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_2'/>
+2
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_2'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Licensed to the Apache Software Foundation (ASF) under one or more</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_3'/>
+3
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_3'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * contributor license agreements.  See the NOTICE file distributed with</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_4'/>
+4
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_4'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * this work for additional information regarding copyright ownership.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_5'/>
+5
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_5'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * The ASF licenses this file to You under the Apache License, Version 2.0</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_6'/>
+6
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_6'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * (the &#34;License&#34;); you may not use this file except in compliance with</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_7'/>
+7
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_7'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * the License.  You may obtain a copy of the License at</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_8'/>
+8
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_8'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_9'/>
+9
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_9'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *      http://www.apache.org/licenses/LICENSE-2.0</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_10'/>
+10
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_10'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_11'/>
+11
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_11'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Unless required by applicable law or agreed to in writing, software</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_12'/>
+12
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_12'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * distributed under the License is distributed on an &#34;AS IS&#34; BASIS,</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_13'/>
+13
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_13'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_14'/>
+14
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_14'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * See the License for the specific language governing permissions and</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_15'/>
+15
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_15'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * limitations under the License.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_16'/>
+16
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_16'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_17'/>
+17
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_17'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_18'/>
+18
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_18'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>package org.apache.commons.math3.optim;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_19'/>
+19
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_19'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_20'/>
+20
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_20'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>/**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_21'/>
+21
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_21'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Starting point (first guess) of the optimization procedure.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_22'/>
+22
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_22'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * &#60;br/&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_23'/>
+23
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_23'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Immutable class.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_24'/>
+24
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_24'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_25'/>
+25
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_25'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * @version $Id$</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_26'/>
+26
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_26'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * @since 3.1</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_27'/>
+27
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_27'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_28'/>
+28
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_28'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>public class InitialGuess implements OptimizationData {</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_29'/>
+29
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_29'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /** Initial guess. */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_30'/>
+30
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_30'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private final double[] init;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_31'/>
+31
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_31'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_32'/>
+32
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_32'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_33'/>
+33
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_33'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param startPoint Initial guess.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_34'/>
+34
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_34'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_35'/>
+35
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_35'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    public InitialGuess(double[] startPoint) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_36'/>
+36
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_36'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        init = startPoint.clone();</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_37'/>
+37
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_37'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_38'/>
+38
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_38'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_39'/>
+39
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_39'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_40'/>
+40
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_40'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Gets the initial guess.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_41'/>
+41
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_41'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_42'/>
+42
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_42'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @return the initial guess.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_43'/>
+43
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_43'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_44'/>
+44
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_44'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public double[] getInitialGuess() {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_45'/>
+45
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_45'>1</a>
+<span>
+1. getInitialGuess : replaced return value with null for org/apache/commons/math3/optim/InitialGuess::getInitialGuess &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        return init.clone();</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_46'/>
+46
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_46'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@58ecc52c_47'/>
+47
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_47'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@58ecc52c_45'>45</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@58ecc52c_45'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>getInitialGuess<br/><b>Killed by : </b>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testInitOutofbounds1(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest)</span></span> replaced return value with null for org/apache/commons/math3/optim/InitialGuess::getInitialGuess &rarr; KILLED</p> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>CONDITIONALS_BOUNDARY</li>
+<li class='mutator'>EMPTY_RETURNS</li>
+<li class='mutator'>FALSE_RETURNS</li>
+<li class='mutator'>INCREMENTS</li>
+<li class='mutator'>INVERT_NEGS</li>
+<li class='mutator'>MATH</li>
+<li class='mutator'>NULL_RETURNS</li>
+<li class='mutator'>PRIMITIVE_RETURNS</li>
+<li class='mutator'>REMOVE_CONDITIONALS_EQUAL_ELSE</li>
+<li class='mutator'>REMOVE_CONDITIONALS_ORDER_ELSE</li>
+<li class='mutator'>TRUE_RETURNS</li>
+<li class='mutator'>VOID_METHOD_CALLS</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackLinearRank1ZeroColsAndRows(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testInputSigmaOutOfRange(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testOneSet(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testTwoSets(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.fitting.HarmonicFitterTest.test1PercentError(org.apache.commons.math3.fitting.HarmonicFitterTest) (72 ms)</li><li>org.apache.commons.math3.fitting.CurveFitterTest.testMath372(org.apache.commons.math3.fitting.CurveFitterTest) (13 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testLeastSquares3(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMinimize2(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testBevington(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (4 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testCircleFittingGoodInit(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (4 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testInitOutofbounds1(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMinimize1(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (0 ms)</li><li>org.apache.commons.math3.fitting.GaussianFitterTest.testFit01(org.apache.commons.math3.fitting.GaussianFitterTest) (17 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest.testQuadratic(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testPowell(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest) (3 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackPowellSingular(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (7 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackMeyer(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (102 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testOneSet(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testRedundantEquations(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testSsDiffPow(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (733 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testCigarWithBoundaries(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (566 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackOsborne1(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testHahn1(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (16 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testInconsistentSizes1(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMath283(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest) (5 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testMoreEstimatedParametersUnsorted(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testOneSet(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackChebyquad(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (9 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testTrivial(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testGetIterations(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testCircleFitting2(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (64 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMaxIterations(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testRosenbrock(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testElliRotated(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (723 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testMoreEstimatedParametersSimple(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testTablet(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (430 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testCircleFittingBadInit(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testMath798(org.apache.commons.math3.fitting.PolynomialFitterTest) (5 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testTrivial(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.AbstractLeastSquaresOptimizerTest.testGetRMS(org.apache.commons.math3.optim.nonlinear.vector.jacobian.AbstractLeastSquaresOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testControlParameters(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (4 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testRosenbrock(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testMath864(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (4 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapterTest.testStartSimplexInsideRange(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapterTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testMaxEvaluations(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (6 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testIllConditioned(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (4 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testMoreEstimatedParametersUnsorted(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (3 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testDiagonalRosen(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (1388 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testConstraintsUnsupported(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testCircleFittingGoodInit(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testNonInvertible(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackFreudensteinRoth(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (5 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testMaximize(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (1283 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testLeastSquares2(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackJennrichSampson(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackBard(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (14 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMinimize1(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testCircleFitting(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMaximize1(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.MultiStartMultivariateVectorOptimizerTest.testTrivial(org.apache.commons.math3.optim.nonlinear.vector.MultiStartMultivariateVectorOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackBrownDennis(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (49 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMaximize2(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackBrownAlmostLinear(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (50 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testMoreEstimatedParametersUnsorted(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testLeastSquares1(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (5 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testTrivial(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMinimize2(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testTwoSets(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.fitting.GaussianFitterTest.testFit05(org.apache.commons.math3.fitting.GaussianFitterTest) (4 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest.testHalfBounded(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest) (4 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest.testBoundsUnsupported(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest) (6 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testNoDependency(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (3 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testMoreEstimatedParametersSimple(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testNoDependency(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOptimizerTest.testCircleFitting(org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOptimizerTest) (15 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackOsborne2(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (14 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testInputSigmaDimensionMismatch(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.AbstractLeastSquaresOptimizerTest.testComputeSigma(org.apache.commons.math3.optim.nonlinear.vector.jacobian.AbstractLeastSquaresOptimizerTest) (12 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.MultiStartMultivariateVectorOptimizerTest.testNoOptimum(org.apache.commons.math3.optim.nonlinear.vector.MultiStartMultivariateVectorOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testGetIterations(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testFitAccuracyDependsOnBoundary(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (13 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testCircleFittingBadInit(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (5 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testTwoSets(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.SmoothingPolynomialBicubicSplineInterpolatorTest.testParaboloid(org.apache.commons.math3.analysis.interpolation.SmoothingPolynomialBicubicSplineInterpolatorTest) (86 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testConstraintsUnsupported(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (5 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testInconsistentEquations(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testHahn1(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (28 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testSmallError(org.apache.commons.math3.fitting.PolynomialFitterTest) (8 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapterTest.testOptimumOutsideRange(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapterTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest.testMaximizeQuadratic(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest) (3 ms)</li><li>org.apache.commons.math3.fitting.GaussianFitterTest.testFit07(org.apache.commons.math3.fitting.GaussianFitterTest) (3 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testInconsistentEquations(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testCircleFitting(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (31 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackLinearRank1(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMaximize2(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackKowalikOsborne(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (21 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testRedundantEquations(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testMoreEstimatedParametersSimple(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testRedundantEquations(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest.testUnbounded(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testColumnsPermutation(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testNoDependency(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testNonInversible(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapterTest.testHalfBounded(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapterTest) (4 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMaximize1(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testInconsistentSizes2(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testCircleFitting(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (4 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testInconsistentSizes2(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testIllConditioned(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testFit(org.apache.commons.math3.fitting.PolynomialFitterTest) (29 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testNonInvertible(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.MultiStartMultivariateVectorOptimizerTest.testIssue914(org.apache.commons.math3.optim.nonlinear.vector.MultiStartMultivariateVectorOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testAckley(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (759 ms)</li><li>org.apache.commons.math3.fitting.CurveFitterTest.testMath303(org.apache.commons.math3.fitting.CurveFitterTest) (6 ms)</li><li>org.apache.commons.math3.fitting.HarmonicFitterTest.testUnsorted(org.apache.commons.math3.fitting.HarmonicFitterTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.AbstractLeastSquaresOptimizerTest.testGetChiSquare(org.apache.commons.math3.optim.nonlinear.vector.jacobian.AbstractLeastSquaresOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testSphere(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (157 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testLargeSample(org.apache.commons.math3.fitting.PolynomialFitterTest) (2640 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testQRColumnsPermutation(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testInitOutofbounds2(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.fitting.HarmonicFitterTest.testTinyVariationsData(org.apache.commons.math3.fitting.HarmonicFitterTest) (35 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testIllConditioned(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testRastrigin(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (6869 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackBox3Dimensional(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testKirby2(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (6 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackLinearFullRank(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testDiffPow(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (538 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testRedundantSolvable(org.apache.commons.math3.fitting.PolynomialFitterTest) (10 ms)</li><li>org.apache.commons.math3.fitting.GaussianFitterTest.testMath798(org.apache.commons.math3.fitting.GaussianFitterTest) (10 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testBoundsUnsupported(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.SmoothingPolynomialBicubicSplineInterpolatorTest.testPlane(org.apache.commons.math3.analysis.interpolation.SmoothingPolynomialBicubicSplineInterpolatorTest) (5 ms)</li><li>org.apache.commons.math3.fitting.GaussianFitterTest.testFit04(org.apache.commons.math3.fitting.GaussianFitterTest) (9 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testInconsistentSizes1(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.SmoothingPolynomialBicubicSplineInterpolatorTest.testPreconditions(org.apache.commons.math3.analysis.interpolation.SmoothingPolynomialBicubicSplineInterpolatorTest) (3 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testBoundsUnsupported(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackRosenbrok(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testRosen(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (548 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testMath798WithToleranceTooLow(org.apache.commons.math3.fitting.PolynomialFitterTest) (216 ms)</li><li>org.apache.commons.math3.fitting.HarmonicFitterTest.testInitialGuess(org.apache.commons.math3.fitting.HarmonicFitterTest) (28 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapterTest.testUnbounded(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapterTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testQRColumnsPermutation(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testMath798WithToleranceTooLowButNoException(org.apache.commons.math3.fitting.PolynomialFitterTest) (137 ms)</li><li>org.apache.commons.math3.fitting.CurveFitterTest.testMath304(org.apache.commons.math3.fitting.CurveFitterTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testCigar(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (891 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest.testRelativeToleranceOnScaledValues(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testBoundariesDimensionMismatch(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (5 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest.testOptimumOutsideRange(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest) (2 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testRedundantUnsolvable(org.apache.commons.math3.fitting.PolynomialFitterTest) (5 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest.testStartSimplexInsideRange(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest) (1 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testNoError(org.apache.commons.math3.fitting.PolynomialFitterTest) (4 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackHelicalValley(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (3 ms)</li><li>org.apache.commons.math3.fitting.GaussianFitterTest.testFit06(org.apache.commons.math3.fitting.GaussianFitterTest) (3 ms)</li><li>org.apache.commons.math3.fitting.HarmonicFitterTest.testNoError(org.apache.commons.math3.fitting.HarmonicFitterTest) (14 ms)</li><li>org.apache.commons.math3.fitting.GaussianFitterTest.testMath519(org.apache.commons.math3.fitting.GaussianFitterTest) (146 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testBoundsUnsupported(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testCigTab(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (788 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testKirby2(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (4 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testEllipse(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (570 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testConstrainedRosen(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (758 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest.testTwoAxes(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.CMAESOptimizerTest) (1021 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest.testSumSinc(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest.testInconsistentEquations(org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest.testStartSimplexOutsideRange(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testPowell(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest.testMinpackWatson(org.apache.commons.math3.optim.nonlinear.vector.jacobian.MinpackTest) (45 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOptimizerTest.testRosenbrock(org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOptimizerTest) (14 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 1.9.11
+
+</body>
+</html>

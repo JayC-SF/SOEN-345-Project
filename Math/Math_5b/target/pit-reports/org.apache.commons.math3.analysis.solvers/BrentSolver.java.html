@@ -1,0 +1,4097 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="../style.css">
+</head>
+<body>
+
+
+<h1>BrentSolver.java</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_1'/>
+1
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_1'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>/*</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_2'/>
+2
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_2'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Licensed to the Apache Software Foundation (ASF) under one or more</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_3'/>
+3
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_3'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * contributor license agreements.  See the NOTICE file distributed with</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_4'/>
+4
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_4'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * this work for additional information regarding copyright ownership.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_5'/>
+5
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_5'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * The ASF licenses this file to You under the Apache License, Version 2.0</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_6'/>
+6
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_6'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * (the &#34;License&#34;); you may not use this file except in compliance with</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_7'/>
+7
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_7'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * the License.  You may obtain a copy of the License at</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_8'/>
+8
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_8'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_9'/>
+9
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_9'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *      http://www.apache.org/licenses/LICENSE-2.0</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_10'/>
+10
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_10'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_11'/>
+11
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_11'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Unless required by applicable law or agreed to in writing, software</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_12'/>
+12
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_12'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * distributed under the License is distributed on an &#34;AS IS&#34; BASIS,</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_13'/>
+13
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_13'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_14'/>
+14
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_14'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * See the License for the specific language governing permissions and</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_15'/>
+15
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_15'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * limitations under the License.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_16'/>
+16
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_16'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_17'/>
+17
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_17'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>package org.apache.commons.math3.analysis.solvers;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_18'/>
+18
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_18'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_19'/>
+19
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_19'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_20'/>
+20
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_20'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.exception.NoBracketingException;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_21'/>
+21
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_21'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.exception.TooManyEvaluationsException;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_22'/>
+22
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_22'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.exception.NumberIsTooLargeException;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_23'/>
+23
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_23'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.util.FastMath;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_24'/>
+24
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_24'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.util.Precision;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_25'/>
+25
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_25'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_26'/>
+26
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_26'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>/**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_27'/>
+27
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_27'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * This class implements the &#60;a href=&#34;http://mathworld.wolfram.com/BrentsMethod.html&#34;&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_28'/>
+28
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_28'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Brent algorithm&#60;/a&#62; for finding zeros of real univariate functions.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_29'/>
+29
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_29'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * The function should be continuous but not necessarily smooth.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_30'/>
+30
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_30'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * The {@code solve} method returns a zero {@code x} of the function {@code f}</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_31'/>
+31
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_31'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * in the given interval {@code [a, b]} to within a tolerance</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_32'/>
+32
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_32'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * {@code 6 eps abs(x) + t} where {@code eps} is the relative accuracy and</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_33'/>
+33
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_33'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * {@code t} is the absolute accuracy.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_34'/>
+34
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_34'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * The given interval must bracket the root.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_35'/>
+35
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_35'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_36'/>
+36
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_36'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * @version $Id$</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_37'/>
+37
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_37'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_38'/>
+38
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_38'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>public class BrentSolver extends AbstractUnivariateSolver {</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_39'/>
+39
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_39'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_40'/>
+40
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_40'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /** Default absolute accuracy. */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_41'/>
+41
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_41'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private static final double DEFAULT_ABSOLUTE_ACCURACY = 1e-6;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_42'/>
+42
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_42'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_43'/>
+43
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_43'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_44'/>
+44
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_44'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Construct a solver with default accuracy (1e-6).</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_45'/>
+45
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_45'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_46'/>
+46
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_46'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public BrentSolver() {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_47'/>
+47
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_47'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        this(DEFAULT_ABSOLUTE_ACCURACY);</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_48'/>
+48
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_48'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_49'/>
+49
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_49'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_50'/>
+50
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_50'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Construct a solver.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_51'/>
+51
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_51'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_52'/>
+52
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_52'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param absoluteAccuracy Absolute accuracy.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_53'/>
+53
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_53'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_54'/>
+54
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_54'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public BrentSolver(double absoluteAccuracy) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_55'/>
+55
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_55'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        super(absoluteAccuracy);</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_56'/>
+56
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_56'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_57'/>
+57
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_57'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_58'/>
+58
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_58'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Construct a solver.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_59'/>
+59
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_59'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_60'/>
+60
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_60'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param relativeAccuracy Relative accuracy.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_61'/>
+61
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_61'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param absoluteAccuracy Absolute accuracy.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_62'/>
+62
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_62'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_63'/>
+63
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_63'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public BrentSolver(double relativeAccuracy,</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_64'/>
+64
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_64'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                       double absoluteAccuracy) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_65'/>
+65
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_65'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        super(relativeAccuracy, absoluteAccuracy);</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_66'/>
+66
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_66'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_67'/>
+67
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_67'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_68'/>
+68
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_68'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Construct a solver.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_69'/>
+69
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_69'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_70'/>
+70
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_70'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param relativeAccuracy Relative accuracy.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_71'/>
+71
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_71'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param absoluteAccuracy Absolute accuracy.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_72'/>
+72
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_72'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param functionValueAccuracy Function value accuracy.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_73'/>
+73
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_73'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_74'/>
+74
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_74'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public BrentSolver(double relativeAccuracy,</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_75'/>
+75
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_75'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                       double absoluteAccuracy,</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_76'/>
+76
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_76'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                       double functionValueAccuracy) {</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_77'/>
+77
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_77'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>        super(relativeAccuracy, absoluteAccuracy, functionValueAccuracy);</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_78'/>
+78
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_78'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_79'/>
+79
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_79'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_80'/>
+80
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_80'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_81'/>
+81
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_81'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * {@inheritDoc}</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_82'/>
+82
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_82'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_83'/>
+83
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_83'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    @Override</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_84'/>
+84
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_84'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    protected double doSolve()</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_85'/>
+85
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_85'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        throws NoBracketingException,</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_86'/>
+86
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_86'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>               TooManyEvaluationsException,</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_87'/>
+87
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_87'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>               NumberIsTooLargeException {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_88'/>
+88
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_88'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        double min = getMin();</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_89'/>
+89
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_89'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        double max = getMax();</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_90'/>
+90
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_90'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        final double initial = getStartValue();</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_91'/>
+91
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_91'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        final double functionValueAccuracy = getFunctionValueAccuracy();</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_92'/>
+92
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_92'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_93'/>
+93
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_93'>1</a>
+<span>
+1. doSolve : removed call to org/apache/commons/math3/analysis/solvers/BrentSolver::verifySequence &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        verifySequence(min, initial, max);</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_94'/>
+94
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_94'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_95'/>
+95
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_95'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        // Return the initial guess if it is good enough.</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_96'/>
+96
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_96'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        double yInitial = computeObjectiveValue(initial);</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_97'/>
+97
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_97'>2</a>
+<span>
+1. doSolve : changed conditional boundary &rarr; SURVIVED<br/>
+2. doSolve : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        if (FastMath.abs(yInitial) &#60;= functionValueAccuracy) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_98'/>
+98
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_98'>1</a>
+<span>
+1. doSolve : replaced double return with 0.0d for org/apache/commons/math3/analysis/solvers/BrentSolver::doSolve &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            return initial;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_99'/>
+99
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_99'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_100'/>
+100
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_100'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_101'/>
+101
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_101'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        // Return the first endpoint if it is good enough.</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_102'/>
+102
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_102'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        double yMin = computeObjectiveValue(min);</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_103'/>
+103
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_103'>2</a>
+<span>
+1. doSolve : changed conditional boundary &rarr; SURVIVED<br/>
+2. doSolve : removed conditional - replaced comparison check with false &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        if (FastMath.abs(yMin) &#60;= functionValueAccuracy) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_104'/>
+104
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_104'>1</a>
+<span>
+1. doSolve : replaced double return with 0.0d for org/apache/commons/math3/analysis/solvers/BrentSolver::doSolve &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            return min;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_105'/>
+105
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_105'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_106'/>
+106
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_106'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_107'/>
+107
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_107'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        // Reduce interval if min and initial bracket the root.</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_108'/>
+108
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_108'>3</a>
+<span>
+1. doSolve : changed conditional boundary &rarr; SURVIVED<br/>
+2. doSolve : Replaced double multiplication with division &rarr; SURVIVED<br/>
+3. doSolve : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        if (yInitial * yMin &#60; 0) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_109'/>
+109
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_109'>1</a>
+<span>
+1. doSolve : replaced double return with 0.0d for org/apache/commons/math3/analysis/solvers/BrentSolver::doSolve &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            return brent(min, initial, yMin, yInitial);</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_110'/>
+110
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_110'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_111'/>
+111
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_111'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_112'/>
+112
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_112'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        // Return the second endpoint if it is good enough.</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_113'/>
+113
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_113'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        double yMax = computeObjectiveValue(max);</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_114'/>
+114
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_114'>2</a>
+<span>
+1. doSolve : changed conditional boundary &rarr; SURVIVED<br/>
+2. doSolve : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        if (FastMath.abs(yMax) &#60;= functionValueAccuracy) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_115'/>
+115
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_115'>1</a>
+<span>
+1. doSolve : replaced double return with 0.0d for org/apache/commons/math3/analysis/solvers/BrentSolver::doSolve &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            return max;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_116'/>
+116
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_116'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_117'/>
+117
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_117'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_118'/>
+118
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_118'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        // Reduce interval if initial and max bracket the root.</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_119'/>
+119
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_119'>3</a>
+<span>
+1. doSolve : changed conditional boundary &rarr; SURVIVED<br/>
+2. doSolve : Replaced double multiplication with division &rarr; SURVIVED<br/>
+3. doSolve : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        if (yInitial * yMax &#60; 0) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_120'/>
+120
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_120'>1</a>
+<span>
+1. doSolve : replaced double return with 0.0d for org/apache/commons/math3/analysis/solvers/BrentSolver::doSolve &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            return brent(initial, max, yInitial, yMax);</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_121'/>
+121
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_121'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_122'/>
+122
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_122'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_123'/>
+123
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_123'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        throw new NoBracketingException(min, max, yMin, yMax);</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_124'/>
+124
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_124'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_125'/>
+125
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_125'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_126'/>
+126
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_126'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_127'/>
+127
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_127'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Search for a zero inside the provided interval.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_128'/>
+128
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_128'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * This implementation is based on the algorithm described at page 58 of</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_129'/>
+129
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_129'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * the book</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_130'/>
+130
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_130'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * &#60;quote&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_131'/>
+131
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_131'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *  &#60;b&#62;Algorithms for Minimization Without Derivatives&#60;/b&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_132'/>
+132
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_132'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *  &#60;it&#62;Richard P. Brent&#60;/it&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_133'/>
+133
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_133'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *  Dover 0-486-41998-3</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_134'/>
+134
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_134'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * &#60;/quote&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_135'/>
+135
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_135'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_136'/>
+136
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_136'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param lo Lower bound of the search interval.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_137'/>
+137
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_137'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param hi Higher bound of the search interval.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_138'/>
+138
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_138'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param fLo Function value at the lower bound of the search interval.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_139'/>
+139
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_139'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param fHi Function value at the higher bound of the search interval.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_140'/>
+140
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_140'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @return the value where the function is zero.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_141'/>
+141
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_141'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_142'/>
+142
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_142'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private double brent(double lo, double hi,</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_143'/>
+143
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_143'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                         double fLo, double fHi) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_144'/>
+144
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_144'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        double a = lo;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_145'/>
+145
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_145'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        double fa = fLo;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_146'/>
+146
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_146'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        double b = hi;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_147'/>
+147
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_147'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        double fb = fHi;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_148'/>
+148
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_148'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        double c = a;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_149'/>
+149
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_149'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        double fc = fa;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_150'/>
+150
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_150'>1</a>
+<span>
+1. brent : Replaced double subtraction with addition &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        double d = b - a;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_151'/>
+151
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_151'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        double e = d;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_152'/>
+152
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_152'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_153'/>
+153
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_153'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        final double t = getAbsoluteAccuracy();</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_154'/>
+154
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_154'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        final double eps = getRelativeAccuracy();</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_155'/>
+155
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_155'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_156'/>
+156
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_156'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        while (true) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_157'/>
+157
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_157'>2</a>
+<span>
+1. brent : changed conditional boundary &rarr; SURVIVED<br/>
+2. brent : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            if (FastMath.abs(fc) &#60; FastMath.abs(fb)) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_158'/>
+158
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_158'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                a = b;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_159'/>
+159
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_159'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                b = c;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_160'/>
+160
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_160'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                c = a;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_161'/>
+161
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_161'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                fa = fb;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_162'/>
+162
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_162'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                fb = fc;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_163'/>
+163
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_163'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                fc = fa;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_164'/>
+164
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_164'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_165'/>
+165
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_165'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_166'/>
+166
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_166'>3</a>
+<span>
+1. brent : Replaced double multiplication with division &rarr; KILLED<br/>
+2. brent : Replaced double multiplication with division &rarr; KILLED<br/>
+3. brent : Replaced double addition with subtraction &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            final double tol = 2 * eps * FastMath.abs(b) + t;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_167'/>
+167
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_167'>2</a>
+<span>
+1. brent : Replaced double subtraction with addition &rarr; KILLED<br/>
+2. brent : Replaced double multiplication with division &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            final double m = 0.5 * (c - b);</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_168'/>
+168
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_168'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_169'/>
+169
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_169'>2</a>
+<span>
+1. brent : changed conditional boundary &rarr; SURVIVED<br/>
+2. brent : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            if (FastMath.abs(m) &#60;= tol ||</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_170'/>
+170
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_170'>1</a>
+<span>
+1. brent : removed conditional - replaced equality check with false &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>                Precision.equals(fb, 0))  {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_171'/>
+171
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_171'>1</a>
+<span>
+1. brent : replaced double return with 0.0d for org/apache/commons/math3/analysis/solvers/BrentSolver::brent &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                return b;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_172'/>
+172
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_172'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_173'/>
+173
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_173'>2</a>
+<span>
+1. brent : changed conditional boundary &rarr; SURVIVED<br/>
+2. brent : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            if (FastMath.abs(e) &#60; tol ||</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_174'/>
+174
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_174'>2</a>
+<span>
+1. brent : changed conditional boundary &rarr; SURVIVED<br/>
+2. brent : removed conditional - replaced comparison check with false &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>                FastMath.abs(fa) &#60;= FastMath.abs(fb)) {</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_175'/>
+175
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_175'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                // Force bisection.</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_176'/>
+176
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_176'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                d = m;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_177'/>
+177
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_177'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                e = d;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_178'/>
+178
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_178'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            } else {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_179'/>
+179
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_179'>1</a>
+<span>
+1. brent : Replaced double division with multiplication &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                double s = fb / fa;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_180'/>
+180
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_180'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                double p;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_181'/>
+181
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_181'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                double q;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_182'/>
+182
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_182'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                // The equality test (a == c) is intentional,</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_183'/>
+183
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_183'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                // it is part of the original Brent&#39;s method and</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_184'/>
+184
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_184'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                // it should NOT be replaced by proximity test.</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_185'/>
+185
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_185'>1</a>
+<span>
+1. brent : removed conditional - replaced equality check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                if (a == c) {</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_186'/>
+186
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_186'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                    // Linear interpolation.</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_187'/>
+187
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_187'>2</a>
+<span>
+1. brent : Replaced double multiplication with division &rarr; KILLED<br/>
+2. brent : Replaced double multiplication with division &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                    p = 2 * m * s;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_188'/>
+188
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_188'>1</a>
+<span>
+1. brent : Replaced double subtraction with addition &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                    q = 1 - s;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_189'/>
+189
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_189'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                } else {</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_190'/>
+190
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_190'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                    // Inverse quadratic interpolation.</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_191'/>
+191
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_191'>1</a>
+<span>
+1. brent : Replaced double division with multiplication &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                    q = fa / fc;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_192'/>
+192
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_192'>1</a>
+<span>
+1. brent : Replaced double division with multiplication &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                    final double r = fb / fc;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_193'/>
+193
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_193'>9</a>
+<span>
+1. brent : Replaced double multiplication with division &rarr; KILLED<br/>
+2. brent : Replaced double multiplication with division &rarr; KILLED<br/>
+3. brent : Replaced double subtraction with addition &rarr; KILLED<br/>
+4. brent : Replaced double multiplication with division &rarr; KILLED<br/>
+5. brent : Replaced double subtraction with addition &rarr; KILLED<br/>
+6. brent : Replaced double subtraction with addition &rarr; KILLED<br/>
+7. brent : Replaced double multiplication with division &rarr; KILLED<br/>
+8. brent : Replaced double subtraction with addition &rarr; KILLED<br/>
+9. brent : Replaced double multiplication with division &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                    p = s * (2 * m * q * (q - r) - (b - a) * (r - 1));</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_194'/>
+194
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_194'>5</a>
+<span>
+1. brent : Replaced double subtraction with addition &rarr; KILLED<br/>
+2. brent : Replaced double subtraction with addition &rarr; KILLED<br/>
+3. brent : Replaced double multiplication with division &rarr; KILLED<br/>
+4. brent : Replaced double subtraction with addition &rarr; KILLED<br/>
+5. brent : Replaced double multiplication with division &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                    q = (q - 1) * (r - 1) * (s - 1);</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_195'/>
+195
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_195'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_196'/>
+196
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_196'>2</a>
+<span>
+1. brent : changed conditional boundary &rarr; SURVIVED<br/>
+2. brent : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>                if (p &#62; 0) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_197'/>
+197
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_197'>1</a>
+<span>
+1. brent : removed negation &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                    q = -q;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_198'/>
+198
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_198'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                } else {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_199'/>
+199
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_199'>1</a>
+<span>
+1. brent : removed negation &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                    p = -p;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_200'/>
+200
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_200'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_201'/>
+201
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_201'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                s = e;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_202'/>
+202
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_202'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                e = d;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_203'/>
+203
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_203'>8</a>
+<span>
+1. brent : changed conditional boundary &rarr; SURVIVED<br/>
+2. brent : Replaced double multiplication with division &rarr; SURVIVED<br/>
+3. brent : Replaced double subtraction with addition &rarr; SURVIVED<br/>
+4. brent : Replaced double multiplication with division &rarr; KILLED<br/>
+5. brent : Replaced double multiplication with division &rarr; KILLED<br/>
+6. brent : Replaced double multiplication with division &rarr; KILLED<br/>
+7. brent : Replaced double multiplication with division &rarr; KILLED<br/>
+8. brent : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>                if (p &#62;= 1.5 * m * q - FastMath.abs(tol * q) ||</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_204'/>
+204
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_204'>2</a>
+<span>
+1. brent : changed conditional boundary &rarr; SURVIVED<br/>
+2. brent : removed conditional - replaced comparison check with false &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>                    p &#62;= FastMath.abs(0.5 * s * q)) {</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_205'/>
+205
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_205'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                    // Inverse quadratic interpolation gives a value</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_206'/>
+206
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_206'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                    // in the wrong direction, or progress is slow.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_207'/>
+207
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_207'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                    // Fall back to bisection.</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_208'/>
+208
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_208'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                    d = m;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_209'/>
+209
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_209'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                    e = d;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_210'/>
+210
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_210'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                } else {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_211'/>
+211
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_211'>1</a>
+<span>
+1. brent : Replaced double division with multiplication &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                    d = p / q;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_212'/>
+212
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_212'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_213'/>
+213
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_213'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_214'/>
+214
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_214'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            a = b;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_215'/>
+215
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_215'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            fa = fb;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_216'/>
+216
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_216'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_217'/>
+217
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_217'>2</a>
+<span>
+1. brent : changed conditional boundary &rarr; SURVIVED<br/>
+2. brent : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            if (FastMath.abs(d) &#62; tol) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_218'/>
+218
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_218'>1</a>
+<span>
+1. brent : Replaced double addition with subtraction &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                b += d;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_219'/>
+219
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_219'>2</a>
+<span>
+1. brent : changed conditional boundary &rarr; SURVIVED<br/>
+2. brent : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            } else if (m &#62; 0) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_220'/>
+220
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_220'>1</a>
+<span>
+1. brent : Replaced double addition with subtraction &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                b += tol;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_221'/>
+221
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_221'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            } else {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_222'/>
+222
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_222'>1</a>
+<span>
+1. brent : Replaced double subtraction with addition &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                b -= tol;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_223'/>
+223
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_223'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_224'/>
+224
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_224'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            fb = computeObjectiveValue(b);</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_225'/>
+225
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_225'>8</a>
+<span>
+1. brent : changed conditional boundary &rarr; SURVIVED<br/>
+2. brent : changed conditional boundary &rarr; SURVIVED<br/>
+3. brent : changed conditional boundary &rarr; SURVIVED<br/>
+4. brent : changed conditional boundary &rarr; SURVIVED<br/>
+5. brent : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+6. brent : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+7. brent : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+8. brent : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            if ((fb &#62; 0 &#38;&#38; fc &#62; 0) ||</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_226'/>
+226
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_226'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                (fb &#60;= 0 &#38;&#38; fc &#60;= 0)) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_227'/>
+227
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_227'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                c = a;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_228'/>
+228
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_228'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                fc = fa;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_229'/>
+229
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_229'>1</a>
+<span>
+1. brent : Replaced double subtraction with addition &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                d = b - a;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_230'/>
+230
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_230'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                e = d;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_231'/>
+231
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_231'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_232'/>
+232
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_232'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_233'/>
+233
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_233'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@1f92bfed_234'/>
+234
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_234'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_93'>93</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_93'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testBadEndpoints(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed call to org/apache/commons/math3/analysis/solvers/BrentSolver::verifySequence &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_97'>97</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_97'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testInitialGuess(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_98'>98</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_98'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testInitialGuess(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> replaced double return with 0.0d for org/apache/commons/math3/analysis/solvers/BrentSolver::doSolve &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_103'>103</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_103'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>none</span></span> removed conditional - replaced comparison check with false &rarr; SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_104'>104</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_104'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testRootEndpoints(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> replaced double return with 0.0d for org/apache/commons/math3/analysis/solvers/BrentSolver::doSolve &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_108'>108</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_108'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>none</span></span> Replaced double multiplication with division &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_109'>109</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_109'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> replaced double return with 0.0d for org/apache/commons/math3/analysis/solvers/BrentSolver::doSolve &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_114'>114</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_114'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testRootEndpoints(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_115'>115</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_115'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testRootEndpoints(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> replaced double return with 0.0d for org/apache/commons/math3/analysis/solvers/BrentSolver::doSolve &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_119'>119</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_119'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>none</span></span> Replaced double multiplication with division &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_120'>120</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_120'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>doSolve<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> replaced double return with 0.0d for org/apache/commons/math3/analysis/solvers/BrentSolver::doSolve &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_150'>150</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_150'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> Replaced double subtraction with addition &rarr; SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_157'>157</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_157'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testInitialGuess(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_166'>166</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_166'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.distribution.LogNormalDistributionTest.testInverseCumulativeProbabilities(org.apache.commons.math3.distribution.LogNormalDistributionTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double addition with subtraction &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_167'>167</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_167'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double subtraction with addition &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_169'>169</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_169'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_170'>170</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_170'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> removed conditional - replaced equality check with false &rarr; SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_171'>171</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_171'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> replaced double return with 0.0d for org/apache/commons/math3/analysis/solvers/BrentSolver::brent &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_173'>173</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_173'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_174'>174</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_174'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> removed conditional - replaced comparison check with false &rarr; SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_179'>179</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_179'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double division with multiplication &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_185'>185</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_185'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed conditional - replaced equality check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_187'>187</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_187'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_188'>188</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_188'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double subtraction with addition &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_191'>191</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_191'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testMath832(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double division with multiplication &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_192'>192</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_192'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testMath832(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double division with multiplication &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_193'>193</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_193'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testMath832(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double subtraction with addition &rarr; KILLED</p> <p class='KILLED'><span class='pop'>4.<span><b>4</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='KILLED'><span class='pop'>5.<span><b>5</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double subtraction with addition &rarr; KILLED</p> <p class='KILLED'><span class='pop'>6.<span><b>6</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double subtraction with addition &rarr; KILLED</p> <p class='KILLED'><span class='pop'>7.<span><b>7</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testMath832(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='KILLED'><span class='pop'>8.<span><b>8</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double subtraction with addition &rarr; KILLED</p> <p class='KILLED'><span class='pop'>9.<span><b>9</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_194'>194</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_194'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double subtraction with addition &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double subtraction with addition &rarr; KILLED</p> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testMath832(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='KILLED'><span class='pop'>4.<span><b>4</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double subtraction with addition &rarr; KILLED</p> <p class='KILLED'><span class='pop'>5.<span><b>5</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_196'>196</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_196'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_197'>197</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_197'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed negation &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_199'>199</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_199'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed negation &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_203'>203</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_203'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testMath832(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testTwoSets(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='SURVIVED'><span class='pop'>4.<span><b>4</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> Replaced double multiplication with division &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>5.<span><b>5</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> Replaced double subtraction with addition &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>6.<span><b>6</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='KILLED'><span class='pop'>7.<span><b>7</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testMath832(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='KILLED'><span class='pop'>8.<span><b>8</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_204'>204</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_204'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> removed conditional - replaced comparison check with false &rarr; SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_211'>211</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_211'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double division with multiplication &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_217'>217</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_217'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_218'>218</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_218'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double addition with subtraction &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_219'>219</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_219'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testInitialGuess(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_220'>220</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_220'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testInitialGuess(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double addition with subtraction &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_222'>222</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_222'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double subtraction with addition &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_225'>225</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_225'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>4.<span><b>4</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>5.<span><b>5</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> <p class='KILLED'><span class='pop'>6.<span><b>6</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> <p class='KILLED'><span class='pop'>7.<span><b>7</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> <p class='KILLED'><span class='pop'>8.<span><b>8</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@1f92bfed_229'>229</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@1f92bfed_229'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>brent<br/><b>Killed by : </b>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest)</span></span> Replaced double subtraction with addition &rarr; KILLED</p> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>CONDITIONALS_BOUNDARY</li>
+<li class='mutator'>EMPTY_RETURNS</li>
+<li class='mutator'>FALSE_RETURNS</li>
+<li class='mutator'>INCREMENTS</li>
+<li class='mutator'>INVERT_NEGS</li>
+<li class='mutator'>MATH</li>
+<li class='mutator'>NULL_RETURNS</li>
+<li class='mutator'>PRIMITIVE_RETURNS</li>
+<li class='mutator'>REMOVE_CONDITIONALS_EQUAL_ELSE</li>
+<li class='mutator'>REMOVE_CONDITIONALS_ORDER_ELSE</li>
+<li class='mutator'>TRUE_RETURNS</li>
+<li class='mutator'>VOID_METHOD_CALLS</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextGamma(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (5 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testOneSet(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testTwoSets(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest.testCircleFitting(org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.distribution.FDistributionTest.testSmallDegreesOfFreedom(org.apache.commons.math3.distribution.FDistributionTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextT(org.apache.commons.math3.random.Well44497bTest) (5 ms)</li><li>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testInitialGuess(org.apache.commons.math3.analysis.solvers.BrentSolverTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextChiSquare(org.apache.commons.math3.random.Well44497bTest) (22 ms)</li><li>org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest.testMoreEstimatedParametersUnsorted(org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextF(org.apache.commons.math3.random.MersenneTwisterTest) (11 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextChiSquare(org.apache.commons.math3.random.Well19937cTest) (20 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextGamma(org.apache.commons.math3.random.Well512aTest) (1 ms)</li><li>org.apache.commons.math3.distribution.ChiSquaredDistributionTest.testSampling(org.apache.commons.math3.distribution.ChiSquaredDistributionTest) (127 ms)</li><li>org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest.testColumnsPermutation(org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.distribution.FDistributionTest.testSampling(org.apache.commons.math3.distribution.FDistributionTest) (212 ms)</li><li>org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest.testIllConditioned(org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest) (4 ms)</li><li>org.apache.commons.math3.distribution.ChiSquaredDistributionTest.testInverseCumulativeProbabilities(org.apache.commons.math3.distribution.ChiSquaredDistributionTest) (2 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextBeta(org.apache.commons.math3.random.BitsStreamGeneratorTest) (10 ms)</li><li>org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest.testInconsistentEquations(org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextBeta(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (15 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextInversionDeviate(org.apache.commons.math3.random.Well512aTest) (0 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextT(org.apache.commons.math3.random.BitsStreamGeneratorTest) (13 ms)</li><li>org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRemoveSingle(org.apache.commons.math3.stat.regression.SimpleRegressionTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testRedundantEquations(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.distribution.TDistributionTest.testSampling(org.apache.commons.math3.distribution.TDistributionTest) (43 ms)</li><li>org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRemoveMultiple(org.apache.commons.math3.stat.regression.SimpleRegressionTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextInversionDeviate(org.apache.commons.math3.random.Well19937aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextGamma(org.apache.commons.math3.random.Well44497bTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest.testSolveNoRoot(org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest) (0 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextF(org.apache.commons.math3.random.Well19937aTest) (12 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextGamma(org.apache.commons.math3.random.BitsStreamGeneratorTest) (3 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextChiSquare(org.apache.commons.math3.random.MersenneTwisterTest) (15 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextChiSquare(org.apache.commons.math3.random.ISAACTest) (24 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextInversionDeviate(org.apache.commons.math3.random.RandomDataGeneratorTest) (0 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextInversionDeviate(org.apache.commons.math3.random.ISAACTest) (0 ms)</li><li>org.apache.commons.math3.distribution.ChiSquaredDistributionTest.testDistributionClone(org.apache.commons.math3.distribution.ChiSquaredDistributionTest) (16 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextF(org.apache.commons.math3.random.ISAACTest) (19 ms)</li><li>org.apache.commons.math3.ode.events.EventStateTest.closeEvents(org.apache.commons.math3.ode.events.EventStateTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testTrivial(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.distribution.GammaDistributionTest.testSampling(org.apache.commons.math3.distribution.GammaDistributionTest) (2 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextF(org.apache.commons.math3.random.BitsStreamGeneratorTest) (20 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testKernelOverrideUniform(org.apache.commons.math3.random.EmpiricalDistributionTest) (16 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextGamma(org.apache.commons.math3.random.Well1024aTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextChiSquare(org.apache.commons.math3.random.Well19937aTest) (15 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextT(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (15 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextGamma(org.apache.commons.math3.random.RandomDataGeneratorTest) (2 ms)</li><li>org.apache.commons.math3.distribution.FDistributionTest.testInverseCumulativeProbabilities(org.apache.commons.math3.distribution.FDistributionTest) (13 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextBeta(org.apache.commons.math3.random.Well19937cTest) (4 ms)</li><li>org.apache.commons.math3.stat.regression.SimpleRegressionTest.testInference(org.apache.commons.math3.stat.regression.SimpleRegressionTest) (0 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextChiSquare(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (27 ms)</li><li>org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest.testNonInversible(org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.distribution.LogNormalDistributionTest.testInverseCumulativeProbabilities(org.apache.commons.math3.distribution.LogNormalDistributionTest) (1 ms)</li><li>org.apache.commons.math3.distribution.GammaDistributionTest.testInverseCumulativeProbabilities(org.apache.commons.math3.distribution.GammaDistributionTest) (4 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testCircleFitting(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextT(org.apache.commons.math3.random.Well1024aTest) (5 ms)</li><li>org.apache.commons.math3.optimization.MultivariateDifferentiableMultiStartOptimizerTest.testCircleFitting(org.apache.commons.math3.optimization.MultivariateDifferentiableMultiStartOptimizerTest) (71 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testMoreEstimatedParametersUnsorted(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.distribution.BetaDistributionTest.testCumulative(org.apache.commons.math3.distribution.BetaDistributionTest) (40 ms)</li><li>org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest.testTwoSets(org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest) (5 ms)</li><li>org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest.testSolveBadAccuracy(org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest) (0 ms)</li><li>org.apache.commons.math3.distribution.AbstractRealDistributionTest.testContinuous(org.apache.commons.math3.distribution.AbstractRealDistributionTest) (11 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextInversionDeviate(org.apache.commons.math3.random.Well1024aTest) (1 ms)</li><li>org.apache.commons.math3.distribution.FDistributionTest.testDistributionClone(org.apache.commons.math3.distribution.FDistributionTest) (18 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextInversionDeviate(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (0 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextGamma(org.apache.commons.math3.random.Well19937cTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextGamma(org.apache.commons.math3.random.Well19937aTest) (2 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextChiSquare(org.apache.commons.math3.random.BitsStreamGeneratorTest) (21 ms)</li><li>org.apache.commons.math3.distribution.FDistributionTest.testLargeDegreesOfFreedom(org.apache.commons.math3.distribution.FDistributionTest) (15 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextChiSquare(org.apache.commons.math3.random.Well512aTest) (20 ms)</li><li>org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest.testMoreEstimatedParametersSimple(org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextF(org.apache.commons.math3.random.RandomDataGeneratorTest) (16 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOptimizerTest.testCircleFitting(org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOptimizerTest) (15 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextT(org.apache.commons.math3.random.MersenneTwisterTest) (8 ms)</li><li>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testBadEndpoints(org.apache.commons.math3.analysis.solvers.BrentSolverTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextF(org.apache.commons.math3.random.Well44497aTest) (17 ms)</li><li>org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest.testSolveBadEndpoints(org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest) (0 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextF(org.apache.commons.math3.random.Well44497bTest) (15 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextT(org.apache.commons.math3.random.Well44497aTest) (7 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextBeta(org.apache.commons.math3.random.Well44497aTest) (11 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testInconsistentEquations(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testSinZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest) (1 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextBeta(org.apache.commons.math3.random.ISAACTest) (9 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextF(org.apache.commons.math3.random.Well19937cTest) (10 ms)</li><li>org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest.testNoDependency(org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.distribution.TDistributionTest.testDistributionClone(org.apache.commons.math3.distribution.TDistributionTest) (16 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testNextF(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (18 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testMoreEstimatedParametersSimple(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest.testSolveAccuracySin(org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest) (0 ms)</li><li>org.apache.commons.math3.distribution.FDistributionTest.testMath785(org.apache.commons.math3.distribution.FDistributionTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testColumnsPermutation(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testNoDependency(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest.testOneSet(org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testNonInversible(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextChiSquare(org.apache.commons.math3.random.RandomDataGeneratorTest) (18 ms)</li><li>org.apache.commons.math3.distribution.UniformRealDistributionTest.testSampling(org.apache.commons.math3.distribution.UniformRealDistributionTest) (2 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextGamma(org.apache.commons.math3.random.Well44497aTest) (2 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextBeta(org.apache.commons.math3.random.MersenneTwisterTest) (5 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextF(org.apache.commons.math3.random.Well512aTest) (8 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextF(org.apache.commons.math3.random.Well1024aTest) (14 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextInversionDeviate(org.apache.commons.math3.random.MersenneTwisterTest) (0 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextBeta(org.apache.commons.math3.random.Well44497bTest) (5 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextBeta(org.apache.commons.math3.random.RandomDataGeneratorTest) (4 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextBeta(org.apache.commons.math3.random.Well1024aTest) (8 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testIllConditioned(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testQuinticZero(org.apache.commons.math3.analysis.solvers.BrentSolverTest) (1 ms)</li><li>org.apache.commons.math3.distribution.AbstractRealDistributionTest.testDiscontinuous(org.apache.commons.math3.distribution.AbstractRealDistributionTest) (221 ms)</li><li>org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest.testSolveSin(org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest) (0 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextT(org.apache.commons.math3.random.Well19937aTest) (5 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextT(org.apache.commons.math3.random.ISAACTest) (5 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testNextChiSquare(org.apache.commons.math3.random.Well1024aTest) (22 ms)</li><li>org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest.testRedundantEquations(org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.distribution.LogNormalDistributionTest.testSampling(org.apache.commons.math3.distribution.LogNormalDistributionTest) (2 ms)</li><li>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testMath832(org.apache.commons.math3.analysis.solvers.BrentSolverTest) (14 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testNextBeta(org.apache.commons.math3.random.Well19937aTest) (7 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testNextGamma(org.apache.commons.math3.random.ISAACTest) (4 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testNextGamma(org.apache.commons.math3.random.MersenneTwisterTest) (2 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testNextInversionDeviate(org.apache.commons.math3.random.BitsStreamGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testNextInversionDeviate(org.apache.commons.math3.random.Well44497bTest) (0 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextChiSquare(org.apache.commons.math3.random.Well44497aTest) (19 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextT(org.apache.commons.math3.random.Well19937cTest) (5 ms)</li><li>org.apache.commons.math3.stat.regression.SimpleRegressionTest.testRemoveXY(org.apache.commons.math3.stat.regression.SimpleRegressionTest) (0 ms)</li><li>org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest.testTrivial(org.apache.commons.math3.optimization.general.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.BrentSolverTest.testRootEndpoints(org.apache.commons.math3.analysis.solvers.BrentSolverTest) (0 ms)</li><li>org.apache.commons.math3.distribution.UniformRealDistributionTest.testInverseCumulativeProbabilities(org.apache.commons.math3.distribution.UniformRealDistributionTest) (1 ms)</li><li>org.apache.commons.math3.distribution.TDistributionTest.testInverseCumulativeProbabilities(org.apache.commons.math3.distribution.TDistributionTest) (2 ms)</li><li>org.apache.commons.math3.distribution.GammaDistributionTest.testValues(org.apache.commons.math3.distribution.GammaDistributionTest) (1 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextT(org.apache.commons.math3.random.Well512aTest) (5 ms)</li><li>org.apache.commons.math3.random.RandomDataGeneratorTest.testNextT(org.apache.commons.math3.random.RandomDataGeneratorTest) (11 ms)</li><li>org.apache.commons.math3.distribution.TDistributionTest.testSmallDf(org.apache.commons.math3.distribution.TDistributionTest) (1 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testNextInversionDeviate(org.apache.commons.math3.random.Well19937cTest) (0 ms)</li><li>org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest.testMisc(org.apache.commons.math3.analysis.solvers.UnivariateSolverUtilsTest) (0 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testNextBeta(org.apache.commons.math3.random.Well512aTest) (5 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testNextInversionDeviate(org.apache.commons.math3.random.Well44497aTest) (0 ms)</li><li>org.apache.commons.math3.distribution.ChiSquaredDistributionTest.testSmallDf(org.apache.commons.math3.distribution.ChiSquaredDistributionTest) (14 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 1.9.11
+
+</body>
+</html>

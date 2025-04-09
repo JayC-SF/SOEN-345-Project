@@ -369,6 +369,28 @@
           </executions>
         </plugin>
         <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.9.11</version> <!-- Use the latest version -->
+        <configuration>
+          <targetClasses>
+            <param>org.apache.commons.math3.*</param> <!-- Specify the package to mutate -->
+          </targetClasses>
+          <targetTests>
+            <param>org.apache.commons.math3.*Test</param> <!-- Specify the test classes -->
+          </targetTests>
+          <mutators>
+            <mutator>DEFAULTS</mutator>
+          </mutators>
+          <outputFormats>
+            <param>HTML</param>
+            <param>XML</param>
+          </outputFormats>
+          <threads>4</threads> <!-- Use 4 threads for faster execution -->
+          <timeoutConst>1000</timeoutConst> <!-- Timeout in milliseconds -->
+        </configuration>
+      </plugin>
+        <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>clirr-maven-plugin</artifactId>
           <version>${commons.clirr.version}</version>

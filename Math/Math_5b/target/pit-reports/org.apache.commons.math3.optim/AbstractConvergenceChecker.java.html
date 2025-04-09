@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="../style.css">
+</head>
+<body>
+
+
+<h1>AbstractConvergenceChecker.java</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_1'/>
+1
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_1'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>/*</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_2'/>
+2
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_2'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Licensed to the Apache Software Foundation (ASF) under one or more</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_3'/>
+3
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_3'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * contributor license agreements.  See the NOTICE file distributed with</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_4'/>
+4
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_4'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * this work for additional information regarding copyright ownership.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_5'/>
+5
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_5'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * The ASF licenses this file to You under the Apache License, Version 2.0</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_6'/>
+6
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_6'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * (the &#34;License&#34;); you may not use this file except in compliance with</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_7'/>
+7
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_7'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * the License.  You may obtain a copy of the License at</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_8'/>
+8
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_8'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_9'/>
+9
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_9'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *      http://www.apache.org/licenses/LICENSE-2.0</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_10'/>
+10
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_10'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_11'/>
+11
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_11'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Unless required by applicable law or agreed to in writing, software</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_12'/>
+12
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_12'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * distributed under the License is distributed on an &#34;AS IS&#34; BASIS,</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_13'/>
+13
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_13'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_14'/>
+14
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_14'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * See the License for the specific language governing permissions and</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_15'/>
+15
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_15'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * limitations under the License.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_16'/>
+16
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_16'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_17'/>
+17
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_17'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>package org.apache.commons.math3.optim;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_18'/>
+18
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_18'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_19'/>
+19
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_19'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>/**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_20'/>
+20
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_20'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Base class for all convergence checker implementations.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_21'/>
+21
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_21'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_22'/>
+22
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_22'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * @param &#60;PAIR&#62; Type of (point, value) pair.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_23'/>
+23
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_23'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_24'/>
+24
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_24'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * @version $Id$</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_25'/>
+25
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_25'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * @since 3.0</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_26'/>
+26
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_26'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_27'/>
+27
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_27'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>public abstract class AbstractConvergenceChecker&#60;PAIR&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_28'/>
+28
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_28'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    implements ConvergenceChecker&#60;PAIR&#62; {</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_29'/>
+29
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_29'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_30'/>
+30
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_30'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Relative tolerance threshold.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_31'/>
+31
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_31'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_32'/>
+32
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_32'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private final double relativeThreshold;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_33'/>
+33
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_33'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_34'/>
+34
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_34'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Absolute tolerance threshold.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_35'/>
+35
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_35'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_36'/>
+36
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_36'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private final double absoluteThreshold;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_37'/>
+37
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_37'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_38'/>
+38
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_38'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_39'/>
+39
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_39'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Build an instance with a specified thresholds.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_40'/>
+40
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_40'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_41'/>
+41
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_41'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param relativeThreshold relative tolerance threshold</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_42'/>
+42
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_42'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param absoluteThreshold absolute tolerance threshold</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_43'/>
+43
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_43'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_44'/>
+44
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_44'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public AbstractConvergenceChecker(final double relativeThreshold,</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_45'/>
+45
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_45'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                                      final double absoluteThreshold) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_46'/>
+46
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_46'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        this.relativeThreshold = relativeThreshold;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_47'/>
+47
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_47'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        this.absoluteThreshold = absoluteThreshold;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_48'/>
+48
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_48'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_49'/>
+49
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_49'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_50'/>
+50
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_50'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_51'/>
+51
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_51'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @return the relative threshold.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_52'/>
+52
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_52'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_53'/>
+53
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_53'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public double getRelativeThreshold() {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_54'/>
+54
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_54'>1</a>
+<span>
+1. getRelativeThreshold : replaced double return with 0.0d for org/apache/commons/math3/optim/AbstractConvergenceChecker::getRelativeThreshold &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        return relativeThreshold;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_55'/>
+55
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_55'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_56'/>
+56
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_56'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_57'/>
+57
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_57'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_58'/>
+58
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_58'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @return the absolute threshold.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_59'/>
+59
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_59'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_60'/>
+60
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_60'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public double getAbsoluteThreshold() {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_61'/>
+61
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_61'>1</a>
+<span>
+1. getAbsoluteThreshold : replaced double return with 0.0d for org/apache/commons/math3/optim/AbstractConvergenceChecker::getAbsoluteThreshold &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        return absoluteThreshold;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_62'/>
+62
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_62'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_63'/>
+63
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_63'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_64'/>
+64
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_64'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_65'/>
+65
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_65'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * {@inheritDoc}</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_66'/>
+66
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_66'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_67'/>
+67
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_67'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public abstract boolean converged(int iteration,</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_68'/>
+68
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_68'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                                      PAIR previous,</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_69'/>
+69
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_69'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                                      PAIR current);</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@3e9ee994_70'/>
+70
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_70'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3e9ee994_54'>54</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_54'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>getRelativeThreshold<br/><b>Killed by : </b>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMinimize1(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest)</span></span> replaced double return with 0.0d for org/apache/commons/math3/optim/AbstractConvergenceChecker::getRelativeThreshold &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@3e9ee994_61'>61</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@3e9ee994_61'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>getAbsoluteThreshold<br/><b>Killed by : </b>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testRosenbrock(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest)</span></span> replaced double return with 0.0d for org/apache/commons/math3/optim/AbstractConvergenceChecker::getAbsoluteThreshold &rarr; KILLED</p> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>CONDITIONALS_BOUNDARY</li>
+<li class='mutator'>EMPTY_RETURNS</li>
+<li class='mutator'>FALSE_RETURNS</li>
+<li class='mutator'>INCREMENTS</li>
+<li class='mutator'>INVERT_NEGS</li>
+<li class='mutator'>MATH</li>
+<li class='mutator'>NULL_RETURNS</li>
+<li class='mutator'>PRIMITIVE_RETURNS</li>
+<li class='mutator'>REMOVE_CONDITIONALS_EQUAL_ELSE</li>
+<li class='mutator'>REMOVE_CONDITIONALS_ORDER_ELSE</li>
+<li class='mutator'>TRUE_RETURNS</li>
+<li class='mutator'>VOID_METHOD_CALLS</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testOneSet(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testTwoSets(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testLeastSquares3(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapterTest.testOptimumOutsideRange(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapterTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest.testMaximizeQuadratic(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest) (3 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testInconsistentEquations(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testCircleFitting(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (31 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMinimize2(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest) (1 ms)</li><li>org.apache.commons.math3.optim.SimpleVectorValueCheckerTest.testIterationCheckDisabled(org.apache.commons.math3.optim.SimpleVectorValueCheckerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testCircleFittingGoodInit(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (4 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMaximize2(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMinimize1(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest.testQuadratic(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testRedundantEquations(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testMoreEstimatedParametersSimple(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testPowell(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest) (3 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest.testUnbounded(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testColumnsPermutation(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testNoDependency(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testNonInversible(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapterTest.testHalfBounded(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapterTest) (4 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMaximize1(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testRedundantEquations(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testInconsistentSizes2(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.univariate.BrentOptimizerTest.testSinMinWithValueChecker(org.apache.commons.math3.optim.univariate.BrentOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.MultiStartMultivariateVectorOptimizerTest.testIssue914(org.apache.commons.math3.optim.nonlinear.vector.MultiStartMultivariateVectorOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.optim.SimpleValueCheckerTest.testIterationCheckDisabled(org.apache.commons.math3.optim.SimpleValueCheckerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMath283(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest) (5 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testOneSet(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testTrivial(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMaxIterations(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testRosenbrock(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testIllConditioned(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testCircleFittingBadInit(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testKirby2(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (6 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testMath798(org.apache.commons.math3.fitting.PolynomialFitterTest) (5 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testTrivial(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testRosenbrock(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapterTest.testStartSimplexInsideRange(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapterTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.SmoothingPolynomialBicubicSplineInterpolatorTest.testPlane(org.apache.commons.math3.analysis.interpolation.SmoothingPolynomialBicubicSplineInterpolatorTest) (5 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testMaxEvaluations(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (6 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testIllConditioned(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (4 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testInconsistentSizes1(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.SmoothingPolynomialBicubicSplineInterpolatorTest.testPreconditions(org.apache.commons.math3.analysis.interpolation.SmoothingPolynomialBicubicSplineInterpolatorTest) (3 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testLeastSquares2(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMinimize1(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest) (0 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testMath798WithToleranceTooLow(org.apache.commons.math3.fitting.PolynomialFitterTest) (216 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testCircleFitting(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapterTest.testUnbounded(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapterTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMaximize1(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testQRColumnsPermutation(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.MultiStartMultivariateVectorOptimizerTest.testTrivial(org.apache.commons.math3.optim.nonlinear.vector.MultiStartMultivariateVectorOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest.testMaximize2(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerMultiDirectionalTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest.testMoreEstimatedParametersUnsorted(org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testMath798WithToleranceTooLowButNoException(org.apache.commons.math3.fitting.PolynomialFitterTest) (137 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testLeastSquares1(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (5 ms)</li><li>org.apache.commons.math3.optim.SimplePointCheckerTest.testIterationCheckDisabled(org.apache.commons.math3.optim.SimplePointCheckerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testMinimize2(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest.testRelativeToleranceOnScaledValues(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest.testOptimumOutsideRange(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest) (2 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest.testHalfBounded(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest) (4 ms)</li><li>org.apache.commons.math3.fitting.PolynomialFitterTest.testRedundantUnsolvable(org.apache.commons.math3.fitting.PolynomialFitterTest) (5 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest.testStartSimplexInsideRange(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testNoDependency(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOptimizerTest.testCircleFitting(org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOptimizerTest) (15 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testGetIterations(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (2 ms)</li><li>org.apache.commons.math3.optim.univariate.SimpleUnivariateValueCheckerTest.testIterationCheckDisabled(org.apache.commons.math3.optim.univariate.SimpleUnivariateValueCheckerTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest.testSumSinc(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.PowellOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest.testStartSimplexOutsideRange(org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapterTest) (0 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testTwoSets(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest.testPowell(org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizerNelderMeadTest) (1 ms)</li><li>org.apache.commons.math3.analysis.interpolation.SmoothingPolynomialBicubicSplineInterpolatorTest.testParaboloid(org.apache.commons.math3.analysis.interpolation.SmoothingPolynomialBicubicSplineInterpolatorTest) (86 ms)</li><li>org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOptimizerTest.testRosenbrock(org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOptimizerTest) (14 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testInconsistentEquations(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (1 ms)</li><li>org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest.testHahn1(org.apache.commons.math3.optim.nonlinear.vector.jacobian.GaussNewtonOptimizerTest) (28 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 1.9.11
+
+</body>
+</html>

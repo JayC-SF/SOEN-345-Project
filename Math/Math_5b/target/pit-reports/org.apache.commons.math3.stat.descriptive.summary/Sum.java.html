@@ -1,0 +1,3688 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="../style.css">
+</head>
+<body>
+
+
+<h1>Sum.java</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_1'/>
+1
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_1'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>/*</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_2'/>
+2
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_2'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Licensed to the Apache Software Foundation (ASF) under one or more</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_3'/>
+3
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_3'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * contributor license agreements.  See the NOTICE file distributed with</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_4'/>
+4
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_4'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * this work for additional information regarding copyright ownership.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_5'/>
+5
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_5'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * The ASF licenses this file to You under the Apache License, Version 2.0</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_6'/>
+6
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_6'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * (the &#34;License&#34;); you may not use this file except in compliance with</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_7'/>
+7
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_7'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * the License.  You may obtain a copy of the License at</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_8'/>
+8
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_8'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_9'/>
+9
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_9'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *      http://www.apache.org/licenses/LICENSE-2.0</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_10'/>
+10
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_10'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_11'/>
+11
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_11'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Unless required by applicable law or agreed to in writing, software</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_12'/>
+12
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_12'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * distributed under the License is distributed on an &#34;AS IS&#34; BASIS,</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_13'/>
+13
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_13'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_14'/>
+14
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_14'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * See the License for the specific language governing permissions and</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_15'/>
+15
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_15'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * limitations under the License.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_16'/>
+16
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_16'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_17'/>
+17
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_17'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>package org.apache.commons.math3.stat.descriptive.summary;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_18'/>
+18
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_18'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_19'/>
+19
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_19'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import java.io.Serializable;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_20'/>
+20
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_20'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_21'/>
+21
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_21'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.exception.MathIllegalArgumentException;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_22'/>
+22
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_22'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.exception.NullArgumentException;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_23'/>
+23
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_23'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.stat.descriptive.AbstractStorelessUnivariateStatistic;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_24'/>
+24
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_24'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import org.apache.commons.math3.util.MathUtils;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_25'/>
+25
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_25'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_26'/>
+26
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_26'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_27'/>
+27
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_27'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>/**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_28'/>
+28
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_28'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>  * Returns the sum of the available values.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_29'/>
+29
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_29'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_30'/>
+30
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_30'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * If there are no values in the dataset, then 0 is returned.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_31'/>
+31
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_31'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * If any of the values are</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_32'/>
+32
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_32'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * &#60;code&#62;NaN&#60;/code&#62;, then &#60;code&#62;NaN&#60;/code&#62; is returned.&#60;/p&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_33'/>
+33
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_33'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * &#60;p&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_34'/>
+34
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_34'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * &#60;strong&#62;Note that this implementation is not synchronized.&#60;/strong&#62; If</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_35'/>
+35
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_35'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * multiple threads access an instance of this class concurrently, and at least</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_36'/>
+36
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_36'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * one of the threads invokes the &#60;code&#62;increment()&#60;/code&#62; or</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_37'/>
+37
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_37'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * &#60;code&#62;clear()&#60;/code&#62; method, it must be synchronized externally.&#60;/p&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_38'/>
+38
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_38'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_39'/>
+39
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_39'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * @version $Id$</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_40'/>
+40
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_40'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_41'/>
+41
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_41'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>public class Sum extends AbstractStorelessUnivariateStatistic implements Serializable {</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_42'/>
+42
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_42'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_43'/>
+43
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_43'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /** Serializable version identifier */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_44'/>
+44
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_44'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private static final long serialVersionUID = -8231831954703408316L;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_45'/>
+45
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_45'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_46'/>
+46
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_46'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /** */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_47'/>
+47
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_47'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private long n;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_48'/>
+48
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_48'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_49'/>
+49
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_49'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_50'/>
+50
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_50'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * The currently running sum.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_51'/>
+51
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_51'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_52'/>
+52
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_52'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private double value;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_53'/>
+53
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_53'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_54'/>
+54
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_54'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_55'/>
+55
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_55'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Create a Sum instance</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_56'/>
+56
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_56'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_57'/>
+57
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_57'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    public Sum() {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_58'/>
+58
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_58'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        n = 0;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_59'/>
+59
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_59'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        value = 0;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_60'/>
+60
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_60'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_61'/>
+61
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_61'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_62'/>
+62
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_62'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_63'/>
+63
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_63'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Copy constructor, creates a new {@code Sum} identical</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_64'/>
+64
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_64'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * to the {@code original}</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_65'/>
+65
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_65'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_66'/>
+66
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_66'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param original the {@code Sum} instance to copy</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_67'/>
+67
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_67'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @throws NullArgumentException if original is null</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_68'/>
+68
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_68'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_69'/>
+69
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_69'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>    public Sum(Sum original) throws NullArgumentException {</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_70'/>
+70
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_70'>1</a>
+<span>
+1. &#60;init&#62; : removed call to org/apache/commons/math3/stat/descriptive/summary/Sum::copy &rarr; NO_COVERAGE<br/>
+
+</span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class='survived'>        copy(original, this);</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_71'/>
+71
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_71'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_72'/>
+72
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_72'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_73'/>
+73
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_73'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_74'/>
+74
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_74'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * {@inheritDoc}</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_75'/>
+75
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_75'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_76'/>
+76
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_76'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    @Override</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_77'/>
+77
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_77'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public void increment(final double d) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_78'/>
+78
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_78'>1</a>
+<span>
+1. increment : Replaced double addition with subtraction &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        value += d;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_79'/>
+79
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_79'>1</a>
+<span>
+1. increment : Replaced long addition with subtraction &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        n++;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_80'/>
+80
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_80'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_81'/>
+81
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_81'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_82'/>
+82
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_82'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_83'/>
+83
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_83'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * {@inheritDoc}</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_84'/>
+84
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_84'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_85'/>
+85
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_85'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    @Override</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_86'/>
+86
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_86'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public double getResult() {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_87'/>
+87
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_87'>1</a>
+<span>
+1. getResult : replaced double return with 0.0d for org/apache/commons/math3/stat/descriptive/summary/Sum::getResult &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        return value;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_88'/>
+88
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_88'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_89'/>
+89
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_89'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_90'/>
+90
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_90'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_91'/>
+91
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_91'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * {@inheritDoc}</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_92'/>
+92
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_92'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_93'/>
+93
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_93'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public long getN() {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_94'/>
+94
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_94'>1</a>
+<span>
+1. getN : replaced long return with 0 for org/apache/commons/math3/stat/descriptive/summary/Sum::getN &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        return n;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_95'/>
+95
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_95'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_96'/>
+96
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_96'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_97'/>
+97
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_97'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_98'/>
+98
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_98'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * {@inheritDoc}</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_99'/>
+99
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_99'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_100'/>
+100
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_100'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    @Override</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_101'/>
+101
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_101'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public void clear() {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_102'/>
+102
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_102'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        value = 0;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_103'/>
+103
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_103'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        n = 0;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_104'/>
+104
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_104'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_105'/>
+105
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_105'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_106'/>
+106
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_106'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_107'/>
+107
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_107'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * The sum of the entries in the specified portion of</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_108'/>
+108
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_108'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * the input array, or 0 if the designated subarray</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_109'/>
+109
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_109'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * is empty.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_110'/>
+110
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_110'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_111'/>
+111
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_111'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Throws &#60;code&#62;MathIllegalArgumentException&#60;/code&#62; if the array is null.&#60;/p&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_112'/>
+112
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_112'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_113'/>
+113
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_113'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param values the input array</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_114'/>
+114
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_114'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param begin index of the first array element to include</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_115'/>
+115
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_115'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param length the number of elements to include</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_116'/>
+116
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_116'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @return the sum of the values or 0 if length = 0</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_117'/>
+117
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_117'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @throws MathIllegalArgumentException if the array is null or the array index</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_118'/>
+118
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_118'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *  parameters are not valid</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_119'/>
+119
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_119'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_120'/>
+120
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_120'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    @Override</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_121'/>
+121
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_121'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public double evaluate(final double[] values, final int begin, final int length)</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_122'/>
+122
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_122'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    throws MathIllegalArgumentException {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_123'/>
+123
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_123'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        double sum = Double.NaN;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_124'/>
+124
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_124'>1</a>
+<span>
+1. evaluate : removed conditional - replaced equality check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (test(values, begin, length, true)) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_125'/>
+125
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_125'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            sum = 0.0;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_126'/>
+126
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_126'>3</a>
+<span>
+1. evaluate : changed conditional boundary &rarr; KILLED<br/>
+2. evaluate : Replaced integer addition with subtraction &rarr; KILLED<br/>
+3. evaluate : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int i = begin; i &#60; begin + length; i++) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_127'/>
+127
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_127'>1</a>
+<span>
+1. evaluate : Replaced double addition with subtraction &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                sum += values[i];</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_128'/>
+128
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_128'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_129'/>
+129
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_129'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_130'/>
+130
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_130'>1</a>
+<span>
+1. evaluate : replaced double return with 0.0d for org/apache/commons/math3/stat/descriptive/summary/Sum::evaluate &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        return sum;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_131'/>
+131
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_131'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_132'/>
+132
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_132'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_133'/>
+133
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_133'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_134'/>
+134
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_134'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * The weighted sum of the entries in the specified portion of</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_135'/>
+135
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_135'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * the input array, or 0 if the designated subarray</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_136'/>
+136
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_136'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * is empty.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_137'/>
+137
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_137'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_138'/>
+138
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_138'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Throws &#60;code&#62;MathIllegalArgumentException&#60;/code&#62; if any of the following are true:</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_139'/>
+139
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_139'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * &#60;ul&#62;&#60;li&#62;the values array is null&#60;/li&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_140'/>
+140
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_140'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *     &#60;li&#62;the weights array is null&#60;/li&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_141'/>
+141
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_141'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *     &#60;li&#62;the weights array does not have the same length as the values array&#60;/li&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_142'/>
+142
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_142'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *     &#60;li&#62;the weights array contains one or more infinite values&#60;/li&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_143'/>
+143
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_143'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *     &#60;li&#62;the weights array contains one or more NaN values&#60;/li&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_144'/>
+144
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_144'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *     &#60;li&#62;the weights array contains negative values&#60;/li&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_145'/>
+145
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_145'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *     &#60;li&#62;the start and length arguments do not determine a valid array&#60;/li&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_146'/>
+146
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_146'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * &#60;/ul&#62;&#60;/p&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_147'/>
+147
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_147'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_148'/>
+148
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_148'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Uses the formula, &#60;pre&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_149'/>
+149
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_149'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *    weighted sum = &#38;Sigma;(values[i] * weights[i])</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_150'/>
+150
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_150'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * &#60;/pre&#62;&#60;/p&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_151'/>
+151
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_151'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_152'/>
+152
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_152'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param values the input array</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_153'/>
+153
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_153'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param weights the weights array</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_154'/>
+154
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_154'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param begin index of the first array element to include</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_155'/>
+155
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_155'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param length the number of elements to include</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_156'/>
+156
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_156'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @return the sum of the values or 0 if length = 0</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_157'/>
+157
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_157'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @throws MathIllegalArgumentException if the parameters are not valid</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_158'/>
+158
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_158'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @since 2.1</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_159'/>
+159
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_159'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_160'/>
+160
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_160'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public double evaluate(final double[] values, final double[] weights,</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_161'/>
+161
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_161'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        final int begin, final int length) throws MathIllegalArgumentException {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_162'/>
+162
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_162'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        double sum = Double.NaN;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_163'/>
+163
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_163'>1</a>
+<span>
+1. evaluate : removed conditional - replaced equality check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (test(values, weights, begin, length, true)) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_164'/>
+164
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_164'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            sum = 0.0;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_165'/>
+165
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_165'>3</a>
+<span>
+1. evaluate : changed conditional boundary &rarr; KILLED<br/>
+2. evaluate : Replaced integer addition with subtraction &rarr; KILLED<br/>
+3. evaluate : removed conditional - replaced comparison check with false &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            for (int i = begin; i &#60; begin + length; i++) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_166'/>
+166
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_166'>2</a>
+<span>
+1. evaluate : Replaced double multiplication with division &rarr; KILLED<br/>
+2. evaluate : Replaced double addition with subtraction &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                sum += values[i] * weights[i];</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_167'/>
+167
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_167'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_168'/>
+168
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_168'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_169'/>
+169
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_169'>1</a>
+<span>
+1. evaluate : replaced double return with 0.0d for org/apache/commons/math3/stat/descriptive/summary/Sum::evaluate &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        return sum;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_170'/>
+170
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_170'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_171'/>
+171
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_171'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_172'/>
+172
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_172'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_173'/>
+173
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_173'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * The weighted sum of the entries in the the input array.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_174'/>
+174
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_174'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_175'/>
+175
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_175'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Throws &#60;code&#62;MathIllegalArgumentException&#60;/code&#62; if any of the following are true:</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_176'/>
+176
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_176'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * &#60;ul&#62;&#60;li&#62;the values array is null&#60;/li&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_177'/>
+177
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_177'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *     &#60;li&#62;the weights array is null&#60;/li&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_178'/>
+178
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_178'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *     &#60;li&#62;the weights array does not have the same length as the values array&#60;/li&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_179'/>
+179
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_179'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *     &#60;li&#62;the weights array contains one or more infinite values&#60;/li&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_180'/>
+180
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_180'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *     &#60;li&#62;the weights array contains one or more NaN values&#60;/li&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_181'/>
+181
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_181'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *     &#60;li&#62;the weights array contains negative values&#60;/li&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_182'/>
+182
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_182'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * &#60;/ul&#62;&#60;/p&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_183'/>
+183
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_183'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_184'/>
+184
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_184'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Uses the formula, &#60;pre&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_185'/>
+185
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_185'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *    weighted sum = &#38;Sigma;(values[i] * weights[i])</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_186'/>
+186
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_186'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * &#60;/pre&#62;&#60;/p&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_187'/>
+187
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_187'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_188'/>
+188
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_188'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param values the input array</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_189'/>
+189
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_189'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param weights the weights array</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_190'/>
+190
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_190'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @return the sum of the values or Double.NaN if length = 0</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_191'/>
+191
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_191'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @throws MathIllegalArgumentException if the parameters are not valid</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_192'/>
+192
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_192'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @since 2.1</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_193'/>
+193
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_193'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_194'/>
+194
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_194'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public double evaluate(final double[] values, final double[] weights)</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_195'/>
+195
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_195'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    throws MathIllegalArgumentException {</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_196'/>
+196
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_196'>1</a>
+<span>
+1. evaluate : replaced double return with 0.0d for org/apache/commons/math3/stat/descriptive/summary/Sum::evaluate &rarr; NO_COVERAGE<br/>
+
+</span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class='survived'>        return evaluate(values, weights, 0, values.length);</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_197'/>
+197
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_197'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_198'/>
+198
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_198'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_199'/>
+199
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_199'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_200'/>
+200
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_200'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * {@inheritDoc}</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_201'/>
+201
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_201'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_202'/>
+202
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_202'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    @Override</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_203'/>
+203
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_203'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public Sum copy() {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_204'/>
+204
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_204'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        Sum result = new Sum();</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_205'/>
+205
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_205'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        // No try-catch or advertised exception because args are valid</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_206'/>
+206
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_206'>1</a>
+<span>
+1. copy : removed call to org/apache/commons/math3/stat/descriptive/summary/Sum::copy &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        copy(this, result);</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_207'/>
+207
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_207'>1</a>
+<span>
+1. copy : replaced return value with null for org/apache/commons/math3/stat/descriptive/summary/Sum::copy &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        return result;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_208'/>
+208
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_208'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_209'/>
+209
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_209'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_210'/>
+210
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_210'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_211'/>
+211
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_211'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Copies source to dest.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_212'/>
+212
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_212'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * &#60;p&#62;Neither source nor dest can be null.&#60;/p&#62;</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_213'/>
+213
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_213'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_214'/>
+214
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_214'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param source Sum to copy</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_215'/>
+215
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_215'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param dest Sum to copy to</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_216'/>
+216
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_216'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @throws NullArgumentException if either source or dest is null</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_217'/>
+217
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_217'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_218'/>
+218
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_218'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public static void copy(Sum source, Sum dest)</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_219'/>
+219
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_219'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        throws NullArgumentException {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_220'/>
+220
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_220'>1</a>
+<span>
+1. copy : removed call to org/apache/commons/math3/util/MathUtils::checkNotNull &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        MathUtils.checkNotNull(source);</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_221'/>
+221
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_221'>1</a>
+<span>
+1. copy : removed call to org/apache/commons/math3/util/MathUtils::checkNotNull &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        MathUtils.checkNotNull(dest);</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_222'/>
+222
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_222'>1</a>
+<span>
+1. copy : removed call to org/apache/commons/math3/stat/descriptive/summary/Sum::setData &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        dest.setData(source.getDataRef());</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_223'/>
+223
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_223'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        dest.n = source.n;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_224'/>
+224
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_224'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        dest.value = source.value;</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_225'/>
+225
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_225'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_226'/>
+226
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_226'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_227'/>
+227
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_227'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_70'>70</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_70'/> 
+
+<p class='NO_COVERAGE'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>&#60;init&#62;<br/><b>Killed by : </b>none</span></span> removed call to org/apache/commons/math3/stat/descriptive/summary/Sum::copy &rarr; NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_78'>78</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_78'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>increment<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testSpecialValues(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> Replaced double addition with subtraction &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_79'>79</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_79'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>increment<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testIncrementation(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> Replaced long addition with subtraction &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_87'>87</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_87'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>getResult<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testSpecialValues(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> replaced double return with 0.0d for org/apache/commons/math3/stat/descriptive/summary/Sum::getResult &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_94'>94</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_94'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>getN<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testIncrementation(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> replaced long return with 0 for org/apache/commons/math3/stat/descriptive/summary/Sum::getN &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_124'>124</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_124'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>evaluate<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testEvaluation(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> removed conditional - replaced equality check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_126'>126</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_126'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>evaluate<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testEvaluation(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> changed conditional boundary &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>evaluate<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testEvaluation(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> Replaced integer addition with subtraction &rarr; KILLED</p> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b>evaluate<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testEvaluation(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_127'>127</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_127'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>evaluate<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testEvaluation(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> Replaced double addition with subtraction &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_130'>130</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_130'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>evaluate<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testEvaluation(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> replaced double return with 0.0d for org/apache/commons/math3/stat/descriptive/summary/Sum::evaluate &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_163'>163</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_163'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>evaluate<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testWeightedSum(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> removed conditional - replaced equality check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_165'>165</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_165'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>evaluate<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testWeightedSum(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> changed conditional boundary &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>evaluate<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testWeightedSum(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> Replaced integer addition with subtraction &rarr; KILLED</p> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b>evaluate<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testWeightedSum(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> removed conditional - replaced comparison check with false &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_166'>166</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_166'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>evaluate<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testWeightedSum(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>evaluate<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testWeightedSum(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> Replaced double addition with subtraction &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_169'>169</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_169'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>evaluate<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testWeightedSum(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> replaced double return with 0.0d for org/apache/commons/math3/stat/descriptive/summary/Sum::evaluate &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_196'>196</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_196'/> 
+
+<p class='NO_COVERAGE'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>evaluate<br/><b>Killed by : </b>none</span></span> replaced double return with 0.0d for org/apache/commons/math3/stat/descriptive/summary/Sum::evaluate &rarr; NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_206'>206</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_206'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>copy<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testCopyConsistency(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> removed call to org/apache/commons/math3/stat/descriptive/summary/Sum::copy &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_207'>207</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_207'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>copy<br/><b>Killed by : </b>org.apache.commons.math3.stat.descriptive.summary.SumTest.testCopy(org.apache.commons.math3.stat.descriptive.summary.SumTest)</span></span> replaced return value with null for org/apache/commons/math3/stat/descriptive/summary/Sum::copy &rarr; KILLED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_220'>220</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_220'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>copy<br/><b>Killed by : </b>none</span></span> removed call to org/apache/commons/math3/util/MathUtils::checkNotNull &rarr; SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_221'>221</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_221'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>copy<br/><b>Killed by : </b>none</span></span> removed call to org/apache/commons/math3/util/MathUtils::checkNotNull &rarr; SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_222'>222</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@2d1dd9e5_222'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>copy<br/><b>Killed by : </b>none</span></span> removed call to org/apache/commons/math3/stat/descriptive/summary/Sum::setData &rarr; SURVIVED</p> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>CONDITIONALS_BOUNDARY</li>
+<li class='mutator'>EMPTY_RETURNS</li>
+<li class='mutator'>FALSE_RETURNS</li>
+<li class='mutator'>INCREMENTS</li>
+<li class='mutator'>INVERT_NEGS</li>
+<li class='mutator'>MATH</li>
+<li class='mutator'>NULL_RETURNS</li>
+<li class='mutator'>PRIMITIVE_RETURNS</li>
+<li class='mutator'>REMOVE_CONDITIONALS_EQUAL_ELSE</li>
+<li class='mutator'>REMOVE_CONDITIONALS_ORDER_ELSE</li>
+<li class='mutator'>TRUE_RETURNS</li>
+<li class='mutator'>VOID_METHOD_CALLS</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest.testShuffledStatistics(org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest.testShuffledStatistics(org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest) (2 ms)</li><li>org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest.testNaNContracts(org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest.testSetterInjection(org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testDifferenceStats(org.apache.commons.math3.stat.StatUtilsTest) (0 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testNormalize1(org.apache.commons.math3.stat.StatUtilsTest) (0 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testGetBinUpperBounds(org.apache.commons.math3.random.EmpiricalDistributionTest) (8 ms)</li><li>org.apache.commons.math3.stat.descriptive.summary.SumTest.testCopy(org.apache.commons.math3.stat.descriptive.summary.SumTest) (3 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.VarianceTest.testCopy(org.apache.commons.math3.stat.descriptive.moment.VarianceTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest.testOverrideVarianceWithMathClass(org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.StandardDeviationTest.testEvaluateArraySegment(org.apache.commons.math3.stat.descriptive.moment.StandardDeviationTest) (0 ms)</li><li>org.apache.commons.math3.stat.inference.TestUtilsTest.testOneWayAnovaUtils(org.apache.commons.math3.stat.inference.TestUtilsTest) (0 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testFloatDirect(org.apache.commons.math3.random.Well44497aTest) (0 ms)</li><li>org.apache.commons.math3.stat.inference.TTestTest.testPaired(org.apache.commons.math3.stat.inference.TTestTest) (1 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testFloatDirect(org.apache.commons.math3.random.Well512aTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest.testStats(org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.SemiVarianceTest.testSample(org.apache.commons.math3.stat.descriptive.moment.SemiVarianceTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.MeanTest.testEvaluation(org.apache.commons.math3.stat.descriptive.moment.MeanTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest.testEqualsAndHashCode(org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.SemiVarianceTest.testVarianceDecompMeanCutoff(org.apache.commons.math3.stat.descriptive.moment.SemiVarianceTest) (0 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testNexFail(org.apache.commons.math3.random.EmpiricalDistributionTest) (13 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testDoubleDirect(org.apache.commons.math3.random.Well19937aTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.SkewnessTest.testCopy(org.apache.commons.math3.stat.descriptive.moment.SkewnessTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest.testWindowSize(org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest) (2 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testLongly(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.summary.SumTest.testSerialization(org.apache.commons.math3.stat.descriptive.summary.SumTest) (2 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testFloatDirect(org.apache.commons.math3.random.Well1024aTest) (1 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testDensities(org.apache.commons.math3.random.EmpiricalDistributionTest) (34 ms)</li><li>org.apache.commons.math3.stat.descriptive.AggregateSummaryStatisticsTest.testAggregationConsistency(org.apache.commons.math3.stat.descriptive.AggregateSummaryStatisticsTest) (9 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.MeanTest.testCopy(org.apache.commons.math3.stat.descriptive.moment.MeanTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest.testEqualsAndHashCode(org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.ode.JacobianMatricesTest.testLowAccuracyExternalDifferentiation(org.apache.commons.math3.ode.JacobianMatricesTest) (81 ms)</li><li>org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest.testOverrideMeanWithMathClass(org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest.testEqualsAndHashCode(org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.data.LewTest.testCertifiedValues(org.apache.commons.math3.stat.data.LewTest) (5 ms)</li><li>org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest.testSetterInjection(org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testLoadNullDoubleArray(org.apache.commons.math3.random.EmpiricalDistributionTest) (16 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testIllegalArguments(org.apache.commons.math3.random.EmpiricalDistributionTest) (11 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.SkewnessTest.testEvaluateArraySegment(org.apache.commons.math3.stat.descriptive.moment.SkewnessTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.StandardDeviationTest.testPopulation(org.apache.commons.math3.stat.descriptive.moment.StandardDeviationTest) (0 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testFloatDirect(org.apache.commons.math3.random.Well44497bTest) (1 ms)</li><li>org.apache.commons.math3.distribution.GammaDistributionTest.testMath753Shape8(org.apache.commons.math3.distribution.GammaDistributionTest) (88 ms)</li><li>org.apache.commons.math3.stat.inference.TestUtilsTest.testTwoSampleTHomoscedastic(org.apache.commons.math3.stat.inference.TestUtilsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest.testSetterInjection(org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.distribution.fitting.MultivariateNormalMixtureExpectationMaximizationTest.testThresholdPositive(org.apache.commons.math3.distribution.fitting.MultivariateNormalMixtureExpectationMaximizationTest) (4 ms)</li><li>org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest.testOverrideGeoMeanWithMathClass(org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testLoadNullFile(org.apache.commons.math3.random.EmpiricalDistributionTest) (13 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testBinIndexOverflow(org.apache.commons.math3.random.EmpiricalDistributionTest) (31 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testLoadNullURL(org.apache.commons.math3.random.EmpiricalDistributionTest) (17 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest.testProductAndGeometricMean(org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testMean(org.apache.commons.math3.stat.StatUtilsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest.testGetSummary(org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest.testSummaryConsistency(org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest) (2 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testDoubleDirect(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (3 ms)</li><li>org.apache.commons.math3.stat.descriptive.AggregateSummaryStatisticsTest.testAggregateSpecialValues(org.apache.commons.math3.stat.descriptive.AggregateSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest.testOverrideGeoMeanWithMathClass(org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.inference.TTestTest.testTwoSampleTHeterscedastic(org.apache.commons.math3.stat.inference.TTestTest) (1 ms)</li><li>org.apache.commons.math3.stat.inference.OneWayAnovaTest.testAnovaFValue(org.apache.commons.math3.stat.inference.OneWayAnovaTest) (3 ms)</li><li>org.apache.commons.math3.stat.inference.TTestTest.testSmallSamples(org.apache.commons.math3.stat.inference.TTestTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest.testSummaryConsistency(org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.SemiVarianceTest.testSingleDown(org.apache.commons.math3.stat.descriptive.moment.SemiVarianceTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.SkewnessTest.testConsistency(org.apache.commons.math3.stat.descriptive.moment.SkewnessTest) (1 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testLoad(org.apache.commons.math3.random.EmpiricalDistributionTest) (18 ms)</li><li>org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest.testSetterInjection(org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest.testSerialization(org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest) (5 ms)</li><li>org.apache.commons.math3.stat.descriptive.summary.SumTest.testEqualsAndHashCode(org.apache.commons.math3.stat.descriptive.summary.SumTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.summary.SumTest.testWeightedSum(org.apache.commons.math3.stat.descriptive.summary.SumTest) (0 ms)</li><li>org.apache.commons.math3.optim.univariate.BrentOptimizerTest.testQuinticMinStatistics(org.apache.commons.math3.optim.univariate.BrentOptimizerTest) (34 ms)</li><li>org.apache.commons.math3.stat.correlation.CovarianceTest.testSwissFertility(org.apache.commons.math3.stat.correlation.CovarianceTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.AggregateSummaryStatisticsTest.testAggregateDegenerate(org.apache.commons.math3.stat.descriptive.AggregateSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testFloatDirect(org.apache.commons.math3.random.BitsStreamGeneratorTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.summary.SumTest.testEvaluation(org.apache.commons.math3.stat.descriptive.summary.SumTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.AggregateSummaryStatisticsTest.testAggregate(org.apache.commons.math3.stat.descriptive.AggregateSummaryStatisticsTest) (4 ms)</li><li>org.apache.commons.math3.stat.correlation.CovarianceTest.testLongly(org.apache.commons.math3.stat.correlation.CovarianceTest) (2 ms)</li><li>org.apache.commons.math3.stat.descriptive.summary.SumTest.testSerial(org.apache.commons.math3.stat.descriptive.summary.SumTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest.testShuffledStatistics(org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.random.BitsStreamGeneratorTest.testDoubleDirect(org.apache.commons.math3.random.BitsStreamGeneratorTest) (4 ms)</li><li>org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest.testOverrideVarianceWithMathClass(org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testFloatDirect(org.apache.commons.math3.random.MersenneTwisterTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest.testSetterIllegalState(org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest) (4 ms)</li><li>org.apache.commons.math3.stat.descriptive.ListUnivariateImplTest.testN0andN1Conditions(org.apache.commons.math3.stat.descriptive.ListUnivariateImplTest) (5 ms)</li><li>org.apache.commons.math3.stat.inference.TestUtilsTest.testOneSampleTTest(org.apache.commons.math3.stat.inference.TestUtilsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.MeanTest.testWeightedConsistency(org.apache.commons.math3.stat.descriptive.moment.MeanTest) (7 ms)</li><li>org.apache.commons.math3.stat.inference.TestUtilsTest.testTwoSampleTHeterscedastic(org.apache.commons.math3.stat.inference.TestUtilsTest) (0 ms)</li><li>org.apache.commons.math3.random.Well44497bTest.testDoubleDirect(org.apache.commons.math3.random.Well44497bTest) (3 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest.testStats(org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.random.ValueServerTest.testNextDigest(org.apache.commons.math3.random.ValueServerTest) (5 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest.testSerialization(org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest) (6 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.VarianceTest.testConsistency(org.apache.commons.math3.stat.descriptive.moment.VarianceTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest.testCopy(org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testGridTooFat(org.apache.commons.math3.random.EmpiricalDistributionTest) (19 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.VarianceTest.testEvaluateArraySegment(org.apache.commons.math3.stat.descriptive.moment.VarianceTest) (0 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testDoubleLoad(org.apache.commons.math3.random.EmpiricalDistributionTest) (8 ms)</li><li>org.apache.commons.math3.random.StableRandomGeneratorTest.testNextDouble(org.apache.commons.math3.random.StableRandomGeneratorTest) (23 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.VarianceTest.testEvaluateArraySegmentWeighted(org.apache.commons.math3.stat.descriptive.moment.VarianceTest) (1 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testStats(org.apache.commons.math3.stat.StatUtilsTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.testGLSEfficiency(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (2284 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.SkewnessTest.testEvaluation(org.apache.commons.math3.stat.descriptive.moment.SkewnessTest) (1 ms)</li><li>org.apache.commons.math3.ode.JacobianMatricesTest.testInternalDifferentiation(org.apache.commons.math3.ode.JacobianMatricesTest) (274 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest.testOverrideMeanWithMathClass(org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest) (3 ms)</li><li>org.apache.commons.math3.random.Well44497aTest.testDoubleDirect(org.apache.commons.math3.random.Well44497aTest) (4 ms)</li><li>org.apache.commons.math3.stat.descriptive.summary.SumTest.testCopyConsistency(org.apache.commons.math3.stat.descriptive.summary.SumTest) (4 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest.testN0andN1Conditions(org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testFloatDirect(org.apache.commons.math3.random.Well19937cTest) (1 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testGridTooFine(org.apache.commons.math3.random.EmpiricalDistributionTest) (36 ms)</li><li>org.apache.commons.math3.stat.correlation.CovarianceTest.testConstant(org.apache.commons.math3.stat.correlation.CovarianceTest) (1 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testCumulativeProbabilities(org.apache.commons.math3.random.EmpiricalDistributionTest) (25 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest.testSetterIllegalState(org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest.testToString(org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.MeanTest.testEvaluateArraySegment(org.apache.commons.math3.stat.descriptive.moment.MeanTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.SemiVarianceTest.testPopulation(org.apache.commons.math3.stat.descriptive.moment.SemiVarianceTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest.testStats(org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest.testN0andN1Conditions(org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest.testRemoval(org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.correlation.PearsonsCorrelationTest.testCovarianceConsistency(org.apache.commons.math3.stat.correlation.PearsonsCorrelationTest) (2 ms)</li><li>org.apache.commons.math3.distribution.GammaDistributionTest.testMath753Shape1(org.apache.commons.math3.distribution.GammaDistributionTest) (257 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.StandardDeviationTest.testEvaluation(org.apache.commons.math3.stat.descriptive.moment.StandardDeviationTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.summary.SumTest.testIncrementation(org.apache.commons.math3.stat.descriptive.summary.SumTest) (4 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest.testToString(org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.distribution.MultivariateNormalDistributionTest.testSampling(org.apache.commons.math3.distribution.MultivariateNormalDistributionTest) (776 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.MeanTest.testConsistency(org.apache.commons.math3.stat.descriptive.moment.MeanTest) (0 ms)</li><li>org.apache.commons.math3.random.StableRandomGeneratorTest.testGaussianCase(org.apache.commons.math3.random.StableRandomGeneratorTest) (4 ms)</li><li>org.apache.commons.math3.stat.inference.TTestTest.testOneSampleT(org.apache.commons.math3.stat.inference.TTestTest) (0 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testNext(org.apache.commons.math3.random.EmpiricalDistributionTest) (13 ms)</li><li>org.apache.commons.math3.stat.descriptive.MixedListUnivariateImplTest.testN0andN1Conditions(org.apache.commons.math3.stat.descriptive.MixedListUnivariateImplTest) (3 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.VarianceTest.testEvaluation(org.apache.commons.math3.stat.descriptive.moment.VarianceTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.SemiVarianceTest.testSingleUp(org.apache.commons.math3.stat.descriptive.moment.SemiVarianceTest) (0 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testFloatDirect(org.apache.commons.math3.random.ISAACTest) (5 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testSampling(org.apache.commons.math3.random.EmpiricalDistributionTest) (12 ms)</li><li>org.apache.commons.math3.stat.CertifiedDataTest.testSummaryStatistics(org.apache.commons.math3.stat.CertifiedDataTest) (4 ms)</li><li>org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest.testStats(org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest.testEqualsAndHashCode(org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest.testNaNContracts(org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest.testSerialization(org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest) (2 ms)</li><li>org.apache.commons.math3.random.AbstractRandomGeneratorTest.testFloatDirect(org.apache.commons.math3.random.AbstractRandomGeneratorTest) (2 ms)</li><li>org.apache.commons.math3.distribution.fitting.MultivariateNormalMixtureExpectationMaximizationTest.testConvergenceException(org.apache.commons.math3.distribution.fitting.MultivariateNormalMixtureExpectationMaximizationTest) (50 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testIsSupportLowerBoundInclusive(org.apache.commons.math3.random.EmpiricalDistributionTest) (18 ms)</li><li>org.apache.commons.math3.random.ValueServerTest.testFixedSeed(org.apache.commons.math3.random.ValueServerTest) (2 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testN0andN1Conditions(org.apache.commons.math3.stat.StatUtilsTest) (0 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testConsistency(org.apache.commons.math3.random.EmpiricalDistributionTest) (34 ms)</li><li>org.apache.commons.math3.random.GaussianRandomGeneratorTest.testMeanAndStandardDeviation(org.apache.commons.math3.random.GaussianRandomGeneratorTest) (3 ms)</li><li>org.apache.commons.math3.stat.descriptive.ListUnivariateImplTest.testStats(org.apache.commons.math3.stat.descriptive.ListUnivariateImplTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.MixedListUnivariateImplTest.testSkewAndKurtosis(org.apache.commons.math3.stat.descriptive.MixedListUnivariateImplTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest.testSetterInjection(org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.stat.inference.TTestTest.testTwoSampleTHomoscedastic(org.apache.commons.math3.stat.inference.TTestTest) (1 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testKernelOverrideUniform(org.apache.commons.math3.random.EmpiricalDistributionTest) (16 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testPopulationVariance(org.apache.commons.math3.stat.StatUtilsTest) (0 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testInverseCumulativeProbabilities(org.apache.commons.math3.random.EmpiricalDistributionTest) (18 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testSwissFertility(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (1 ms)</li><li>org.apache.commons.math3.random.Well512aTest.testDoubleDirect(org.apache.commons.math3.random.Well512aTest) (2 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.MeanTest.testEvaluateArraySegmentWeighted(org.apache.commons.math3.stat.descriptive.moment.MeanTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest.testGetValues(org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest.testN0andN1Conditions(org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.inference.TTestTest.testOneSampleTTest(org.apache.commons.math3.stat.inference.TTestTest) (0 ms)</li><li>org.apache.commons.math3.distribution.fitting.MultivariateNormalMixtureExpectationMaximizationTest.testMaxIterationsPositive(org.apache.commons.math3.distribution.fitting.MultivariateNormalMixtureExpectationMaximizationTest) (2 ms)</li><li>org.apache.commons.math3.stat.inference.OneWayAnovaTest.testAnovaTest(org.apache.commons.math3.stat.inference.OneWayAnovaTest) (0 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testReSeed(org.apache.commons.math3.random.EmpiricalDistributionTest) (19 ms)</li><li>org.apache.commons.math3.ode.JacobianMatricesTest.testHighAccuracyExternalDifferentiation(org.apache.commons.math3.ode.JacobianMatricesTest) (809 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest.testToString(org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest.testGetValues(org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest) (4 ms)</li><li>org.apache.commons.math3.stat.inference.OneWayAnovaTest.testAnovaPValueSummaryStatistics(org.apache.commons.math3.stat.inference.OneWayAnovaTest) (1 ms)</li><li>org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest.testYVariance(org.apache.commons.math3.stat.regression.GLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.random.Well19937aTest.testFloatDirect(org.apache.commons.math3.random.Well19937aTest) (1 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testNormalize2(org.apache.commons.math3.stat.StatUtilsTest) (1 ms)</li><li>org.apache.commons.math3.distribution.GammaDistributionTest.testMath753Shape100(org.apache.commons.math3.distribution.GammaDistributionTest) (21 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testSerialization(org.apache.commons.math3.random.EmpiricalDistributionTest) (21 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.SemiVarianceTest.testNoVariance(org.apache.commons.math3.stat.descriptive.moment.SemiVarianceTest) (0 ms)</li><li>org.apache.commons.math3.random.MersenneTwisterTest.testDoubleDirect(org.apache.commons.math3.random.MersenneTwisterTest) (2 ms)</li><li>org.apache.commons.math3.stat.correlation.CovarianceTest.testConsistency(org.apache.commons.math3.stat.correlation.CovarianceTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest.testShuffledStatistics(org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.distribution.GammaDistributionTest.testMath753Shape1000(org.apache.commons.math3.distribution.GammaDistributionTest) (181 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.StandardDeviationTest.testCopy(org.apache.commons.math3.stat.descriptive.moment.StandardDeviationTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest.testRemoval(org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testIsSupportUpperBoundInclusive(org.apache.commons.math3.random.EmpiricalDistributionTest) (17 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest.testWindowSize(org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.correlation.CovarianceTest.testOneColumn(org.apache.commons.math3.stat.correlation.CovarianceTest) (1 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testArrayIndexConditions(org.apache.commons.math3.stat.StatUtilsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest.testSetterInjection(org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest.testGetSummary(org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.random.UniformRandomGeneratorTest.testMeanAndStandardDeviation(org.apache.commons.math3.random.UniformRandomGeneratorTest) (3 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.VarianceTest.testWeightedConsistency(org.apache.commons.math3.stat.descriptive.moment.VarianceTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest.testSetterIllegalState(org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.MixedListUnivariateImplTest.testStats(org.apache.commons.math3.stat.descriptive.MixedListUnivariateImplTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest.testNaNContracts(org.apache.commons.math3.stat.descriptive.SynchronizedMultivariateSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testDensityIntegrals(org.apache.commons.math3.random.EmpiricalDistributionTest) (2864 ms)</li><li>org.apache.commons.math3.stat.descriptive.summary.SumTest.testConsistency(org.apache.commons.math3.stat.descriptive.summary.SumTest) (0 ms)</li><li>org.apache.commons.math3.stat.data.LotteryTest.testCertifiedValues(org.apache.commons.math3.stat.data.LotteryTest) (1 ms)</li><li>org.apache.commons.math3.distribution.GammaDistributionTest.testMath753Shape10(org.apache.commons.math3.distribution.GammaDistributionTest) (21 ms)</li><li>org.apache.commons.math3.stat.StatUtilsTest.testVariance(org.apache.commons.math3.stat.StatUtilsTest) (2 ms)</li><li>org.apache.commons.math3.stat.inference.OneWayAnovaTest.testAnovaPValue(org.apache.commons.math3.stat.inference.OneWayAnovaTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest.testCopy(org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.inference.TestUtilsTest.testOneSampleT(org.apache.commons.math3.stat.inference.TestUtilsTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.ListUnivariateImplTest.testSkewAndKurtosis(org.apache.commons.math3.stat.descriptive.ListUnivariateImplTest) (5 ms)</li><li>org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest.testN0andN1Conditions(org.apache.commons.math3.stat.descriptive.MultivariateSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.summary.SumTest.testEvaluateArraySegment(org.apache.commons.math3.stat.descriptive.summary.SumTest) (1 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testDistributionClone(org.apache.commons.math3.random.EmpiricalDistributionTest) (42 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testGeneratorConfig(org.apache.commons.math3.random.EmpiricalDistributionTest) (12 ms)</li><li>org.apache.commons.math3.stat.inference.TestUtilsTest.testSmallSamples(org.apache.commons.math3.stat.inference.TestUtilsTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.MeanTest.testWeightedMean(org.apache.commons.math3.stat.descriptive.moment.MeanTest) (0 ms)</li><li>org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest.testYVariance(org.apache.commons.math3.stat.regression.OLSMultipleLinearRegressionTest) (0 ms)</li><li>org.apache.commons.math3.ode.JacobianMatricesTest.testAnalyticalDifferentiation(org.apache.commons.math3.ode.JacobianMatricesTest) (225 ms)</li><li>org.apache.commons.math3.random.EmpiricalDistributionTest.testKernelOverrideConstant(org.apache.commons.math3.random.EmpiricalDistributionTest) (14 ms)</li><li>org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest.testSetterIllegalState(org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest) (3 ms)</li><li>org.apache.commons.math3.distribution.GammaDistributionTest.testMath753Shape142(org.apache.commons.math3.distribution.GammaDistributionTest) (26 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.VarianceTest.testWeightedVariance(org.apache.commons.math3.stat.descriptive.moment.VarianceTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.StandardDeviationTest.testConsistency(org.apache.commons.math3.stat.descriptive.moment.StandardDeviationTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest.testCopy(org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest.testProductAndGeometricMean(org.apache.commons.math3.stat.descriptive.SummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.random.Well1024aTest.testDoubleDirect(org.apache.commons.math3.random.Well1024aTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.summary.SumTest.testSpecialValues(org.apache.commons.math3.stat.descriptive.summary.SumTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest.testNaNContracts(org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.AggregateSummaryStatisticsTest.testAggregation(org.apache.commons.math3.stat.descriptive.AggregateSummaryStatisticsTest) (0 ms)</li><li>org.apache.commons.math3.stat.CertifiedDataTest.testDescriptiveStatistics(org.apache.commons.math3.stat.CertifiedDataTest) (5 ms)</li><li>org.apache.commons.math3.optimization.univariate.BrentOptimizerTest.testQuinticMinStatistics(org.apache.commons.math3.optimization.univariate.BrentOptimizerTest) (12 ms)</li><li>org.apache.commons.math3.random.Well19937cTest.testDoubleDirect(org.apache.commons.math3.random.Well19937cTest) (2 ms)</li><li>org.apache.commons.math3.random.ISAACTest.testDoubleDirect(org.apache.commons.math3.random.ISAACTest) (5 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest.testSerialization(org.apache.commons.math3.stat.descriptive.SynchronizedSummaryStatisticsTest) (3 ms)</li><li>org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest.testToString(org.apache.commons.math3.stat.descriptive.DescriptiveStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest.testCopy(org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatisticsTest) (1 ms)</li><li>org.apache.commons.math3.stat.descriptive.moment.VarianceTest.testPopulation(org.apache.commons.math3.stat.descriptive.moment.VarianceTest) (0 ms)</li><li>org.apache.commons.math3.stat.descriptive.ListUnivariateImplTest.testSerialization(org.apache.commons.math3.stat.descriptive.ListUnivariateImplTest) (15 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 1.9.11
+
+</body>
+</html>
