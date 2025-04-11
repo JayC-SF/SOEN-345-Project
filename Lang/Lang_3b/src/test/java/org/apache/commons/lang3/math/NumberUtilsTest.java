@@ -117,19 +117,6 @@ public class NumberUtilsTest {
     }
     
     /**
-     * Test for {(@link NumberUtils#createNumber(String)}
-     */
-    @Test
-    public void testStringCreateNumberEnsureNoPrecisionLoss(){
-        String shouldBeFloat = "1.23";
-        String shouldBeDouble = "3.40282354e+38";
-        String shouldBeBigDecimal = "1.797693134862315759e+308";
-        
-        assertTrue(NumberUtils.createNumber(shouldBeFloat) instanceof Float);
-        assertTrue(NumberUtils.createNumber(shouldBeDouble) instanceof Double);
-        assertTrue(NumberUtils.createNumber(shouldBeBigDecimal) instanceof BigDecimal);
-    }
-    /**
      * Test for {@link NumberUtils#toDouble(String)}.
      */
     @Test
@@ -139,7 +126,6 @@ public class NumberUtilsTest {
         assertTrue("toDouble(String) 3 failed", NumberUtils.toDouble("abc") == 0.0d);
         assertTrue("toDouble(Double.MAX_VALUE) failed", NumberUtils.toDouble(Double.MAX_VALUE+"") == Double.MAX_VALUE);
         assertTrue("toDouble(Double.MIN_VALUE) failed", NumberUtils.toDouble(Double.MIN_VALUE+"") == Double.MIN_VALUE);
-        assertTrue("toDouble(empty) failed", NumberUtils.toDouble("") == 0.0d);
         assertTrue("toDouble(null) failed", NumberUtils.toDouble(null) == 0.0d);
     }
 

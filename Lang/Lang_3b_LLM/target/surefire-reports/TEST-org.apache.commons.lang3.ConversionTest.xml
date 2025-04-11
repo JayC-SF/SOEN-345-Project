@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="42" failures="0" name="org.apache.commons.lang3.ConversionTest" time="0.005" errors="0" skipped="0">
+  <properties>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="java.vm.version" value="11.0.20.1+1-LTS"/>
+    <property name="sun.boot.library.path" value="/Users/shanv/.sdkman/candidates/java/11.0.20.1-zulu/zulu-11.jdk/Contents/Home/lib"/>
+    <property name="gopherProxySet" value="false"/>
+    <property name="jdk.vendor.version" value="Zulu11.66+19-CA"/>
+    <property name="maven.multiModuleProjectDirectory" value="/Users/shanv/Desktop/Github Repos/SOEN-345-Project/Lang/Lang_3b_LLM"/>
+    <property name="java.vm.vendor" value="Azul Systems, Inc."/>
+    <property name="java.vendor.url" value="http://www.azul.com/"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="path.separator" value=":"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="user.country" value="CA"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="/Users/shanv/Desktop/Github Repos/SOEN-345-Project/Lang/Lang_3b_LLM"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="java.runtime.version" value="11.0.20.1+1-LTS"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.CGraphicsEnvironment"/>
+    <property name="os.arch" value="aarch64"/>
+    <property name="java.io.tmpdir" value="/var/folders/98/1z4vmp_9007d_k7p53bjpsk40000gn/T/"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="classworlds.conf" value="/opt/homebrew/Cellar/maven/3.9.9/libexec/bin/m2.conf"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/Users/shanv/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
+    <property name="maven.conf" value="/opt/homebrew/Cellar/maven/3.9.9/libexec/conf"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="java.class.version" value="55.0"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="13.2.1"/>
+    <property name="library.jansi.path" value="/opt/homebrew/Cellar/maven/3.9.9/libexec/lib/jansi-native"/>
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="user.home" value="/Users/shanv"/>
+    <property name="user.timezone" value="America/Toronto"/>
+    <property name="java.awt.printerjob" value="sun.lwawt.macosx.CPrinterJob"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.specification.version" value="11"/>
+    <property name="user.name" value="shanv"/>
+    <property name="java.class.path" value="/opt/homebrew/Cellar/maven/3.9.9/libexec/boot/plexus-classworlds-2.8.0.jar"/>
+    <property name="java.vm.specification.version" value="11"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean install"/>
+    <property name="java.home" value="/Users/shanv/.sdkman/candidates/java/11.0.20.1-zulu/zulu-11.jdk/Contents/Home"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="awt.toolkit" value="sun.lwawt.macosx.LWCToolkit"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="11.0.20.1"/>
+    <property name="java.vendor" value="Azul Systems, Inc."/>
+    <property name="java.specification.maintenance.version" value="2"/>
+    <property name="maven.home" value="/opt/homebrew/Cellar/maven/3.9.9/libexec"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.version.date" value="2023-08-24"/>
+    <property name="java.vendor.url.bug" value="http://www.azul.com/support/"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="java.vendor.version" value="Zulu11.66+19-CA"/>
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="sun.cpu.isalist" value=""/>
+  </properties>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testBinaryToHexDigit" time="0.005"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testIntToBinary" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testShortArrayToInt" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testBinaryToHexDigit_2args" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testBinaryBeMsb0ToHexDigit_2args" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testByteToHex" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testBinaryBeMsb0ToHexDigit" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testBinaryToShort" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testShortToBinary" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testBinaryToHexDigitMsb0_bits" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testHexToByte" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testHexToLong" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testShortArrayToLong" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testByteArrayToLong" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testByteArrayToUuid" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testLongToShortArray" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testHexDigitMsb0ToBinary" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testUuidToByteArray" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testIntToShortArray" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testIntArrayToLong" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testHexDigitMsb0ToInt" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testShortToByteArray" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testHexDigitToBinary" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testHexToInt" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testIntToByteArray" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testIntToHexDigitMsb0" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testLongToByteArray" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testLongToBinary" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testHexDigitToInt" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testLongToHex" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testShortToHex" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testLongToIntArray" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testByteToBinary" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testBinaryToByte" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testBinaryToLong" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testIntToHex" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testByteArrayToInt" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testHexToShort" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testIntToHexDigit" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testBinaryToHexDigitMsb0_4bits_2args" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testByteArrayToShort" time="0"/>
+  <testcase classname="org.apache.commons.lang3.ConversionTest" name="testBinaryToInt" time="0"/>
+</testsuite>

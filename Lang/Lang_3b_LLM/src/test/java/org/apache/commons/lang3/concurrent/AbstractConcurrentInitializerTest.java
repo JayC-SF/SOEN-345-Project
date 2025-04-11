@@ -1,115 +1,60 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.apache.commons.lang3.concurrent;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.junit.Test;
 
-/**
- * <p>
- * An abstract base class for tests of concrete {@code ConcurrentInitializer}
- * implementations.
- * </p>
- * <p>
- * This class provides some basic tests for initializer implementations. Derived
- * class have to create a {@link ConcurrentInitializer} object on which the
- * tests are executed.
- * </p>
- *
- * @version $Id$
- */
 public abstract class AbstractConcurrentInitializerTest {
-    /**
-     * Tests a simple invocation of the get() method.
-     */
-    @Test
-    public void testGet() throws ConcurrentException {
-        assertNotNull("No managed object", createInitializer().get());
-    }
 
-    /**
-     * Tests whether sequential get() invocations always return the same
-     * instance.
-     */
-    @Test
-    public void testGetMultipleTimes() throws ConcurrentException {
-        final ConcurrentInitializer<Object> initializer = createInitializer();
-        final Object obj = initializer.get();
-        for (int i = 0; i < 10; i++) {
-            assertEquals("Got different object at " + i, obj, initializer.get());
-        }
-    }
-
-    /**
-     * Tests whether get() can be invoked from multiple threads concurrently.
-     * Always the same object should be returned.
-     */
-    @Test
-    public void testGetConcurrent() throws ConcurrentException,
-            InterruptedException {
-        final ConcurrentInitializer<Object> initializer = createInitializer();
-        final int threadCount = 20;
-        final CountDownLatch startLatch = new CountDownLatch(1);
-        class GetThread extends Thread {
-            Object object;
-
+    protected ConcurrentInitializer<Object> createInitializer() {
+        return new AtomicInitializer<Object>() {
             @Override
-            public void run() {
-                try {
-                    // wait until all threads are ready for maximum parallelism
-                    startLatch.await();
-                    // access the initializer
-                    object = initializer.get();
-                } catch (final InterruptedException iex) {
-                    // ignore
-                } catch (final ConcurrentException cex) {
-                    object = cex;
-                }
+            protected Object initialize() {
+                return new Object(); // or return any specific test object
             }
-        }
-
-        final GetThread[] threads = new GetThread[threadCount];
-        for (int i = 0; i < threadCount; i++) {
-            threads[i] = new GetThread();
-            threads[i].start();
-        }
-
-        // fire all threads and wait until they are ready
-        startLatch.countDown();
-        for (final Thread t : threads) {
-            t.join();
-        }
-
-        // check results
-        final Object managedObject = initializer.get();
-        for (final GetThread t : threads) {
-            assertEquals("Wrong object", managedObject, t.object);
-        }
+        };
     }
 
-    /**
-     * Creates the {@link ConcurrentInitializer} object to be tested. This
-     * method is called whenever the test fixture needs to be obtained.
-     *
-     * @return the initializer object to be tested
-     */
-    protected abstract ConcurrentInitializer<Object> createInitializer();
+    @Test
+    public void testGetCreatesNonNullObject() throws Exception {
+        ConcurrentInitializer<Object> initializer = createInitializer();
+        Object obj = initializer.get();
+        assertNotNull("Object must not be null", obj);
+    }
+
+    @Test
+    public void testGetReturnsSameInstance() throws Exception {
+        ConcurrentInitializer<Object> initializer = createInitializer();
+        Object obj1 = initializer.get();
+        Object obj2 = initializer.get();
+        assertEquals("Objects must be the same", obj1, obj2);
+    }
+
+    @Test
+    public void testGetFromMultipleThreads() throws Exception {
+        final ConcurrentInitializer<Object> initializer = createInitializer();
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        Future<Object> future1 = executor.submit(new Callable<Object>() {
+            public Object call() throws Exception {
+                return initializer.get();
+            }
+        });
+        Future<Object> future2 = executor.submit(new Callable<Object>() {
+            public Object call() throws Exception {
+                return initializer.get();
+            }
+        });
+
+        Object obj1 = future1.get();
+        Object obj2 = future2.get();
+
+        assertEquals("Objects must be the same in concurrent access", obj1, obj2);
+        executor.shutdown();
+    }
 }

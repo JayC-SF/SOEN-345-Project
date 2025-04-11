@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <copy todir="/Users/shanv/Desktop/Github Repos/SOEN-345-Project/Lang/Lang_3b_LLM/target/apidocs/META-INF">
+    <fileset dir="/Users/shanv/Desktop/Github Repos/SOEN-345-Project/Lang/Lang_3b_LLM">
+      <include name="LICENSE.txt"/>
+      <include name="NOTICE.txt"/>
+    </fileset>
+  </copy>
+</target>
+</project>

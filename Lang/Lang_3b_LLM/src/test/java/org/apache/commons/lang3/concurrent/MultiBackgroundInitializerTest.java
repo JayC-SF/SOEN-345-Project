@@ -272,7 +272,7 @@ public class MultiBackgroundInitializerTest {
      * throws a checked exception.
      */
     @Test
-    public void testInitializeEx() throws ConcurrentException {
+    public void testInitializeCheckedException() throws ConcurrentException {
         final ChildBackgroundInitializer child = new ChildBackgroundInitializer();
         child.ex = new Exception();
         initializer.addInitializer(CHILD_INIT, child);

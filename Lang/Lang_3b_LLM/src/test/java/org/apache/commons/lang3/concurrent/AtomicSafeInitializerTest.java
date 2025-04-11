@@ -1,23 +1,10 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.apache.commons.lang3.concurrent;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Before;
@@ -28,14 +15,23 @@ import org.junit.Test;
  *
  * @version $Id$
  */
-public class AtomicSafeInitializerTest extends
-        AbstractConcurrentInitializerTest {
+public class AtomicSafeInitializerTest extends AbstractConcurrentInitializerTest {
+
     /** The instance to be tested. */
-    private AtomicSafeInitializerTestImpl initializer;
+    private AtomicSafeInitializer<Object> initializer;
+
+    /** A counter to verify initialize() is called exactly once. */
+    private final AtomicInteger counter = new AtomicInteger(0);
 
     @Before
     public void setUp() throws Exception {
-        initializer = new AtomicSafeInitializerTestImpl();
+        initializer = new AtomicSafeInitializer<Object>() {
+            @Override
+            protected Object initialize() {
+                counter.incrementAndGet();
+                return new Object();
+            }
+        };
     }
 
     /**
@@ -49,30 +45,47 @@ public class AtomicSafeInitializerTest extends
     }
 
     /**
-     * Tests that initialize() is called only once.
+     * Tests that the initializer actually returns a non-null value.
      */
     @Test
-    public void testNumberOfInitializeInvocations() throws ConcurrentException,
-            InterruptedException {
-        testGetConcurrent();
-        assertEquals("Wrong number of invocations", 1,
-                initializer.initCounter.get());
+    public void testGetReturnsObject() throws Exception {
+        Object obj = initializer.get();
+        assertNotNull("Returned object should not be null", obj);
     }
 
     /**
-     * A concrete test implementation of {@code AtomicSafeInitializer}. This
-     * implementation also counts the number of invocations of the initialize()
-     * method.
+     * Tests that initialize() is only called once even in a concurrent setting.
      */
-    private static class AtomicSafeInitializerTestImpl extends
-            AtomicSafeInitializer<Object> {
-        /** A counter for initialize() invocations. */
-        final AtomicInteger initCounter = new AtomicInteger();
+    @Test
+    public void testConcurrentInitializationOnlyOnce() throws Exception {
+        final int numThreads = 10;
+        final Object[] results = new Object[numThreads];
+        final CountDownLatch latch = new CountDownLatch(numThreads);
 
-        @Override
-        protected Object initialize() throws ConcurrentException {
-            initCounter.incrementAndGet();
-            return new Object();
+        Thread[] threads = new Thread[numThreads];
+        for (int i = 0; i < numThreads; i++) {
+            final int index = i;
+            threads[i] = new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        results[index] = initializer.get();
+                    } catch (ConcurrentException e) {
+                        fail("Exception during get(): " + e.getMessage());
+                    } finally {
+                        latch.countDown();
+                    }
+                }
+            });
+            threads[i].start();
         }
+
+        latch.await();
+
+        Object first = results[0];
+        for (int i = 1; i < numThreads; i++) {
+            assertEquals("All threads should receive the same object", first, results[i]);
+        }
+
+        assertEquals("Initialize should be called only once", 1, counter.get());
     }
 }

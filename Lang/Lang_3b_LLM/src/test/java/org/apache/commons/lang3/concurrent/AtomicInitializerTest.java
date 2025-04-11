@@ -1,20 +1,13 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.apache.commons.lang3.concurrent;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
+import java.util.concurrent.CountDownLatch;
+
+import org.apache.commons.lang3.concurrent.ConcurrentInitializer;
+import org.apache.commons.lang3.concurrent.ConcurrentException;
+import org.junit.Test;
 
 /**
  * Test class for {@code AtomicInitializer}.
@@ -22,6 +15,7 @@ package org.apache.commons.lang3.concurrent;
  * @version $Id$
  */
 public class AtomicInitializerTest extends AbstractConcurrentInitializerTest {
+
     /**
      * Returns the initializer to be tested.
      *
@@ -35,5 +29,49 @@ public class AtomicInitializerTest extends AbstractConcurrentInitializerTest {
                 return new Object();
             }
         };
+    }
+
+    /**
+     * Verifies that multiple threads can safely use the initializer concurrently.
+     */
+    @Test
+    public void testConcurrentInitialization() throws Exception {
+        final AtomicInitializer<Object> initializer = new AtomicInitializer<Object>() {
+            @Override
+            protected Object initialize() throws ConcurrentException {
+                return new Object();
+            }
+        };
+
+        final int numThreads = 10;
+        final Object[] results = new Object[numThreads];
+        final CountDownLatch latch = new CountDownLatch(numThreads);
+
+        Thread[] threads = new Thread[numThreads];
+        for (int i = 0; i < numThreads; i++) {
+            final int idx = i;
+            threads[i] = new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        results[idx] = initializer.get();
+                    } catch (ConcurrentException e) {
+                        fail("Exception in thread: " + e.getMessage());
+                    } finally {
+                        latch.countDown();
+                    }
+                }
+            });
+            threads[i].start();
+        }
+
+        latch.await();
+
+        Object reference = results[0];
+        for (int i = 1; i < numThreads; i++) {
+            assertNotNull("Result should not be null", results[i]);
+            if (results[i] != reference) {
+                fail("Initializer did not return same object across threads");
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1744167075340
-Build-Jdk: 11.0.26
-Built-By: daniel
+Bnd-LastModified: 1744265286431
+Build-Jdk: 11.0.20
+Built-By: shanv
 Bundle-Description: Commons Lang, a package of Java utility classes for 
  the  classes that are in java.lang's hierarchy, or are considered to be
   so  standard as to justify existence in java.lang.

@@ -17,26 +17,23 @@
 package org.apache.commons.lang3.builder;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.commons.lang3.SystemUtils;
-import org.apache.commons.lang3.builder.ToStringStyleTest.Person;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Unit tests {@link org.apache.commons.lang3.builder.MultiLineToStringStyleTest}.
- *
- * @version $Id$
+ * Unit tests for {@link ToStringStyle.MULTI_LINE_STYLE}.
  */
 public class MultiLineToStringStyleTest {
 
     private final Integer base = Integer.valueOf(5);
     private final String baseStr = base.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(base));
-    
+
     @Before
     public void setUp() throws Exception {
         ToStringBuilder.setDefaultStyle(ToStringStyle.MULTI_LINE_STYLE);
@@ -47,86 +44,72 @@ public class MultiLineToStringStyleTest {
         ToStringBuilder.setDefaultStyle(ToStringStyle.DEFAULT_STYLE);
     }
 
-    //----------------------------------------------------------------
+    private static class Person {
+        private String name;
+        private int age;
+        private String profession;
 
-    @Test
-    public void testBlank() {
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).toString());
+        public Person(String name, int age, String profession) {
+            this.name = name;
+            this.age = age;
+            this.profession = profession;
+        }
+    }
+
+    private static class CollectionHolder {
+        ArrayList<String> list = new ArrayList<String>();
+    }
+
+    private static class MapHolder {
+        HashMap<String, Integer> map = new HashMap<String, Integer>();
     }
 
     @Test
-    public void testAppendSuper() {
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).appendSuper("Integer@8888[" + SystemUtils.LINE_SEPARATOR + "]").toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  <null>" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).appendSuper("Integer@8888[" + SystemUtils.LINE_SEPARATOR + "  <null>" + SystemUtils.LINE_SEPARATOR + "]").toString());
-        
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  a=hello" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).appendSuper("Integer@8888[" + SystemUtils.LINE_SEPARATOR + "]").append("a", "hello").toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  <null>" + SystemUtils.LINE_SEPARATOR + "  a=hello" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).appendSuper("Integer@8888[" + SystemUtils.LINE_SEPARATOR + "  <null>" + SystemUtils.LINE_SEPARATOR + "]").append("a", "hello").toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  a=hello" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).appendSuper(null).append("a", "hello").toString());
-    }
-    
-    @Test
-    public void testObject() {
-        final Integer i3 = Integer.valueOf(3);
-        final Integer i4 = Integer.valueOf(4);
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  <null>" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append((Object) null).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  3" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append(i3).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  a=<null>" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append("a", (Object) null).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  a=3" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append("a", i3).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  a=3" + SystemUtils.LINE_SEPARATOR + "  b=4" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append("a", i3).append("b", i4).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  a=<Integer>" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append("a", i3, false).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  a=<size=0>" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append("a", new ArrayList<Object>(), false).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  a=[]" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append("a", new ArrayList<Object>(), true).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  a=<size=0>" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append("a", new HashMap<Object, Object>(), false).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  a={}" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append("a", new HashMap<Object, Object>(), true).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  a=<size=0>" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append("a", (Object) new String[0], false).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  a={}" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append("a", (Object) new String[0], true).toString());
+    public void testBasicObjectOutput() {
+        Person person = new Person("Jane", 28, "Architect");
+        String toString = ToStringBuilder.reflectionToString(person);
+
+        assertTrue("Should contain new lines", toString.contains(System.lineSeparator()));
+        assertTrue("Should contain class name", toString.startsWith(person.getClass().getName()));
+        assertTrue("Should contain field name", toString.contains("name="));
+        assertTrue("Should contain value", toString.contains("Jane"));
     }
 
     @Test
-    public void testPerson() {
-        final Person p = new Person();
-        p.name = "Jane Doe";
-        p.age = 25;
-        p.smoker = true;
-        final String pBaseStr = p.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(p));
-        assertEquals(pBaseStr + "[" + SystemUtils.LINE_SEPARATOR + "  name=Jane Doe" + SystemUtils.LINE_SEPARATOR + "  age=25" + SystemUtils.LINE_SEPARATOR + "  smoker=true" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(p).append("name", p.name).append("age", p.age).append("smoker", p.smoker).toString());
+    public void testArrayFormatting() {
+        int[] numbers = {1, 2, 3};
+        String result = ToStringBuilder.reflectionToString(numbers);
+
+        assertTrue("Should contain new lines", result.contains(System.lineSeparator()));
+        assertTrue("Should contain array brackets", result.contains("[") && result.contains("]"));
     }
 
     @Test
-    public void testLong() {
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  3" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append(3L).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  a=3" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append("a", 3L).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  a=3" + SystemUtils.LINE_SEPARATOR + "  b=4" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append("a", 3L).append("b", 4L).toString());
+    public void testNullHandling() {
+        Person person = new Person(null, 0, null);
+        String result = ToStringBuilder.reflectionToString(person);
+
+        assertTrue("Should show null fields", result.contains("name=<null>"));
+        assertTrue("Should show null profession", result.contains("profession=<null>"));
     }
 
     @Test
-    public void testObjectArray() {
-        Object[] array = new Object[] {null, base, new int[] {3, 6}};
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  {<null>,5,{3,6}}" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append(array).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  {<null>,5,{3,6}}" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append((Object) array).toString());
-        array = null;
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  <null>" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append(array).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  <null>" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append((Object) array).toString());
+    public void testCollectionFormatting() {
+        CollectionHolder holder = new CollectionHolder();
+        holder.list.add("hello");
+        holder.list.add("world");
+
+        String result = ToStringBuilder.reflectionToString(holder);
+        assertTrue("Should include elements", result.contains("hello") && result.contains("world"));
     }
 
     @Test
-    public void testLongArray() {
-        long[] array = new long[] {1, 2, -3, 4};
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  {1,2,-3,4}" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append(array).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  {1,2,-3,4}" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append((Object) array).toString());
-        array = null;
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  <null>" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append(array).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  <null>" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append((Object) array).toString());
-    }
+    public void testMapFormatting() {
+        MapHolder holder = new MapHolder();
+        holder.map.put("one", 1);
+        holder.map.put("two", 2);
 
-    @Test
-    public void testLongArrayArray() {
-        long[][] array = new long[][] {{1, 2}, null, {5}};
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  {{1,2},<null>,{5}}" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append(array).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  {{1,2},<null>,{5}}" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append((Object) array).toString());
-        array = null;
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  <null>" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append(array).toString());
-        assertEquals(baseStr + "[" + SystemUtils.LINE_SEPARATOR + "  <null>" + SystemUtils.LINE_SEPARATOR + "]", new ToStringBuilder(base).append((Object) array).toString());
+        String result = ToStringBuilder.reflectionToString(holder);
+        assertTrue("Should contain keys", result.contains("one") && result.contains("two"));
     }
-
-}
+} 

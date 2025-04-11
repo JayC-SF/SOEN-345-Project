@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="14" failures="0" name="org.apache.commons.lang3.exception.ContextedExceptionTest" time="0.004" errors="0" skipped="0">
+  <properties>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="java.vm.version" value="11.0.20.1+1-LTS"/>
+    <property name="sun.boot.library.path" value="/Users/shanv/.sdkman/candidates/java/11.0.20.1-zulu/zulu-11.jdk/Contents/Home/lib"/>
+    <property name="gopherProxySet" value="false"/>
+    <property name="jdk.vendor.version" value="Zulu11.66+19-CA"/>
+    <property name="maven.multiModuleProjectDirectory" value="/Users/shanv/Desktop/Github Repos/SOEN-345-Project/Lang/Lang_3b_LLM"/>
+    <property name="java.vm.vendor" value="Azul Systems, Inc."/>
+    <property name="java.vendor.url" value="http://www.azul.com/"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="path.separator" value=":"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="user.country" value="CA"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="/Users/shanv/Desktop/Github Repos/SOEN-345-Project/Lang/Lang_3b_LLM"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="java.runtime.version" value="11.0.20.1+1-LTS"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.CGraphicsEnvironment"/>
+    <property name="os.arch" value="aarch64"/>
+    <property name="java.io.tmpdir" value="/var/folders/98/1z4vmp_9007d_k7p53bjpsk40000gn/T/"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="classworlds.conf" value="/opt/homebrew/Cellar/maven/3.9.9/libexec/bin/m2.conf"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/Users/shanv/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
+    <property name="maven.conf" value="/opt/homebrew/Cellar/maven/3.9.9/libexec/conf"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="java.class.version" value="55.0"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="13.2.1"/>
+    <property name="library.jansi.path" value="/opt/homebrew/Cellar/maven/3.9.9/libexec/lib/jansi-native"/>
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="user.home" value="/Users/shanv"/>
+    <property name="user.timezone" value="America/Toronto"/>
+    <property name="java.awt.printerjob" value="sun.lwawt.macosx.CPrinterJob"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.specification.version" value="11"/>
+    <property name="user.name" value="shanv"/>
+    <property name="java.class.path" value="/opt/homebrew/Cellar/maven/3.9.9/libexec/boot/plexus-classworlds-2.8.0.jar"/>
+    <property name="java.vm.specification.version" value="11"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean install"/>
+    <property name="java.home" value="/Users/shanv/.sdkman/candidates/java/11.0.20.1-zulu/zulu-11.jdk/Contents/Home"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="awt.toolkit" value="sun.lwawt.macosx.LWCToolkit"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="11.0.20.1"/>
+    <property name="java.vendor" value="Azul Systems, Inc."/>
+    <property name="java.specification.maintenance.version" value="2"/>
+    <property name="maven.home" value="/opt/homebrew/Cellar/maven/3.9.9/libexec"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.version.date" value="2023-08-24"/>
+    <property name="java.vendor.url.bug" value="http://www.azul.com/support/"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="java.vendor.version" value="Zulu11.66+19-CA"/>
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="sun.cpu.isalist" value=""/>
+  </properties>
+  <testcase classname="org.apache.commons.lang3.exception.ContextedExceptionTest" name="testContextedException" time="0"/>
+  <testcase classname="org.apache.commons.lang3.exception.ContextedExceptionTest" name="testNullExceptionPassing" time="0"/>
+  <testcase classname="org.apache.commons.lang3.exception.ContextedExceptionTest" name="testRawMessage" time="0"/>
+  <testcase classname="org.apache.commons.lang3.exception.ContextedExceptionTest" name="testContextedExceptionThrowable" time="0"/>
+  <testcase classname="org.apache.commons.lang3.exception.ContextedExceptionTest" name="testContextedExceptionStringThrowableContext" time="0"/>
+  <testcase classname="org.apache.commons.lang3.exception.ContextedExceptionTest" name="testContextedExceptionString" time="0"/>
+  <testcase classname="org.apache.commons.lang3.exception.ContextedExceptionTest" name="testContextedExceptionStringThrowable" time="0"/>
+  <testcase classname="org.apache.commons.lang3.exception.ContextedExceptionTest" name="testAddContextValue" time="0"/>
+  <testcase classname="org.apache.commons.lang3.exception.ContextedExceptionTest" name="testJavaSerialization" time="0.003"/>
+  <testcase classname="org.apache.commons.lang3.exception.ContextedExceptionTest" name="testSetContextValue" time="0"/>
+  <testcase classname="org.apache.commons.lang3.exception.ContextedExceptionTest" name="testGetContextEntries" time="0"/>
+  <testcase classname="org.apache.commons.lang3.exception.ContextedExceptionTest" name="testGetContextLabels" time="0"/>
+  <testcase classname="org.apache.commons.lang3.exception.ContextedExceptionTest" name="testGetFirstContextValue" time="0"/>
+  <testcase classname="org.apache.commons.lang3.exception.ContextedExceptionTest" name="testGetContextValues" time="0.001"/>
+</testsuite>
