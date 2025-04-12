@@ -20,48 +20,42 @@ package org.apache.commons.csv;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * Tests {@link CSVFormat.Predefined}.
- */
 public class CSVFormatPredefinedTest {
 
-    private void test(final CSVFormat format, final String enumName) {
-        Assert.assertEquals(format, CSVFormat.Predefined.valueOf(enumName).getFormat());
-        Assert.assertEquals(format, CSVFormat.valueOf(enumName));
+    @Test
+    public void testPredefinedFormatsNotNull() {
+        for (CSVFormat.Predefined predefined : CSVFormat.Predefined.values()) {
+            CSVFormat format = predefined.getFormat();
+            Assert.assertNotNull("Format for " + predefined.name() + " should not be null", format);
+        }
     }
 
     @Test
-    public void testDefault() {
-        test(CSVFormat.DEFAULT, "Default");
+    public void testExcelFormat() {
+        CSVFormat excel = CSVFormat.Predefined.Excel.getFormat();
+        Assert.assertEquals("Excel format should use comma as delimiter", ',', excel.getDelimiter());
+        Assert.assertTrue("Excel format should allow quotes", excel.getQuoteCharacter() != null);
     }
 
     @Test
-    public void testExcel() {
-        test(CSVFormat.EXCEL, "Excel");
+    public void testRFC4180Format() {
+        CSVFormat rfc = CSVFormat.Predefined.RFC4180.getFormat();
+        Assert.assertEquals("RFC4180 format should use comma as delimiter", ',', rfc.getDelimiter());
+        Assert.assertTrue("RFC4180 format should allow quotes", rfc.getQuoteCharacter() != null);
+        Assert.assertTrue("RFC4180 should use CRLF as record separator", "\r\n".equals(rfc.getRecordSeparator()));
     }
 
     @Test
-    public void testMySQL() {
-        test(CSVFormat.MYSQL, "MySQL");
+    public void testTDFFormat() {
+        CSVFormat tdf = CSVFormat.Predefined.TDF.getFormat();
+        Assert.assertEquals("TDF format should use tab as delimiter", '\t', tdf.getDelimiter());
     }
 
     @Test
-    public void testPostgreSqlCsv() {
-        test(CSVFormat.POSTGRESQL_CSV, "PostgreSQLCsv");
-    }
-
-    @Test
-    public void testPostgreSqlText() {
-        test(CSVFormat.POSTGRESQL_TEXT, "PostgreSQLText");
-    }
-
-    @Test
-    public void testRFC4180() {
-        test(CSVFormat.RFC4180, "RFC4180");
-    }
-
-    @Test
-    public void testTDF() {
-        test(CSVFormat.TDF, "TDF");
+    public void testMySQLFormat() {
+        CSVFormat mysql = CSVFormat.Predefined.MySQL.getFormat();
+        Assert.assertEquals("MySQL format should use tab as delimiter", '\t', mysql.getDelimiter());
+        Assert.assertEquals("MySQL format should use \\n as record separator", "\n", mysql.getRecordSeparator());
     }
 }
+

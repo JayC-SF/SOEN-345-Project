@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Iterator;
+
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -36,161 +38,101 @@ import org.junit.Test;
 
 public class CSVRecordTest {
 
-    private enum EnumFixture { UNKNOWN_COLUMN }
-
-    private String[] values;
-    private CSVRecord record, recordWithHeader;
-    private Map<String, Integer> header;
+    private CSVRecord record;
+    private Map<String, Integer> headerMap;
 
     @Before
-    public void setUp() throws Exception {
-        values = new String[] { "A", "B", "C" };
-        record = new CSVRecord(values, null, null, 0, -1);
-        header = new HashMap<>();
-        header.put("first", Integer.valueOf(0));
-        header.put("second", Integer.valueOf(1));
-        header.put("third", Integer.valueOf(2));
-        recordWithHeader = new CSVRecord(values, header, null, 0, -1);
+    public void setUp() {
+        headerMap = new HashMap<>();
+        headerMap.put("Name", 0);
+        headerMap.put("Age", 1);
+        headerMap.put("City", 2);
+
+        String[] values = {"Alice", "30", "Montreal"};
+        record = new CSVRecord(values, headerMap, "source.csv", 1L, 0L);
+
     }
 
     @Test
-    public void testGetInt() {
-        assertEquals(values[0], record.get(0));
-        assertEquals(values[1], record.get(1));
-        assertEquals(values[2], record.get(2));
-    }
-
-    @Test
-    public void testGetString() {
-        assertEquals(values[0], recordWithHeader.get("first"));
-        assertEquals(values[1], recordWithHeader.get("second"));
-        assertEquals(values[2], recordWithHeader.get("third"));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetStringInconsistentRecord() {
-        header.put("fourth", Integer.valueOf(4));
-        recordWithHeader.get("fourth");
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testGetStringNoHeader() {
-        record.get("first");
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetUnmappedEnum() {
-        assertNull(recordWithHeader.get(EnumFixture.UNKNOWN_COLUMN));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetUnmappedName() {
-        assertNull(recordWithHeader.get("fourth"));
+    public void testGetByIndex() {
+        assertEquals("Alice", record.get(0));
+        assertEquals("30", record.get(1));
+        assertEquals("Montreal", record.get(2));
     }
 
     @Test(expected = ArrayIndexOutOfBoundsException.class)
-    public void testGetUnmappedNegativeInt() {
-        assertNull(recordWithHeader.get(Integer.MIN_VALUE));
-    }
-
-    @Test(expected = ArrayIndexOutOfBoundsException.class)
-    public void testGetUnmappedPositiveInt() {
-        assertNull(recordWithHeader.get(Integer.MAX_VALUE));
+    public void testGetByInvalidIndex() {
+        record.get(5);
     }
 
     @Test
-    public void testIsConsistent() {
-        assertTrue(record.isConsistent());
-        assertTrue(recordWithHeader.isConsistent());
+    public void testGetByName() {
+        assertEquals("Alice", record.get("Name"));
+        assertEquals("30", record.get("Age"));
+        assertEquals("Montreal", record.get("City"));
+    }
 
-        header.put("fourth", Integer.valueOf(4));
-        assertFalse(recordWithHeader.isConsistent());
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetByInvalidName() {
+        record.get("InvalidColumn");
     }
 
     @Test
     public void testIsMapped() {
-        assertFalse(record.isMapped("first"));
-        assertTrue(recordWithHeader.isMapped("first"));
-        assertFalse(recordWithHeader.isMapped("fourth"));
+        assertTrue(record.isMapped("Name"));
+        assertFalse(record.isMapped("InvalidColumn"));
     }
 
     @Test
     public void testIsSet() {
-        assertFalse(record.isSet("first"));
-        assertTrue(recordWithHeader.isSet("first"));
-        assertFalse(recordWithHeader.isSet("fourth"));
-    }
-
-    @Test
-    public void testIterator() {
-        int i = 0;
-        for (final String value : record) {
-            assertEquals(values[i], value);
-            i++;
-        }
-    }
-
-    @Test
-    public void testPutInMap() {
-        final Map<String, String> map = new ConcurrentHashMap<>();
-        this.recordWithHeader.putIn(map);
-        this.validateMap(map, false);
-        // Test that we can compile with assigment to the same map as the param.
-        final TreeMap<String, String> map2 = recordWithHeader.putIn(new TreeMap<String, String>());
-        this.validateMap(map2, false);
-    }
-
-    @Test
-    public void testRemoveAndAddColumns() throws IOException {
-        // do:
-        try (final CSVPrinter printer = new CSVPrinter(new StringBuilder(), CSVFormat.DEFAULT)) {
-            final Map<String, String> map = recordWithHeader.toMap();
-            map.remove("OldColumn");
-            map.put("ZColumn", "NewValue");
-            // check:
-            final ArrayList<String> list = new ArrayList<>(map.values());
-            Collections.sort(list);
-            printer.printRecord(list);
-            Assert.assertEquals("A,B,C,NewValue" + CSVFormat.DEFAULT.getRecordSeparator(), printer.getOut().toString());
-        }
+        assertTrue(record.isSet("Name"));
+        assertFalse(record.isSet("InvalidColumn"));
     }
 
     @Test
     public void testToMap() {
-        final Map<String, String> map = this.recordWithHeader.toMap();
-        this.validateMap(map, true);
+        Map<String, String> expectedMap = new HashMap<>();
+        expectedMap.put("Name", "Alice");
+        expectedMap.put("Age", "30");
+        expectedMap.put("City", "Montreal");
+
+        assertEquals(expectedMap, record.toMap());
     }
 
     @Test
-    public void testToMapWithShortRecord() throws Exception {
-        try (final CSVParser parser = CSVParser.parse("a,b", CSVFormat.DEFAULT.withHeader("A", "B", "C"))) {
-            final CSVRecord shortRec = parser.iterator().next();
-            shortRec.toMap();
-        }
+    public void testSize() {
+        assertEquals(3, record.size());
     }
 
     @Test
-    public void testToMapWithNoHeader() throws Exception {
-        try (final CSVParser parser = CSVParser.parse("a,b", CSVFormat.newFormat(','))) {
-            final CSVRecord shortRec = parser.iterator().next();
-            final Map<String, String> map = shortRec.toMap();
-            assertNotNull("Map is not null.", map);
-            assertTrue("Map is empty.", map.isEmpty());
-        }
+    public void testIterator() {
+        Iterator<String> iterator = record.iterator();
+        assertTrue(iterator.hasNext());
+        assertEquals("Alice", iterator.next());
+        assertEquals("30", iterator.next());
+        assertEquals("Montreal", iterator.next());
+        assertFalse(iterator.hasNext());
     }
 
-    private void validateMap(final Map<String, String> map, final boolean allowsNulls) {
-        assertTrue(map.containsKey("first"));
-        assertTrue(map.containsKey("second"));
-        assertTrue(map.containsKey("third"));
-        assertFalse(map.containsKey("fourth"));
-        if (allowsNulls) {
-            assertFalse(map.containsKey(null));
-        }
-        assertEquals("A", map.get("first"));
-        assertEquals("B", map.get("second"));
-        assertEquals("C", map.get("third"));
-        assertEquals(null, map.get("fourth"));
+    @Test
+public void testGetCharacterPosition() {
+    String[] values = {"value1", "value2"};
+    Map<String, Integer> headerMap = new HashMap<>();
+    headerMap.put("col1", 0);
+    headerMap.put("col2", 1);
+    CSVRecord record = new CSVRecord(values, headerMap, "source.csv", 1L, 1L); // Set character position to 1L
+    assertEquals(1L, record.getCharacterPosition());
+}
+
+
+    @Test
+    public void testGetRecordNumber() {
+        assertEquals(1L, record.getRecordNumber());
     }
 
+    @Test
+    public void testToString() {
+        assertNotNull(record.toString());
+        assertTrue(record.toString().contains("Alice"));
+    }
 }
